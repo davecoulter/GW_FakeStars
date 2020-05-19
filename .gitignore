@@ -10,4 +10,7 @@ all_tiles_ascii.txt
 sexparams/
 *.pyc
 .mana
+.idea
+SwopeTiles/*
+*.png
 
