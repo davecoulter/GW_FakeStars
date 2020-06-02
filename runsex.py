@@ -51,55 +51,58 @@ def getHostMatchfromSex(imfile,eventra,eventdec,sextable=None,maxRparam=6,return
 
 def runsex(imfile, wtfile=None, maskfile=None, zpt=None, segmapname=None):
 
-    imroot,imext = os.path.splitext(imfile)
-    tmpcatname = "%s.delme.txt"%(imroot)
+    imroot, imext = os.path.splitext(imfile)
+    tmpcatname = "%s.delme.txt" % (imroot)
     if os.path.exists(tmpcatname):
-        os.system('rm %s'%tmpcatname)
+        os.system('rm %s' % tmpcatname)
 
     sexcommand = ["sex "]
-    sexcommand.append("%s "%imfile)
-    sexcommand.append("-c %s "%DAO_SEXPARAMS)
-    sexcommand.append("-STARNNW_NAME %s "%DAO_NNW)
-    sexcommand.append("-PARAMETERS_NAME %s "%HOSTPHOT_SEXOUTCOLS)
-    sexcommand.append("-FILTER_NAME %s "%DAO_KERNEL)
+    sexcommand.append("%s " % imfile)
+    sexcommand.append("-c %s " % DAO_SEXPARAMS)
+    sexcommand.append("-STARNNW_NAME %s " % DAO_NNW)
+    sexcommand.append("-PARAMETERS_NAME %s " % HOSTPHOT_SEXOUTCOLS)
+    sexcommand.append("-FILTER_NAME %s " % DAO_KERNEL)
     sexcommand.append("-DETECT_THRESH 2.0 ")
     sexcommand.append("-GAIN 1.0 ")
     sexcommand.append("-DEBLEND_MINCONT 0.5 ")
-    sexcommand.append("-CATALOG_NAME %s "%tmpcatname)
+    sexcommand.append("-CATALOG_NAME %s " % tmpcatname)
     if segmapname:
         sexcommand.append("-CHECKIMAGE_TYPE SEGMENTATION ")
-        sexcommand.append("-CHECKIMAGE_NAME %s "%segmapname)
+        sexcommand.append("-CHECKIMAGE_NAME %s " % segmapname)
     if zpt:
-        sexcommand.append("-MAG_ZEROPOINT %s "%zpt)
+        sexcommand.append("-MAG_ZEROPOINT %s " % zpt)
     sexcommand = ''.join(sexcommand)
 
     if wtfile:
         if maskfile:
-            fname,fext = os.path.splitext(wtfile)
-            noiseimfilename_tmp = '%s_tmp%s'%(fname,fext)
+            fname, fext = os.path.splitext(wtfile)
+            noiseimfilename_tmp = '%s_tmp%s' % (fname, fext)
             mask = fits.getdata(maskfile)
             hdu = fits.open(wtfile)
             hdu[1].data[np.where(mask > 0)] = 1e16
-            hdu.writeto(noiseimfilename_tmp,overwrite=True)
-            sexcommand += ' -WEIGHT_TYPE MAP_VAR -WEIGHT_IMAGE %s'%noiseimfilename_tmp
+            hdu.writeto(noiseimfilename_tmp, overwrite=True)
+            sexcommand += ' -WEIGHT_TYPE MAP_VAR -WEIGHT_IMAGE %s' % noiseimfilename_tmp
         else:
-            sexcommand += ' -WEIGHT_TYPE MAP_VAR -WEIGHT_IMAGE %s'%wtfile
+            sexcommand += ' -WEIGHT_TYPE MAP_VAR -WEIGHT_IMAGE %s' % wtfile
 
             print('running SExtractor:')
+
     print(sexcommand)
+
     try:
-        check_call (sexcommand, shell=True)
+        check_call(sexcommand, shell=True)
     except Exception as e:
         print('error: sextractor invocation failed', file=sys.stderr)
         print('command was:', sexcommand, file=sys.stderr)
         #os.system('rm %s %s'%(tmpcatname,noiseimfilename_tmp))
         raise
+
     if maskfile and wtfile:
         print('removing temporary noise image %s' % noiseimfilename_tmp)
         os.system('rm %s' % noiseimfilename_tmp)
 
     # Read in the catalog
     sextable = txtobj(tmpcatname, sexheader=True)
-    os.system('rm %s' % tmpcatname)
+    # os.system('rm %s' % tmpcatname)
 
     return(sextable)
