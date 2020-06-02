@@ -49,7 +49,7 @@ def getHostMatchfromSex(imfile,eventra,eventdec,sextable=None,maxRparam=6,return
             return(np.nan,np.nan)
 
 
-def runsex(imfile,wtfile=None,maskfile=None,zpt=None,segmapname=None):
+def runsex(imfile, wtfile=None, maskfile=None, zpt=None, segmapname=None):
 
     imroot,imext = os.path.splitext(imfile)
     tmpcatname = "%s.delme.txt"%(imroot)
@@ -95,11 +95,11 @@ def runsex(imfile,wtfile=None,maskfile=None,zpt=None,segmapname=None):
         #os.system('rm %s %s'%(tmpcatname,noiseimfilename_tmp))
         raise
     if maskfile and wtfile:
-        print('removing temporary noise image %s'%noiseimfilename_tmp)
-        os.system('rm %s'%noiseimfilename_tmp)
+        print('removing temporary noise image %s' % noiseimfilename_tmp)
+        os.system('rm %s' % noiseimfilename_tmp)
 
     # Read in the catalog
-    sextable = txtobj(tmpcatname,sexheader=True)
-    os.system('rm %s'%tmpcatname)
+    sextable = txtobj(tmpcatname, sexheader=True)
+    os.system('rm %s' % tmpcatname)
 
     return(sextable)
