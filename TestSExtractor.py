@@ -8,6 +8,8 @@ from runsex import runsex
 import sys
 import astropy.table as at
 from astLib import astCoords
+import astropy.coordinates as coord
+from astropy import units as u
 
 print("running SExtractor")
 
@@ -17,7 +19,7 @@ sextable = runsex(image_file,
                   segmapname=image_file.replace('.fits', '.check.fits'),
                   zpt=fits.getval(image_file, 'ZPTMAG'))
 
-print(sextable)
+# print(sextable)
 
 field_name = image_file.split('.')[0]
 glade_files = glob.glob('*%s*txt' % field_name)
@@ -37,6 +39,18 @@ for gf in glade_files:
                                       glade['Galaxy_Dec'],
                                       sextable.X_WORLD[i],
                                       sextable.Y_WORLD[i])*3600.
+
+        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'], dec=glade['Galaxy_Dec'], units=(u.deg, u.deg))
+        c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], units=(u.deg, u.deg))
+
+        seps = c1.separation(c2)
+
+        # print(sep)
+        # print("-")
+        # print(seps)
+        print("\n\n******HELLO WORLD******\n\n")
+
+
 
         # check if it's found in the sextable...
         if not len(sep):

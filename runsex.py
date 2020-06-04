@@ -103,6 +103,8 @@ def runsex(imfile, wtfile=None, maskfile=None, zpt=None, segmapname=None):
 
     # Read in the catalog
     sextable = txtobj(tmpcatname, sexheader=True)
+
+    ## DC - commenting out below for a test...
     # os.system('rm %s' % tmpcatname)
 
     return(sextable)

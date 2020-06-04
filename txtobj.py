@@ -84,7 +84,6 @@ class txtobj:
 
             # self.filename = np.array([filename] * len(self.__dict__[c]))
             self.filename = np.array([filename] * self.__dict__[c].size)
-
         else:
             fin = open(filename, 'r')
             count = 0
