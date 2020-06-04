@@ -40,8 +40,8 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     for sexcat_id, glade_id, b, sex_mag, num_pix in \
             zip(good_ids, glade_ids, glade_bmags, sex_mags, pixels):
+        result_table.add_row([sexcat_id, glade_id, b, filtr, sex_mag, num_pix])
 
-        result_table.add_row([image_file, sexcat_id, glade_id, b, filtr, sex_mag, num_pix])
     result_table.write(ascii_ecsv_fpath, overwrite=True, format='ascii.ecsv')
 
 t1 = time.time()
