@@ -86,7 +86,7 @@ for sf in swope_files:
     mask_file = sf.replace('.fits', 'mask.fits.gz')
 
     # check if both files are on-disk
-    if os.exists(sf) and os.exists(glade_file_path) and os.exists(dcmp_file) and os.exists(mask_file):
+    if os.path.exists(sf) and os.path.exists(glade_file_path) and os.path.exists(dcmp_file) and os.path.exists(mask_file):
 
         dcmp = txtobj(dcmp_file, cmpheader=True)
         dcmp_header = fits.getheader(dcmp_file)
