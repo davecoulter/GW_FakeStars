@@ -39,7 +39,7 @@ dcmp_file = "s005aae0078.i.ut190425.1083_stch_1.sw.dcmp"
 dcmp_header = fits.getheader(dcmp_file)
 zpt = dcmp_header['ZPTMAG']
 
-mask_file = " s005aae0078.i.ut190425.1083_stch_1.sw.mask.fits.gz"
+mask_file = "s005aae0078.i.ut190425.1083_stch_1.sw.mask.fits.gz"
 mask_hdu = fits.open(mask_file)
 mask_data = mask_hdu[0].data.astype('float')
 
