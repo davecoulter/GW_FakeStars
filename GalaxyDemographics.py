@@ -83,7 +83,9 @@ for sf in swope_files:
     glade_file_path = "%s/%s " % (glade_path, glade_file_name)
 
     dcmp_file = sf.replace('.fits', '.dcmp')
-    mask_file = sf.replace('.fits', 'mask.fits.gz')
+    mask_file = sf.replace('.fits', '.mask.fits.gz')
+
+    import pdb; pdb.set_trace()
 
     # check if both files are on-disk
     print(sf)
