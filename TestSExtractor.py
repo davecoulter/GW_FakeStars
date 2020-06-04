@@ -42,7 +42,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
     result_table.meta['comment'] = meta
 
     for sexcat_id, glade_id, coord_tup, b, sex_mag, num_pix in \
-            zip(good_ids, glade_ids, glade_bmags, sex_mags, pixels, gal_coords):
+            zip(good_ids, glade_ids, gal_coords, glade_bmags, sex_mags, pixels):
         rows.append([sexcat_id, glade_id, coord_tup[0], coord_tup[1], b, filtr, sex_mag, num_pix])
 
     for r in rows:
