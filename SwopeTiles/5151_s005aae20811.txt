@@ -1,0 +1,32 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=s005aae20811.r.ut190428.4156_stch_1.sw.dcmp, DB ID=5151, Field
+#       Name=s005aae20811, RA (deg)=252.1863, Dec (deg)=6.4233, MJD=58602.41844, Exp
+#       Time (sec)=180.0, Lim Mag=22.2711, Instrument=SWOPE, E(B-V)=0.179178068303,
+#     Filter=SDSS r, A_lambda=0.409421886072355, Net 2D Prob=0.000127560329814, Redistributed
+#       2D Prob=8.402152143840527e-05, Net 4D Prob=0.00020889172218543028, Weighted
+#       Mean Pixel Comp=0.34033187422047073, Weighted Mean Pixel Dist=172.84420093566936]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+5928 252.077301 6.312206 None None NGC6224 16481855+0618439 None 1.24358210628e-06 0.02406 100.323421795 2.40776212309 13.988 10.248
+164244 252.047607 6.40661 None None 1300129 16481142+0624237 None 1.11179812277e-06 0.026768 111.843160219 2.68423584525 15.882 12.588
+164272 252.052383 6.523832 None None 1302408 16481257+0631257 None 3.41385320477e-07 0.024796 103.449811773 2.48279548254 15.897 11.924
+216219 251.939423 6.46245 None None None 16474546+0627448 None 0.000122173435089 0.037756 159.053160472 3.81727585133 15.642 12.064
+795604 252.088699 6.561932 None None 1303117 16482128+0633429 None 1.08497997483e-13 0.076302 330.487948547 7.93171076512 17.055 13.267
+954138 252.043137 6.359667 None None None 16481035+0621348 None 0.0 0.136804 617.131988531 14.8111677247 17.953 13.665

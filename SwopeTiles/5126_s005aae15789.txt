@@ -1,0 +1,35 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=s005aae15789.r.ut190428.4149_stch_1.sw.dcmp, DB ID=5126, Field
+#       Name=s005aae15789, RA (deg)=245.8473, Dec (deg)=16.8527, MJD=58602.39402, Exp
+#       Time (sec)=180.0, Lim Mag=22.4634, Instrument=SWOPE, E(B-V)=0.0974015102349,
+#     Filter=SDSS r, A_lambda=0.2225624508867465, Net 2D Prob=0.00011385819462399999,
+#     Redistributed 2D Prob=4.93831547054984e-05, Net 4D Prob=5.4488267254719004e-05,
+#     Weighted Mean Pixel Comp=0.5658181794145348, Weighted Mean Pixel Dist=183.85680647728483]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+9835 245.797256 16.932606 None None UGC10360 16231134+1655573 None 7.05303222499e-07 0.024069 100.361631673 2.40867916016 14.277 10.641
+1223406 245.885 17.00221 None None 1522213 None None 0.0 0.180709710355 837.881556204 20.1091573489 18.12 nan
+125783 245.818771 16.873726 None None 1519124 16231650+1652254 None 4.39498327267e-06 0.0353461676731 148.635350783 3.56724841879 17.86 14.368
+1223291 245.649 16.85364 None None 1518652 None None 0.0 0.168395934198 774.92701678 18.5982484027 18.61 nan
+494429 246.099609 16.749409 None None 1516074 16242390+1644578 None 0.0 0.192387 898.317303679 21.5596152883 18.561 13.848
+1223267 246.045 16.82319 None None 1517832 None None 0.0 0.235846497923 1129.36735608 27.104816546 19.34 nan
+620054 245.951462 16.729492 None None 1515622 16234835+1643461 None 4.82397049053e-09 0.070314 303.270882013 7.27850116832 17.0 13.182
+1411986 245.952 16.7317 None None SDSSJ162348.43+164353.9 None None 2.08356107061e-12 0.0791326595663 343.427868683 8.24226884838 17.93 nan
+1419468 246.042 16.61567 None None SDSSJ162410.05+163656.1 None None 0.0 0.201985240993 948.52192275 22.764526146 18.76 nan
