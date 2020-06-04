@@ -68,6 +68,7 @@ with open("./all_tiles_ascii.txt", 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     for row in csvreader:
         f = "%s/%s" % (swope_file_base_path, row[0])
+        swope_files.append(f)
 
 
 psf_shape = 31
