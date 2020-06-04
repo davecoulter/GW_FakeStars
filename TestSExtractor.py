@@ -35,7 +35,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
     cols = ['sexcat_id', 'glade_id', 'glade_B', 'filter', 'sex_mag', 'num_pixels']
     dtype = ['i4', 'i4', 'f8', 'U64', 'f8', 'i4']
     result_table = Table(dtype=dtype, names=cols)
-    meta = ["{key}={value}".format(key="image_file", value=glade_file)]
+    meta = ["{key}={value}".format(key="image_file", value=image_file)]
     result_table.meta['comment'] = meta
 
     for sexcat_id, glade_id, b, sex_mag, num_pix in \
@@ -115,6 +115,7 @@ for i in good_ids:
 # psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'],dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 # psf_model = generate_psf(psf_x, psf_xy, psf_y, psf_shape)
 
+import pdb; pdb.set_trace()
 
 write_good_sexcat_ids(gf, image_file, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels)
 
