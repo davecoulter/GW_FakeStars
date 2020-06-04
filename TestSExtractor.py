@@ -59,7 +59,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         csvfile.write("global color=lightgreen\n")
         csvfile.write("ICRS\n")
 
-        for r in enumerate(rows):
+        for r in rows:
             glade_id = r[1]
             ra = r[2]
             dec = r[3]
