@@ -97,12 +97,12 @@ for i, sex_num in enumerate(sextable.NUMBER):
     # if within 2 arc sec. # No duplicates
     if min_sep <= 2 and sex_num not in good_ids:
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
-        good_ids += sex_num
-        glade_ids += glade['Galaxy_ID'][closest_sep_mask][0]
-        glade_bmags += glade['B'][closest_sep_mask][0]
-        measured_mags += sextable.MAG_AUTO[i]
+        good_ids.append(sex_num)
+        glade_ids.append(glade['Galaxy_ID'][closest_sep_mask][0])
+        glade_bmags.append(glade['B'][closest_sep_mask][0])
+        measured_mags.append(sextable.MAG_AUTO[i])
 
 # Zero out entries in the segmap that not matched galaxies
 for i in sextable.NUMBER:
