@@ -81,6 +81,8 @@ except:
 # keep a list of matches ("good_ids")
 for i, sex_num in enumerate(sextable.NUMBER):
 
+    import pdb; pdb.set_trace()
+
     # separation between sex source and all glade galaxies in arc sec
     sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],
                                   glade['Galaxy_Dec'],
