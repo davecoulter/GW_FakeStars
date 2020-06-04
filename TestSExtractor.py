@@ -63,7 +63,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             glade_id = r[1]
             ra = r[2]
             dec = r[3]
-            csvfile.write('circle(%s,%s,120") # width=4 text="%s"\n' % (ra, dec, glade_id))
+            csvfile.write('circle(%s,%s,30") # width=2 text="%s"\n' % (ra, dec, glade_id))
 
         print("Done w/ Region File")
 
