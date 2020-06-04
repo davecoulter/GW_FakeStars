@@ -40,17 +40,17 @@ for gf in glade_files:
                                       sextable.X_WORLD[i],
                                       sextable.Y_WORLD[i])*3600.
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
-        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'].data, dec=glade['Galaxy_Dec'].data, units=(u.deg, u.deg))
-        c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], units=(u.deg, u.deg))
+        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'].data, dec=glade['Galaxy_Dec'].data, unit=(u.deg, u.deg))
+        c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], unit=(u.deg, u.deg))
 
         seps = c1.separation(c2)
 
-        # print(sep)
-        # print("-")
-        # print(seps)
-        print("\n\n******HELLO WORLD******\n\n")
+        print(sep.data)
+        print("-")
+        print(seps.arcsecond)
+
 
 
 
