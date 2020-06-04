@@ -39,21 +39,17 @@ for gf in glade_files:
     for i in range(len(sextable.NUMBER)):
 
         # separation in arc sec
-        # sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],
-        #                               glade['Galaxy_Dec'],
-        #                               sextable.X_WORLD[i],
-        #                               sextable.Y_WORLD[i])*3600.
+        sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],
+                                      glade['Galaxy_Dec'],
+                                      sextable.X_WORLD[i],
+                                      sextable.Y_WORLD[i])*3600.
 
         # import pdb; pdb.set_trace()
 
-        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'].data, dec=glade['Galaxy_Dec'].data, unit=(u.deg, u.deg))
-        c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], unit=(u.deg, u.deg))
-
-        sep = c1.separation(c2).arcsecond
-
-        # print(sep.data)
-        # print("-")
-        # print(seps.arcsecond)
+        # c1 = coord.SkyCoord(ra=glade['Galaxy_RA'].data, dec=glade['Galaxy_Dec'].data, unit=(u.deg, u.deg))
+        # c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], unit=(u.deg, u.deg))
+        #
+        # sep = c1.separation(c2).arcsecond
 
 
         # check if it's found in the sextable...
