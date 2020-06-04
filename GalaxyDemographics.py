@@ -61,6 +61,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 t1 = time.time()
 
 
+
 # get all the swope files...
 swope_files = []
 swope_file_base_path = "/data/LCO/Swope/workstch/gw190425/1"
@@ -74,18 +75,37 @@ with open("./all_tiles_ascii.txt", 'r') as csvfile:
 psf_shape = 31
 
 for sf in swope_files:
+
     tokens = sf.split("/")[-1].split(".")
     field_name = tokens[0]
     photpipe_id = tokens[3].replace('_stch_1', '')
 
+
+    glade_files = glob.glob('SwopeTiles/*%s*txt' % field_name)
+    db_id = -9999
+    for gf in glade_files:
+        glade = at.Table.read(gf, format='ascii.ecsv')
+        comment = glade.meta['comment']
+
+        dcmp_photpipe_id = comment[0].split("=")[1].split(".")[3].replace("_stch_1", "")
+        import pdb; pdb.set_trace()
+
+        if photpipe_id == dcmp_photpipe_id:
+            db_id = comment[1].split("=")[1]
+            break
+
+    if db_id == -9999:
+        raise Exception("Can't find match between glade files and `%s`!" % sf)
+
+
     glade_path = "./SwopeTiles"
-    glade_file_name = "%s_%s.txt" % (photpipe_id, field_name)
+    glade_file_name = "%s_%s.txt" % (db_id, field_name)
     glade_file_path = "%s/%s " % (glade_path, glade_file_name)
 
     dcmp_file = sf.replace('.fits', '.dcmp')
     mask_file = sf.replace('.fits', '.mask.fits.gz')
 
-    import pdb; pdb.set_trace()
+
 
     # check if both files are on-disk
     print(sf)
