@@ -88,7 +88,7 @@ for sf in swope_files:
         comment = glade.meta['comment']
 
         dcmp_photpipe_id = comment[0].split("=")[1].split(".")[3].replace("_stch_1", "")
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
 
         if photpipe_id == dcmp_photpipe_id:
             db_id = comment[1].split("=")[1]
@@ -108,10 +108,10 @@ for sf in swope_files:
 
 
     # check if both files are on-disk
-    print(sf)
-    print(glade_file_path)
-    print(dcmp_file)
-    print(mask_file)
+    # print(sf)
+    # print(glade_file_path)
+    # print(dcmp_file)
+    # print(mask_file)
 
     if os.path.exists(sf) and os.path.exists(glade_file_path) \
             and os.path.exists(dcmp_file) and os.path.exists(mask_file):
