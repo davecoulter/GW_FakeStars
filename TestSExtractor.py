@@ -10,6 +10,10 @@ import astropy.table as at
 from astLib import astCoords
 import astropy.coordinates as coord
 from astropy import units as u
+import time
+
+
+t1 = time.time()
 
 print("running SExtractor")
 
@@ -19,7 +23,7 @@ sextable = runsex(image_file,
                   segmapname=image_file.replace('.fits', '.check.fits'),
                   zpt=fits.getval(image_file, 'ZPTMAG'))
 
-# print(sextable)
+
 
 field_name = image_file.split('.')[0]
 glade_files = glob.glob('*%s*txt' % field_name)
@@ -52,8 +56,6 @@ for gf in glade_files:
         # print(seps.arcsecond)
 
 
-
-
         # check if it's found in the sextable...
         if not len(sep):
             break
@@ -67,3 +69,10 @@ for gf in glade_files:
     print(good_ids)
     print(glade_ids)
     print(glade_bmags)
+
+
+
+t2 = time.time()
+print("\n********************")
+print("Execution time: %s" % (t2 - t1))
+print("********************\n")
