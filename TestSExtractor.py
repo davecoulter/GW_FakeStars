@@ -75,7 +75,7 @@ good_ids, glade_ids, glade_bmags, measured_mags = [], [], [], []
 try:
     glade = at.Table.read(gf, format='ascii.ecsv')
 except:
-    continue
+    raise Exception("Can't read file...")
 
 # Identify matches between teglon/GLADE and what source extractor detects
 # keep a list of matches ("good_ids")
