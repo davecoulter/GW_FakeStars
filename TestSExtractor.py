@@ -42,7 +42,7 @@ for gf in glade_files:
 
         import pdb; pdb.set_trace()
 
-        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'], dec=glade['Galaxy_Dec'], units=(u.deg, u.deg))
+        c1 = coord.SkyCoord(ra=glade['Galaxy_RA'].data, dec=glade['Galaxy_Dec'].data, units=(u.deg, u.deg))
         c2 = coord.SkyCoord(ra=sextable.X_WORLD[i], dec=sextable.Y_WORLD[i], units=(u.deg, u.deg))
 
         seps = c1.separation(c2)
