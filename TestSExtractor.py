@@ -81,8 +81,6 @@ except:
 # keep a list of matches ("good_ids")
 for i, sex_num in enumerate(sextable.NUMBER):
 
-    import pdb; pdb.set_trace()
-
     # separation between sex source and all glade galaxies in arc sec
     sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],
                                   glade['Galaxy_Dec'],
@@ -98,6 +96,9 @@ for i, sex_num in enumerate(sextable.NUMBER):
 
     # if within 2 arc sec. # No duplicates
     if min_sep <= 2 and sex_num not in good_ids:
+
+        import pdb; pdb.set_trace()
+
         good_ids += sex_num
         glade_ids += glade['Galaxy_ID'][closest_sep_mask][0]
         glade_bmags += glade['B'][closest_sep_mask][0]
