@@ -113,9 +113,8 @@ for i in sextable.NUMBER:
 pixels = []
 for i in good_ids:
     good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
-
-    import pdb; pdb.set_trace()
-    pixels.append(len(good_galaxy_indices))
+    num_pix = segmap[good_galaxy_indices]
+    pixels.append(len(num_pix))
 
 # psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'],dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 # psf_model = generate_psf(psf_x, psf_xy, psf_y, psf_shape)
