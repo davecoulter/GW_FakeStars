@@ -74,7 +74,7 @@ with open("./all_tiles_ascii.txt", 'r') as csvfile:
 psf_shape = 31
 
 for sf in swope_files:
-    tokens = sf.split(".")
+    tokens = sf.split("/")[-1].split(".")
     field_name = tokens[0]
     photpipe_id = tokens[3].replace('_stch_1', '')
 
