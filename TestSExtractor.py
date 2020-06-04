@@ -50,7 +50,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     result_table.write(ascii_ecsv_fpath, overwrite=True, format='ascii.ecsv')
 
-
+    import pdb; pdb.set_trace()
     # Output region files as well
     region_fpath = "%s/%s.reg" % (".", glade_file.replace('.txt', ''))
     with open(region_fpath, 'w') as csvfile:
