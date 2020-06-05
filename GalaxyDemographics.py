@@ -89,6 +89,9 @@ for sf_index, sf in enumerate(swope_files):
 
     glade_files = glob.glob('SwopeTiles/*%s*txt' % field_name)
     db_id = -9999
+    print(glade_files)
+    import pdb; pdb.set_trace()
+
     for gf in glade_files:
         glade = at.Table.read(gf, format='ascii.ecsv')
         comment = glade.meta['comment']
