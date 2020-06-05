@@ -95,7 +95,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             for i in range(arr_len):
                 x = pixel_tuple[1][i]
                 y = pixel_tuple[0][i]
-                csvfile.write('circle(%s,%s,1) # \n' % (x, y))
+                csvfile.write('circle(%s,%s,1") # \n' % (x, y))
 
         print("Done w/ Region File 2")
 
