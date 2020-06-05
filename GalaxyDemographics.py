@@ -78,7 +78,7 @@ num_sf = len(swope_files)
 for sf_index, sf in enumerate(swope_files):
 
     print("\n********************")
-    print("Processing %/%s..." % (sf_index, num_sf))
+    print("Processing %s/%s..." % (sf_index, num_sf))
     print("********************\n")
     t1 = time.time()
 
