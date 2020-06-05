@@ -257,9 +257,9 @@ for sf_index, sf in enumerate(swope_files):
             logging.debug("Path doesn't exist for: `%s`" % mask_file)
         logging.debug("Skipping %s" % sf)
 
-    if sf_index == 0:
-        print("\n\nDebug stop!!\n\n")
-        break
+    # if sf_index == 0:
+    #     print("\n\nDebug stop!!\n\n")
+    #     break
 
 
 global_t2 = time.time()
