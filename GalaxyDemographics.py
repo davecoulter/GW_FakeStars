@@ -56,12 +56,8 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
         print("Done w/ Region File")
 
-    raise Exception("Stop!")
 
 global_t1 = time.time()
-
-
-
 # get all the swope files...
 swope_files = []
 swope_file_base_path = "/data/LCO/Swope/workstch/gw190425/1"
@@ -78,7 +74,7 @@ num_sf = len(swope_files)
 for sf_index, sf in enumerate(swope_files):
 
     print("\n********************")
-    print("Processing %s/%s..." % (sf_index, num_sf))
+    print("Processing %s/%s..." % (sf_index + 1, num_sf))
     print("********************\n")
     t1 = time.time()
 
@@ -183,7 +179,7 @@ for sf_index, sf in enumerate(swope_files):
 
         t2 = time.time()
         print("\n********************")
-        print("Done processing %s/%s: %s" % (sf_index, num_sf, (t2 - t1)))
+        print("Done processing %s/%s: %s" % (sf_index + 1, num_sf, (t2 - t1)))
         print("********************\n")
     else:
         if not os.path.exists(sf):
@@ -194,6 +190,10 @@ for sf_index, sf in enumerate(swope_files):
             print("Path doesn't exist for: `%s`" % dcmp_file)
         if not os.path.exists(mask_file):
             print("Path doesn't exist for: `%s`" % mask_file)
+
+    print("\n\nDebug stop!!\n\n")
+    break
+
 
 global_t2 = time.time()
 print("\n********************")
