@@ -18,15 +18,15 @@ import logging
 logging.basicConfig(filename='GalaxyDemographics.log', level=logging.DEBUG)
 
 
-def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords):
+def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords,
+                          pixel_tuple_dict):
 
     rows = []
 
+    # Tile synoptic information
     ascii_ecsv_fname = "%s_sexcat_good.txt" % glade_file.replace('.txt', '')
     ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
     print("Creating `%s`" % ascii_ecsv_fpath)
-
-    # Build ascii.ecsv formatted output
     cols = ['sexcat_id', 'glade_id', 'ra_dec', 'dec_dec', 'glade_B', 'filter', 'sex_mag', 'num_pixels']
     dtype = ['i4', 'i4', 'f8', 'f8', 'f8', 'U64', 'f8', 'i4']
     result_table = Table(dtype=dtype, names=cols)
@@ -42,7 +42,27 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     result_table.write(ascii_ecsv_fpath, overwrite=True, format='ascii.ecsv')
 
-    # Output region files as well
+
+    # Tile good pix
+    ascii_ecsv_fname2 = "%s_pixel_good.txt" % glade_file.replace('.txt', '')
+    ascii_ecsv_fpath2 = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname2)
+    print("Creating `%s`" % ascii_ecsv_fpath2)
+    # Build ascii.ecsv formatted output
+    cols2 = ['sexcat_id', 'x', 'y']
+    dtype2 = ['i4', 'i4', 'i4']
+    result_table2 = Table(dtype=dtype2, names=cols2)
+
+    for sxct_id, pixel_tuple in pixel_tuple_dict.items():
+        # Build table for valid galaxy pixels
+        arr_len = np.shape(pixel_tuple)[1]
+
+        for i in range(arr_len):
+            x = pixel_tuple[1][i]
+            y = pixel_tuple[0][i]
+            result_table2.add_row([sxct_id, x, y])
+    result_table2.write(ascii_ecsv_fpath2, overwrite=True, format='ascii.ecsv')
+
+    # Tile region
     region_fpath = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics",
                                   glade_file.replace('.txt', ''))
     with open(region_fpath, 'w') as csvfile:
@@ -56,6 +76,16 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             ra = r[2]
             dec = r[3]
             csvfile.write('circle(%s,%s,30") # width=2 text="%s"\n' % (ra, dec, glade_id))
+
+        for sxct_id, pixel_tuple in pixel_tuple_dict.items():
+            # Build table for valid galaxy pixels
+            arr_len = np.shape(pixel_tuple)[1]
+
+            for i in range(arr_len):
+                x = pixel_tuple[1][i]
+                y = pixel_tuple[0][i]
+                csvfile.write('circle(%s,%s,1) # color=red\n' % (x, y))
+
 
         print("Done w/ Region File")
 
@@ -74,7 +104,7 @@ def test_mask(arr_tup):
 
             x = arr_tup[1][i]
             y = arr_tup[0][i]
-            csvfile.write('circle(%s,%s,1") # width=1\n' % (x, y))
+            csvfile.write('circle(%s,%s,1) # width=1\n' % (x, y))
 
         print("Done w/ Region File")
 
@@ -191,17 +221,16 @@ for sf_index, sf in enumerate(swope_files):
 
         # get the indices (# of pixels) for each galaxy based on sextractor
         pixels = []
+        pixel_tup_dict = {}
         for i in good_ids:
             good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
 
-            test_mask(good_galaxy_indices)
-            raise Exception("Stop")
-
+            pixel_tup_dict[i] = good_galaxy_indices
             gal_pix = segmap[good_galaxy_indices]
             pixels.append(len(gal_pix))
 
         write_good_sexcat_ids(glade_file_name, sf, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
-                              gal_coords)
+                              gal_coords, pixel_tup_dict)
 
         t2 = time.time()
         print("\n********************")
@@ -218,7 +247,7 @@ for sf_index, sf in enumerate(swope_files):
             logging.debug("Path doesn't exist for: `%s`" % mask_file)
         logging.debug("Skipping %s" % sf)
 
-    if sf_index == 10:
+    if sf_index == 0:
         print("\n\nDebug stop!!\n\n")
         break
 
