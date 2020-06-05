@@ -59,6 +59,24 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
         print("Done w/ Region File")
 
+def test_mask(arr_tup):
+
+    arr_len = np.shape(arr_tup)[1]
+
+    # Output region files as well
+    region_fpath = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", "test")
+    with open(region_fpath, 'w') as csvfile:
+        csvfile.write("# Region file format: DS9 version 4.0 global\n\n")
+        csvfile.write("global color=lightgreen\n")
+        csvfile.write("image\n")
+
+        for i in range(arr_len):
+
+            x = arr_tup[1][i]
+            y = arr_tup[0][i]
+            csvfile.write('circle(%s,%s,1") # width=1\n' % (x, y))
+
+        print("Done w/ Region File")
 
 global_t1 = time.time()
 # get all the swope files...
@@ -145,6 +163,10 @@ for sf_index, sf in enumerate(swope_files):
                                           glade['Galaxy_Dec'],
                                           sextable.X_WORLD[i],
                                           sextable.Y_WORLD[i])*3600.
+
+
+
+
             # sanity
             if len(sep) == 0:
                 logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num. glade_file_path, sf))
@@ -171,8 +193,12 @@ for sf_index, sf in enumerate(swope_files):
         pixels = []
         for i in good_ids:
             good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
-            num_pix = segmap[good_galaxy_indices]
-            pixels.append(len(num_pix))
+
+            test_mask(good_galaxy_indices)
+            raise Exception("Stop")
+
+            gal_pix = segmap[good_galaxy_indices]
+            pixels.append(len(gal_pix))
 
         write_good_sexcat_ids(glade_file_name, sf, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
                               gal_coords)
