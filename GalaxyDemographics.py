@@ -89,8 +89,8 @@ for sf_index, sf in enumerate(swope_files):
 
     glade_files = glob.glob('SwopeTiles/*%s*txt' % field_name)
     db_id = -9999
-    print(glade_files)
-    import pdb; pdb.set_trace()
+    # print(glade_files)
+    # import pdb; pdb.set_trace()
 
     for gf in glade_files:
         glade = at.Table.read(gf, format='ascii.ecsv')
@@ -109,12 +109,10 @@ for sf_index, sf in enumerate(swope_files):
 
     glade_path = "./SwopeTiles"
     glade_file_name = "%s_%s.txt" % (db_id, field_name)
-    glade_file_path = "%s/%s " % (glade_path, glade_file_name)
+    glade_file_path = "%s/%s" % (glade_path, glade_file_name)
 
     dcmp_file = sf.replace('.fits', '.dcmp')
     mask_file = sf.replace('.fits', '.mask.fits.gz')
-
-
 
     # check if both files are on-disk
     # print(sf)
@@ -187,7 +185,15 @@ for sf_index, sf in enumerate(swope_files):
         print("\n********************")
         print("Done processing %s/%s: %s" % (sf_index, num_sf, (t2 - t1)))
         print("********************\n")
-
+    else:
+        if not os.path.exists(sf):
+            print("Path doesn't exist for: `%s`" % sf)
+        if not os.path.exists(glade_file_path):
+            print("Path doesn't exist for: `%s`" % glade_file_path)
+        if not os.path.exists(dcmp_file):
+            print("Path doesn't exist for: `%s`" % dcmp_file)
+        if not os.path.exists(mask_file):
+            print("Path doesn't exist for: `%s`" % mask_file)
 
 global_t2 = time.time()
 print("\n********************")
