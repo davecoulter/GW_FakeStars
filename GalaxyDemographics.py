@@ -58,7 +58,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     raise Exception("Stop!")
 
-t1 = time.time()
+global_t1 = time.time()
 
 
 
@@ -74,7 +74,13 @@ with open("./all_tiles_ascii.txt", 'r') as csvfile:
 
 psf_shape = 31
 
-for sf in swope_files:
+num_sf = len(swope_files)
+for sf_index, sf in enumerate(swope_files):
+
+    print("\n********************")
+    print("Processing %/%s..." % (sf_index, num_sf))
+    print("********************\n")
+    t1 = time.time()
 
     tokens = sf.split("/")[-1].split(".")
     field_name = tokens[0]
@@ -174,7 +180,13 @@ for sf in swope_files:
         write_good_sexcat_ids(glade_file_name, sf, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
                               gal_coords)
 
-t2 = time.time()
+        t2 = time.time()
+        print("\n********************")
+        print("Done processing %s/%s: %s" % (sf_index, num_sf, (t2 - t1)))
+        print("********************\n")
+
+
+global_t2 = time.time()
 print("\n********************")
-print("Execution time: %s" % (t2 - t1))
+print("Execution time: %s" % (global_t2 - global_t1))
 print("********************\n")
