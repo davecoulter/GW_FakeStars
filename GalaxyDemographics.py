@@ -13,6 +13,9 @@ from astropy import units as u
 import time
 from astropy.table import Table
 import csv
+import logging
+
+logging.basicConfig(filename='GalaxyDemographics.log', level=logging.DEBUG)
 
 
 def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords):
@@ -82,11 +85,8 @@ for sf_index, sf in enumerate(swope_files):
     field_name = tokens[0]
     photpipe_id = tokens[3].replace('_stch_1', '')
 
-
     glade_files = glob.glob('SwopeTiles/*%s*txt' % field_name)
     db_id = -9999
-    # print(glade_files)
-    # import pdb; pdb.set_trace()
 
     for gf in glade_files:
         glade = at.Table.read(gf, format='ascii.ecsv')
@@ -100,7 +100,9 @@ for sf_index, sf in enumerate(swope_files):
             break
 
     if db_id == -9999:
-        raise Exception("Can't find match between glade files and `%s`!" % sf)
+        logging.debug("Can't find match between glade files and `%s`!" % sf)
+        logging.debug("Skipping %s" % sf)
+        continue
 
 
     glade_path = "./SwopeTiles"
@@ -109,12 +111,6 @@ for sf_index, sf in enumerate(swope_files):
 
     dcmp_file = sf.replace('.fits', '.dcmp')
     mask_file = sf.replace('.fits', '.mask.fits.gz')
-
-    # check if both files are on-disk
-    # print(sf)
-    # print(glade_file_path)
-    # print(dcmp_file)
-    # print(mask_file)
 
     if os.path.exists(sf) and os.path.exists(glade_file_path) \
             and os.path.exists(dcmp_file) and os.path.exists(mask_file):
@@ -136,7 +132,9 @@ for sf_index, sf in enumerate(swope_files):
         try:
             glade = at.Table.read(glade_file_path, format='ascii.ecsv')
         except:
-            raise Exception("Can't read file...")
+            logging.debug("Can't read `%s`!" % glade_file_path)
+            logging.debug("Exiting!")
+            raise Exception("Can't read file `%s`" % glade_file_path)
 
         # Identify matches between teglon/GLADE and what source extractor detects
         # keep a list of matches ("good_ids")
@@ -149,6 +147,8 @@ for sf_index, sf in enumerate(swope_files):
                                           sextable.Y_WORLD[i])*3600.
             # sanity
             if len(sep) == 0:
+                logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num. glade_file_path, sf))
+                logging.debug("Skipping sextable.NUMBER=%s" % sex_num)
                 continue
 
             min_sep = np.min(sep)
@@ -183,13 +183,14 @@ for sf_index, sf in enumerate(swope_files):
         print("********************\n")
     else:
         if not os.path.exists(sf):
-            print("Path doesn't exist for: `%s`" % sf)
+            logging.debug("Path doesn't exist for: `%s`" % sf)
         if not os.path.exists(glade_file_path):
-            print("Path doesn't exist for: `%s`" % glade_file_path)
+            logging.debug("Path doesn't exist for: `%s`" % glade_file_path)
         if not os.path.exists(dcmp_file):
-            print("Path doesn't exist for: `%s`" % dcmp_file)
+            logging.debug("Path doesn't exist for: `%s`" % dcmp_file)
         if not os.path.exists(mask_file):
-            print("Path doesn't exist for: `%s`" % mask_file)
+            logging.debug("Path doesn't exist for: `%s`" % mask_file)
+        logging.debug("Skipping %s" % sf)
 
     print("\n\nDebug stop!!\n\n")
     break
