@@ -77,6 +77,17 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             dec = r[3]
             csvfile.write('circle(%s,%s,30") # width=2 text="%s"\n' % (ra, dec, glade_id))
 
+        print("Done w/ Region File 1")
+
+
+    region_fpath2 = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics",
+                                  glade_file.replace('.txt', '_2'))
+    with open(region_fpath2, 'w') as csvfile:
+
+        csvfile.write("# Region file format: DS9 version 4.0 global\n\n")
+        csvfile.write("global color=red\n")
+        csvfile.write("image\n")
+
         for sxct_id, pixel_tuple in pixel_tuple_dict.items():
             # Build table for valid galaxy pixels
             arr_len = np.shape(pixel_tuple)[1]
@@ -84,10 +95,9 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             for i in range(arr_len):
                 x = pixel_tuple[1][i]
                 y = pixel_tuple[0][i]
-                csvfile.write('circle(%s,%s,1) # color=red\n' % (x, y))
+                csvfile.write('circle(%s,%s,1) # \n' % (x, y))
 
-
-        print("Done w/ Region File")
+        print("Done w/ Region File 2")
 
 def test_mask(arr_tup):
 
