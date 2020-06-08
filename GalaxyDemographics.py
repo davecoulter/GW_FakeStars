@@ -147,7 +147,6 @@ for sf_index, sf in enumerate(swope_files):
     db_id = -9999
 
     for gf in glade_files:
-
         glade = at.Table.read(gf, format='ascii.ecsv')
         comment = glade.meta['comment']
 
@@ -201,6 +200,10 @@ for sf_index, sf in enumerate(swope_files):
         good_ids, glade_ids, glade_bmags, measured_mags, gal_coords = [], [], [], [], []
         try:
             glade = at.Table.read(glade_file_path, format='ascii.ecsv')
+
+            if len(glade['Galaxy_RA']) == 0:
+                print("No glade information in this field, skipping!")
+                continue
         except:
             logging.debug("Can't read `%s`!" % glade_file_path)
             logging.debug("Exiting!")
@@ -215,9 +218,6 @@ for sf_index, sf in enumerate(swope_files):
                                           glade['Galaxy_Dec'],
                                           sextable.X_WORLD[i],
                                           sextable.Y_WORLD[i])*3600.
-
-
-
 
             # sanity
             if len(sep) == 0:
