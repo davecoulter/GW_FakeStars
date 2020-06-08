@@ -147,6 +147,7 @@ for sf_index, sf in enumerate(swope_files):
     db_id = -9999
 
     for gf in glade_files:
+
         glade = at.Table.read(gf, format='ascii.ecsv')
         comment = glade.meta['comment']
 
@@ -162,10 +163,21 @@ for sf_index, sf in enumerate(swope_files):
         logging.debug("Skipping %s" % sf)
         continue
 
-
     glade_path = "./SwopeTiles"
     glade_file_name = "%s_%s.txt" % (db_id, field_name)
     glade_file_path = "%s/%s" % (glade_path, glade_file_name)
+
+
+
+
+    # check if this file has already been processed
+    ascii_ecsv_fname = "%s_sexcat_good.txt" % glade_file_name.replace('.txt', '')
+    ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
+    if os.path.exists(ascii_ecsv_fpath):
+        print("%s already processed! skipping..." % glade_file_name)
+        continue
+
+
 
     dcmp_file = sf.replace('.fits', '.dcmp')
     mask_file = sf.replace('.fits', '.mask.fits.gz')
@@ -209,7 +221,7 @@ for sf_index, sf in enumerate(swope_files):
 
             # sanity
             if len(sep) == 0:
-                logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num. glade_file_path, sf))
+                logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, sf))
                 logging.debug("Skipping sextable.NUMBER=%s" % sex_num)
                 continue
 
