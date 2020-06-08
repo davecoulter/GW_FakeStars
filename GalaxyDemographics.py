@@ -158,6 +158,8 @@ for sf_index, sf in enumerate(swope_files):
             break
 
     if db_id == -9999:
+        print("Can't find match between glade files and `%s`!" % sf)
+        print("Skipping %s" % sf)
         logging.debug("Can't find match between glade files and `%s`!" % sf)
         logging.debug("Skipping %s" % sf)
         continue
@@ -174,6 +176,7 @@ for sf_index, sf in enumerate(swope_files):
     ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
     if os.path.exists(ascii_ecsv_fpath):
         print("%s already processed! skipping..." % glade_file_name)
+        logging.debug("%s already processed! skipping..." % glade_file_name)
         continue
 
 
@@ -203,6 +206,7 @@ for sf_index, sf in enumerate(swope_files):
 
             if len(glade['Galaxy_RA']) == 0:
                 print("No glade information in this field, skipping!")
+                logging.debug("No glade information in this field, skipping!")
                 continue
         except:
             logging.debug("Can't read `%s`!" % glade_file_path)
@@ -223,6 +227,8 @@ for sf_index, sf in enumerate(swope_files):
             if len(sep) == 0:
                 logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, sf))
                 logging.debug("Skipping sextable.NUMBER=%s" % sex_num)
+                print("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, sf))
+                print("Skipping sextable.NUMBER=%s" % sex_num)
                 continue
 
             min_sep = np.min(sep)
@@ -260,13 +266,18 @@ for sf_index, sf in enumerate(swope_files):
         print("********************\n")
     else:
         if not os.path.exists(sf):
+            print("Path doesn't exist for: `%s`" % sf)
             logging.debug("Path doesn't exist for: `%s`" % sf)
         if not os.path.exists(glade_file_path):
+            print("Path doesn't exist for: `%s`" % glade_file_path)
             logging.debug("Path doesn't exist for: `%s`" % glade_file_path)
         if not os.path.exists(dcmp_file):
+            print("Path doesn't exist for: `%s`" % dcmp_file)
             logging.debug("Path doesn't exist for: `%s`" % dcmp_file)
         if not os.path.exists(mask_file):
+            print("Path doesn't exist for: `%s`" % mask_file)
             logging.debug("Path doesn't exist for: `%s`" % mask_file)
+        print("Skipping %s" % sf)
         logging.debug("Skipping %s" % sf)
 
     # if sf_index == 0:
