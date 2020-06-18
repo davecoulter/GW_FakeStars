@@ -32,7 +32,9 @@ class FileAssociation():
                  template_file,
                  template_dcmp_file,
                  diff_dcmp_file,
-                 segmap_file):
+                 segmap_file,
+                 sexcat_good = None,
+                 pixel_good = None):
 
         self.image_file = image_file
         self.image_dcmp_file = image_dcmp_file
@@ -47,11 +49,13 @@ class FileAssociation():
         self.diff_dcmp_file = diff_dcmp_file
         self.segmap_file = segmap_file
 
+        self.sexcat_good = sexcat_good
+        self.pixel_good = pixel_good
+
     def __repr__(self):
         return str(self.__dict__)
 
 class DetermineEfficiencies():
-
 
     def __init__(self, root_path, image_dir, template_dir, image_list, template_list):
 
@@ -84,19 +88,28 @@ class DetermineEfficiencies():
         for t in self.template_names:
             self.template_files.append("{0}/{1}".format(self.template_path, t))
 
-    def initialize(self, iteration):
+    def initialize(self, iteration, gal_bin_to_process):
 
         if self.options.plant_in_galaxies:
-            galstr = 'gal_'
-        else: galstr = ''
+            galstr = 'gal_' + gal_bin_to_process + "_"
+        else:
+            galstr = ''
 
         # These directories depend on the iteration #
-        self.fake_image_dir = "{0}_fake_{1}{2}".format(self.image_dir, galstr, iteration)
+        if len(galstr) > 0:
+            self.fake_image_dir = "{0}_fake_{1}_{2}".format(self.image_dir, galstr, iteration)
+        else:
+            self.fake_image_dir = "{0}_fake_{1}{2}".format(self.image_dir, galstr, iteration)
+
         self.fake_image_path = "{0}/{1}/1".format(self.root_path, self.fake_image_dir)
         self.fake_log_path = self.fake_image_path.replace("workstch", "logstch")
         self.fake_stitched_path = self.fake_log_path.replace("logstch", "stitched")
 
-        self.diff_dir_name = "%s_fake_%s%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
+        if len(galstr) > 0:
+            self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
+        else:
+            self.diff_dir_name = "%s_fake_%s%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
+
         self.diff_dir_path = "%s/%s/1" % (self.root_path, self.diff_dir_name)
 
         self.fake_mag_file = self.fake_log_path + "/fakemags.txt"
@@ -189,6 +202,27 @@ class DetermineEfficiencies():
                     print('warning : file %s does not exist'%file)
             if filemissing: continue
 
+
+
+            sexcat_good = None
+            pixel_good = None
+            if self.options.plant_in_galaxies:
+                gal_demo_base_dir = "%s/%s" % (self.log_path, "galaxy_demographics")
+                sexcat_files = glob.glob("%s/*_sexcat_good.txt" % gal_demo_base_dir)
+
+                for s in sexcat_files:
+                    sexcat_table = at.Table.read(s, format='ascii.ecsv')
+                    model_props = sexcat_table.meta['comment']
+                    f = model_props[0].split("=")[1].strip()
+
+                    if f == image_file:
+                        print("Found %s!" % f)
+                        sexcat_good = s
+                        break
+            if sexcat_good is not None:
+                pixel_good = sexcat_good.replace("sexcat", "pixel")
+
+
             file_associations[image_name] = FileAssociation(image_file,
                                                             image_dcmp_file,
                                                             image_mask_file,
@@ -200,7 +234,9 @@ class DetermineEfficiencies():
                                                             template_file,
                                                             template_dcmp_file,
                                                             diff_dcmp_file,
-                                                            segmap_file)
+                                                            segmap_file,
+                                                            sexcat_good,
+                                                            pixel_good)
 
         return file_associations
 
@@ -220,11 +256,13 @@ class DetermineEfficiencies():
         # mask_files = self.get_mask_files(image_files)
 
         # Plant fake stars
-        for i,img in enumerate(self.image_names):
+        for i, img in enumerate(self.image_names):
 
             print("Opening: %s" % img)
-            try: file_association = self.file_associations[img]
-            except: continue
+            try:
+                file_association = self.file_associations[img]
+            except:
+                continue
 
             if not clobber and os.path.exists(file_association.fake_image_file):
                 continue
@@ -241,20 +279,26 @@ class DetermineEfficiencies():
                     #	glade_file = glade_files[0]
                     #else:
                     #	raise RuntimeError('temporarily raising error here! can\'t find GLADE file!')
-                    good_ids,glade_ids,glade_bmags = np.array([]),np.array([]),np.array([])
+                    good_ids, glade_ids, glade_bmags = np.array([]), np.array([]), np.array([])
 
-                    try:  glade = at.Table.read(gf,format='ascii.ecsv')
-                    except: continue
+                    try:
+                        glade = at.Table.read(gf, format='ascii.ecsv')
+                    except:
+                        continue
 
-                    for i in range(len(sextable.NUMBER)):
-                        sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],glade['Galaxy_Dec'],sextable.X_WORLD[i],sextable.Y_WORLD[i])*3600.
+                    for j in range(len(sextable.NUMBER)):
+                        sep = astCoords.calcAngSepDeg(glade['Galaxy_RA'],
+                                                      glade['Galaxy_Dec'],
+                                                      sextable.X_WORLD[j],
+                                                      sextable.Y_WORLD[j])*3600.
                         if not len(sep):
                             break
                         if min(sep) < 2:
-                            good_ids = np.append(good_ids,sextable.NUMBER[i])
-                            glade_ids = np.append(glade_ids,glade['Galaxy_ID'][sep == np.min(sep)][0])
-                            glade_bmags = np.append(glade_bmags,glade['B'][sep == np.min(sep)][0])
-                if not len(glade_ids): continue
+                            good_ids = np.append(good_ids, sextable.NUMBER[j])
+                            glade_ids = np.append(glade_ids, glade['Galaxy_ID'][sep == np.min(sep)][0])
+                            glade_bmags = np.append(glade_bmags, glade['B'][sep == np.min(sep)][0])
+                if not len(glade_ids):
+                    continue
 
             image_hdu = fits.open(file_association.image_file)
             image_data = image_hdu[0].data.astype('float')
@@ -276,7 +320,7 @@ class DetermineEfficiencies():
             fake_x = np.array([])
             fake_y = np.array([])
             fake_mags = np.random.uniform(fake_mag_range[0], fake_mag_range[1], fake_mag_range[2])
-            gal_mags,glade_gal_mags,glade_gal_ids = [],[],[]
+            gal_mags, glade_gal_mags, glade_gal_ids = [], [], []
 
             print("Opening: %s" % file_association.image_mask_file)
             mask_hdu = fits.open(file_association.image_mask_file)
@@ -286,10 +330,13 @@ class DetermineEfficiencies():
             if self.options.plant_in_galaxies:
                 if not os.path.exists(file_association.segmap_file):
                     raise RuntimeError('segmap file %s was not created by SExtractor!' % file_association.segmap_file)
+
                 segmap = fits.getdata(file_association.segmap_file)
-                dcmp = txtobj(file_association.image_dcmp_file,cmpheader=True)
+                dcmp = txtobj(file_association.image_dcmp_file, cmpheader=True)
+
                 # get rid of the stars
                 self.options.glade = True
+
                 if not self.options.glade:
                     for i in sextable.NUMBER[sextable.CLASS_STAR > 0.5]:
                         segmap[segmap == i] = 0
@@ -297,9 +344,13 @@ class DetermineEfficiencies():
                     for i in sextable.NUMBER:
                         if i not in good_ids:
                             segmap[segmap == i] = 0
+
                 for i in range(len(sextable.NUMBER)):
-                    if not self.options.glade and sextable.CLASS_STAR[i] > 0.5: continue
-                    elif sextable.NUMBER[i] not in good_ids: continue
+
+                    if not self.options.glade and sextable.CLASS_STAR[i] > 0.5:
+                        continue
+                    elif sextable.NUMBER[i] not in good_ids:
+                        continue
                     if not self.options.glade:
                         sep = (dcmp.Xpos - sextable.X_IMAGE[i])**2. + (dcmp.Ypos - sextable.Y_IMAGE[i])**2.
                         sexmatch = np.where(sep == np.min(sep))[0]
@@ -320,14 +371,15 @@ class DetermineEfficiencies():
             collisions = 0
 
 
-            imshapex,imshapey = np.shape(image_data)
+            imshapex, imshapey = np.shape(image_data)
             #rand_ind_used = []
             #print('hi3')
             for j in range(len(fake_mags)):
                 #print(j)
                 candidate_found = False
                 while not candidate_found:
-                    if not len(good_indices[0]): break
+                    if not len(good_indices[0]):
+                        break
 
                     # Turns out that good_indices[1] corresponds to fits X-coord and good_indices[0] corresponds to fits Y-coord
                     rand_ind = random.choice(range(len(good_indices[1])))
@@ -340,23 +392,26 @@ class DetermineEfficiencies():
                     sep = (fake_x - x) ** 2. + (fake_y - y) ** 2.
                     #masksep = (bad_indices[1] - x)**2. + (bad_indices[0] - y)**2.
 
-                    if x < 15 or y < 15 or x > imshapex-15 or y > imshapey - 15: continue
+                    if x < 15 or y < 15 or x > imshapex-15 or y > imshapey - 15:
+                        continue
                     #if min(masksep) < 30 ** 2: continue
 
                     if j == 0 or min(sep) > 5 ** 2:
-                        fake_x = np.append(fake_x,x)
-                        fake_y = np.append(fake_y,y)
+                        fake_x = np.append(fake_x, x)
+                        fake_y = np.append(fake_y, y)
                         if self.options.plant_in_galaxies:
                             try:
-                                gal_mags.append(sextable.MAG_AUTO[sextable.NUMBER == segmap[int(y),int(x)]][0])
+                                gal_mags.append(sextable.MAG_AUTO[sextable.NUMBER == segmap[int(y), int(x)]][0])
                             except:
                                 gal_mags.append(-99)
                             if self.options.glade:
                                 try:
-                                    glade_gal_mags.append(glade_bmags[good_ids == segmap[int(np.round(y)),int(np.round(x))]][0])
-                                    glade_gal_ids.append(glade_ids[good_ids == segmap[int(np.round(y)),int(np.round(x))]][0])
+                                    glade_gal_mags.append(glade_bmags[good_ids == segmap[int(np.round(y)),
+                                                                                         int(np.round(x))]][0])
+                                    glade_gal_ids.append(glade_ids[good_ids == segmap[int(np.round(y)),
+                                                                                      int(np.round(x))]][0])
                                 except: import pdb; pdb.set_trace()
-                            segmap[int(y)-5:int(y)+6,int(x)-5:int(x)+6] = 0
+                            segmap[int(y)-5:int(y)+6, int(x)-5:int(x)+6] = 0
                             good_indices = np.where((mask_data != 144.0) & (segmap != 0))
                         else:
                             gal_mags.append(-99)
@@ -388,14 +443,132 @@ class DetermineEfficiencies():
             image_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
             print('hi5')
 
+
+    def galaxy_plant(self, gal_fake_mag_range, clobber=False):
+
+        # Generate fakes for all files to be processed
+        fake_mags = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1], gal_fake_mag_range[2])
+        fake_mags_iter = iter(fake_mags)
+
+        # Loop over all files...
+        for i, img in enumerate(self.image_names):
+            print("Opening: %s" % img)
+            try:
+                file_association = self.file_associations[img]
+            except:
+                continue
+
+            if not clobber and os.path.exists(file_association.fake_image_file):
+                continue
+
+            # Open the relevant data files, and extract vars
+            image_hdu = fits.open(file_association.image_file)
+            image_data = image_hdu[0].data.astype('float')
+            segmap = fits.getdata(file_association.segmap_file)
+            dcmp_header = fits.getheader(file_association.image_dcmp_file)
+            zpt = None
+            try:
+                zpt = dcmp_header['ZPTMAG']
+            except KeyError:
+                print("'ZPTMAG' keyword doesn't exist. Exiting...")
+                continue
+            fwhm = dcmp_header['FWHM']
+            pix_scale_arc_sec = np.abs(dcmp_header['CD2_2']) * 3600.0
+
+
+            # Build the fake star model -- calculate PSF shape (e.g. the pixel-based radius for the fakes
+            psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
+            psf_shape = int(np.ceil(2.0 * fwhm))
+            psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
+            psf_mag = -2.5 * np.log10(np.sum(psf_model)) + zpt
+            max_size = np.shape(psf_model)[0]
+            dx = dy = int((max_size - 1) / 2)
+
+
+            # We have already gone through the trouble of getting the "eligible" pixels. Rehydrate.
+            pix_by_sexcat_id = {}
+            galaxy_by_sexcat_id = {}
+
+            # Keep track of the SExtractor/GLADE galaxy properties by sexcat_id
+            sexcat_table = at.Table.read(file_association.sexcat_good, format='ascii.ecsv')
+            sexcat_ids = list(sexcat_table["sexcat_id"])
+            glade_ids = list(sexcat_table["glade_id"])
+            glade_Bs = list(sexcat_table["glade_B"])
+            sex_mags = list(sexcat_table["sex_mag"])
+            for j, sid in enumerate(sexcat_ids):
+                galaxy_by_sexcat_id[sid] = (glade_ids[j], glade_Bs[j], sex_mags[j])
+
+            # Keep track of the SExtractor galaxy pixels by sexcat_id
+            pixel_table = at.Table.read(file_association.pixel_good, format='ascii.ecsv')
+            sexcat_ids = list(pixel_table["sexcat_id"])
+            good_pix_x = list(pixel_table["x"])
+            good_pix_y = list(pixel_table["y"])
+            for j, sid in enumerate(sexcat_ids):
+                if sid not in pix_by_sexcat_id:
+                    pix_by_sexcat_id[sid] = [[], []]
+                pix_by_sexcat_id[sid][0].append(good_pix_x[j])
+                pix_by_sexcat_id[sid][1].append(good_pix_y[j])
+
+
+            # Actually inject the fakes
+            injected_fakes = []
+            for sid, good_pix in pix_by_sexcat_id.items():
+
+                glade_id = galaxy_by_sexcat_id[sid][0]
+                glade_B = galaxy_by_sexcat_id[sid][1]
+                sex_mag = galaxy_by_sexcat_id[sid][2]
+
+                all_x = good_pix[0]
+                all_y = good_pix[1]
+
+                x_min = np.min(all_x)
+                x_max = np.max(all_x)
+                y_min = np.min(all_y)
+                y_max = np.max(all_y)
+
+                psf_loc_x = np.arange(x_min, x_max, psf_shape)
+                psf_loc_y = np.arange(y_min, y_max, psf_shape)
+
+                for x in psf_loc_x:
+                    for y in psf_loc_y:
+                        if segmap[y, x] == sid:
+                            m = next(fake_mags_iter)
+                            injected_fakes.append((x, y, m, glade_id, glade_B, sex_mag))
+
+                for x, y, m, gi, gg, g in injected_fakes:
+                    psf_flux = 10 ** (-0.4 * (m - psf_mag))
+                    self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, g, gg, gi))
+                    image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1] += psf_model * psf_flux
+
+            image_hdu[0].data[:] = image_data
+            image_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
+
+            # Write out Fakes for image file.
+            fake_radius = (psf_shape / 2.0) * pix_scale_arc_sec
+            fakes_region = "%s/%s" % (self.fake_log_path, img.replace("fits", "reg"))
+            with open(fakes_region, 'w') as csvfile:
+
+                csvfile.write("# Region file format: DS9 version 4.0 global\n")
+                csvfile.write("global color=green\n")
+                csvfile.write("image\n")
+
+                for x, y, m in injected_fakes:
+                    csvfile.write('circle(%s,%s,%s") # \n' % (x, y, fake_radius))
+                    csvfile.write('point(%s,%s) # point=cross\n' % (x, y))
+
+            print("Done w/ %s" % fakes_region)
+
+
+
     def generate_psf(self, psf_x, psf_xy, psf_y, psf_size):
 
         psf_model = np.zeros([psf_size, psf_size])
         for i in range(psf_size):
             for j in range(psf_size):
-                x = i - psf_size/2; y = j - psf_size/2
+                x = i - psf_size/2
+                y = j - psf_size/2
                 zsq = 1/2.*(x**2./psf_x**2. + 2*psf_xy*x*y + y**2./psf_y**2.)
-                psf_model[j,i] = (1 + zsq + 1/2.*zsq**2. + 1/6.*zsq**3.)**(-1)
+                psf_model[j, i] = (1 + zsq + 1/2.*zsq**2. + 1/6.*zsq**3.)**(-1)
 
         return psf_model
 
@@ -441,7 +614,6 @@ class DetermineEfficiencies():
             os.system('rsync -avz %s %s' % (file_association.image_dcmp_file, file_association.fake_image_dcmp_file))
 
         os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000' % (self.fake_image_dir, self.template_dir))
-
 
     def get_phot(self, fake_mag_range, gal_mag_range):
 
@@ -518,7 +690,6 @@ class DetermineEfficiencies():
             self.write_all_efficiency(fake_mag_range, file_name, file_association.diff_dcmp_file,out_match_files, niter)
             if self.options.plant_in_galaxies:
                 self.write_all_2d_efficiency(fake_mag_range, gal_mag_range, file_name, file_association.diff_dcmp_file, out_match_files, niter)
-
 
     def write_efficiency(self, fake_mag_range, file_name, diff_dcmp_file):
 
@@ -706,7 +877,6 @@ class DetermineEfficiencies():
         except FileNotFoundError:
             print("'%s' not found. Proceeding..." % lgdir)
 
-
     def soft_clean(self):
         diff_log_dir = self.diff_dir_path.replace("workstch", "logstch")
 
@@ -766,11 +936,17 @@ class AllStages():
         parser.add_option('--image_dir', default='gw190425', type='string', help='Image directory')
         parser.add_option('--field_name_start', default='s005', type='string', help='Image directory')
         parser.add_option('--template_dir', default='gw190425tmpl', type='string', help='Template directory')
-        parser.add_option('--image_list', default='gw190425/all_tiles_ascii.txt', type='string', help='File with all observations')
-        parser.add_option('--template_list', default='gw190425/all_temps.txt', type='string', help='File with all templates')
-        parser.add_option('--iterations', default=2, type='int', help='Number of times to run the job')
-        parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=2, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--image_list', default='gw190425/<change this to the one you want>.txt', type='string', help='File with all observations')
+        parser.add_option('--template_list', default='gw190425/<change this to the one you want>.txt', type='string', help='File with all templates')
+
+        parser.add_option('--iterations', default=1, type='int', help='Number of times to run the job')
+        parser.add_option('--iteration_start', default=1, type='int', help='Integer used in directory name to start the iterations')
+
+        parser.add_option('--gal_bin_to_process', default='', type='string', help='Gal mag range for galaxy injections')
         parser.add_option('--gal_mag_range', default=(13, 22, 0.5), nargs=2, type='float', help='gal mag tuple: (min, max, bin size)')
+        parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=2, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--gal_fake_mag_range', default=(18, 25, 3000, 0.2), nargs=2, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
+
         parser.add_option('--plant_in_galaxies', default=False, action="store_true",
                           help='if set, generate positions from the SExtractor galaxy mask')
         parser.add_option('--clean', default=False, action="store_true",
@@ -806,23 +982,29 @@ if __name__ == "__main__":
 
     t0 = time.time()
 
-    i = 1
+    i = options.iteration_start
     out_match_files = []
     while i <= iterations:
 
-        detEff.initialize(i)
+        detEff.initialize(i, options.gal_bin_to_process)
         if options.clean:
             detEff.hard_clean()
             continue
 
         if 'plant' in options.stage or 'all' in options.stage:
-            detEff.plant_fakes(fake_mag_range=options.fake_mag_range,clobber=options.clobber)
+
+            if options.plant_in_galaxies:
+                if options.gal_bin_to_process == "":
+                    raise Exception("Which gal mag bin to process?")
+                detEff.galaxy_plant(fake_mag_range=options.gal_fake_mag_range)
+            else:
+                detEff.plant_fakes(fake_mag_range=options.fake_mag_range, clobber=options.clobber)
 
         if 'photpipe' in options.stage or 'all' in options.stage:
             detEff.do_phot(iteration=i)
 
         if 'getphot' in options.stage or 'all' in options.stage:
-            out_match_files += [detEff.get_phot(fake_mag_range=options.fake_mag_range,gal_mag_range=options.gal_mag_range)]
+            out_match_files += [detEff.get_phot(fake_mag_range=options.fake_mag_range, gal_mag_range=options.gal_mag_range)]
 
         i += 1
 

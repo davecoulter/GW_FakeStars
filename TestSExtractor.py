@@ -26,6 +26,25 @@ def generate_psf(psf_x, psf_xy, psf_y, psf_size):
 
     return psf_model
 
+def test_mask(arr_tup):
+
+    arr_len = np.shape(arr_tup)[1]
+
+    # Output region files as well
+    region_fpath = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", "test")
+    with open(region_fpath, 'w') as csvfile:
+        csvfile.write("# Region file format: DS9 version 4.0 global\n\n")
+        csvfile.write("global color=lightgreen\n")
+        csvfile.write("image\n")
+
+        for i in range(arr_len):
+
+            x = arr_tup[1][i]
+            y = arr_tup[0][i]
+            csvfile.write('circle(%s,%s,1") # width=1\n' % (x, y))
+
+        print("Done w/ Region File")
+
 def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords):
 
     rows = []
@@ -109,6 +128,8 @@ for i, sex_num in enumerate(sextable.NUMBER):
                                   sextable.X_WORLD[i],
                                   sextable.Y_WORLD[i])*3600.
 
+
+
     # sanity
     if len(sep) == 0:
         continue
@@ -136,6 +157,10 @@ for i in sextable.NUMBER:
 pixels = []
 for i in good_ids:
     good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
+
+    test_mask(good_galaxy_indices)
+    raise Exception("Stop")
+
     num_pix = segmap[good_galaxy_indices]
     pixels.append(len(num_pix))
 
