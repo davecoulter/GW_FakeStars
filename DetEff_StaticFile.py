@@ -996,7 +996,7 @@ if __name__ == "__main__":
             if options.plant_in_galaxies:
                 if options.gal_bin_to_process == "":
                     raise Exception("Which gal mag bin to process?")
-                detEff.galaxy_plant(fake_mag_range=options.gal_fake_mag_range)
+                detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range)
             else:
                 detEff.plant_fakes(fake_mag_range=options.fake_mag_range, clobber=options.clobber)
 
