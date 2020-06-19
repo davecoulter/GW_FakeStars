@@ -481,15 +481,19 @@ class DetermineEfficiencies():
 
             # Build the fake star model -- calculate PSF shape (e.g. the pixel-based radius for the fakes
             psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
-            psf_shape = int(np.ceil(2.0 * fwhm))
+
+            psf_shape = int(np.ceil(2.0 * fwhm)) # must be odd...
+            if psf_shape % 2 > 0:
+                psf_shape += 1
+
             psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
             psf_mag = -2.5 * np.log10(np.sum(psf_model)) + zpt
-            max_size = np.shape(psf_model)[0]
-            dx = dy = int((max_size - 1) / 2)
+            # max_size = np.shape(psf_model)[0]
+            # dx = dy = int((max_size - 1) / 2)
+            dx = dy = int((psf_shape - 1) / 2)
 
             print("psf_shape: %s" % psf_shape)
             print(np.shape(psf_model))
-            print("max_size: %s" % max_size)
             print("dx/dy: %s" % dx)
             print(np.shape(image_data[1000 - dy:1000 + dy + 1, 1000 - dx:1000 + dx + 1]))
 
