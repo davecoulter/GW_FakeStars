@@ -555,7 +555,7 @@ class DetermineEfficiencies():
                 csvfile.write("global color=green\n")
                 csvfile.write("image\n")
 
-                for x, y, m in injected_fakes:
+                for x, y, m, gi, gg, g in injected_fakes:
                     csvfile.write('circle(%s,%s,%s") # \n' % (x, y, fake_radius))
                     csvfile.write('point(%s,%s) # point=cross\n' % (x, y))
 
