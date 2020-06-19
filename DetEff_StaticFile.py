@@ -91,7 +91,7 @@ class DetermineEfficiencies():
     def initialize(self, iteration, gal_bin_to_process):
 
         if self.options.plant_in_galaxies:
-            galstr = 'gal_' + gal_bin_to_process + "_"
+            galstr = 'gal_' + gal_bin_to_process
         else:
             galstr = ''
 
@@ -153,7 +153,7 @@ class DetermineEfficiencies():
         image_fields = [i.split('.')[0] for i in self.image_names]
         template_fields = [t.split('.')[0] for t in self.template_names]
 
-        for i,image_name in enumerate(self.image_names):
+        for i, image_name in enumerate(self.image_names):
 
             image_file = self.image_files[i]
             image_dcmp_file = image_file.replace(".fits", ".dcmp")
@@ -179,7 +179,10 @@ class DetermineEfficiencies():
             fake_image_dcmp_file = "%s/%s" % (self.fake_image_path, fake_image_name.replace(".fits", ".dcmp"))
             fake_image_mask_file = "%s/%s" % (self.fake_image_path, fake_image_name.replace('.fits', '.mask.fits.gz'))
             fake_image_noise_file = "%s/%s" % (self.fake_image_path, fake_image_name.replace('.fits', '.noise.fits.gz'))
-            segmap_file = "%s/%s" % (self.fake_image_path, fake_image_name.replace('.fits', '.check.fits'))
+
+            # DC changing this for galaxy_plant()
+            # segmap_file = "%s/%s" % (self.fake_image_path, fake_image_name.replace('.fits', '.check.fits'))
+            segmap_file = "%s/%s" % (self.image_path, image_name.replace('.fits', '.check.fits'))
 
             #temp_field_match = re.findall(r"\d{2}_\d{3}[_]+\d{2}_\d{3}[_\d{1}\.]*", template_name)
             temp_field_match = template_name.split('.ut')[0]
