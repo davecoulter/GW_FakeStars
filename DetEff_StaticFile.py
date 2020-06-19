@@ -959,7 +959,7 @@ class AllStages():
         parser.add_option('--gal_bin_to_process', default='', type='string', help='Gal mag range for galaxy injections')
         parser.add_option('--gal_mag_range', default=(13, 22, 0.5), nargs=2, type='float', help='gal mag tuple: (min, max, bin size)')
         parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=2, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
-        parser.add_option('--gal_fake_mag_range', default=(18, 25, 3000, 0.2), nargs=2, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--gal_fake_mag_range', default=(18, 25, 5000, 0.2), nargs=2, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
 
         parser.add_option('--plant_in_galaxies', default=False, action="store_true",
                           help='if set, generate positions from the SExtractor galaxy mask')
