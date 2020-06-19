@@ -487,6 +487,11 @@ class DetermineEfficiencies():
             max_size = np.shape(psf_model)[0]
             dx = dy = int((max_size - 1) / 2)
 
+            print("psf_shape: %s" % psf_shape)
+            print("psf_model shape: %s" % psf_model)
+            print("max_size: %s" % max_size)
+            print("dx/dy: %s" % dx)
+            print("calculated img shape: %s" % np.shape(image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1]))
 
             # We have already gone through the trouble of getting the "eligible" pixels. Rehydrate.
             pix_by_sexcat_id = {}
@@ -539,7 +544,7 @@ class DetermineEfficiencies():
                             injected_fakes.append((x, y, m, glade_id, glade_B, sex_mag))
 
                 for x, y, m, gi, gg, g in injected_fakes:
-                    import pdb; pdb.set_trace()
+                    # import pdb; pdb.set_trace()
 
                     psf_flux = 10 ** (-0.4 * (m - psf_mag))
                     self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, g, gg, gi))
