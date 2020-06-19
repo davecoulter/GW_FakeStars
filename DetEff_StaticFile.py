@@ -488,10 +488,10 @@ class DetermineEfficiencies():
             dx = dy = int((max_size - 1) / 2)
 
             print("psf_shape: %s" % psf_shape)
-            print("psf_model shape: %s" % psf_model)
+            print("psf_model shape: %s" % np.shape(psf_model))
             print("max_size: %s" % max_size)
             print("dx/dy: %s" % dx)
-            print("calculated img shape: %s" % np.shape(image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1]))
+            print("calculated img shape: %s" % np.shape(image_data[1000 - dy:1000 + dy + 1, 1000 - dx:1000 + dx + 1]))
 
             # We have already gone through the trouble of getting the "eligible" pixels. Rehydrate.
             pix_by_sexcat_id = {}
