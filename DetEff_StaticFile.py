@@ -449,6 +449,8 @@ class DetermineEfficiencies():
 
     def galaxy_plant(self, gal_fake_mag_range, gal_fake_fwhm_factor, clobber=False):
 
+        print("gal_fake_fwhm_factor: %s" % gal_fake_fwhm_factor)
+
         # Generate fakes for all files to be processed
         # fake_mags = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1], gal_fake_mag_range[2])
         # fake_mags_iter = iter(fake_mags)
@@ -482,7 +484,8 @@ class DetermineEfficiencies():
             # Build the fake star model -- calculate PSF shape (e.g. the pixel-based radius for the fakes
             psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 
-            psf_shape = int(np.ceil(2.0 * gal_fake_fwhm_factor))
+            psf_shape = int(np.ceil(gal_fake_fwhm_factor * fwhm))
+            print("psf_shape: %s" % psf_shape)
             # must be odd...
             if psf_shape % 2 == 0:
                 psf_shape += 1
