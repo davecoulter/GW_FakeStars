@@ -483,7 +483,7 @@ class DetermineEfficiencies():
             psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 
             psf_shape = int(np.ceil(2.0 * fwhm)) # must be odd...
-            if psf_shape % 2 > 0:
+            if psf_shape % 2 == 0:
                 psf_shape += 1
 
             psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
