@@ -447,7 +447,7 @@ class DetermineEfficiencies():
             print('hi5')
 
 
-    def galaxy_plant(self, gal_fake_mag_range, clobber=False):
+    def galaxy_plant(self, gal_fake_mag_range, gal_fake_fwhm_factor, clobber=False):
 
         # Generate fakes for all files to be processed
         # fake_mags = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1], gal_fake_mag_range[2])
@@ -482,20 +482,14 @@ class DetermineEfficiencies():
             # Build the fake star model -- calculate PSF shape (e.g. the pixel-based radius for the fakes
             psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 
-            psf_shape = int(np.ceil(2.0 * fwhm)) # must be odd...
+            psf_shape = int(np.ceil(2.0 * gal_fake_fwhm_factor))
+            # must be odd...
             if psf_shape % 2 == 0:
                 psf_shape += 1
 
             psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
             psf_mag = -2.5 * np.log10(np.sum(psf_model)) + zpt
-            # max_size = np.shape(psf_model)[0]
-            # dx = dy = int((max_size - 1) / 2)
             dx = dy = int((psf_shape - 1) / 2)
-
-            print("psf_shape: %s" % psf_shape)
-            print(np.shape(psf_model))
-            print("dx/dy: %s" % dx)
-            print(np.shape(image_data[1000 - dy:1000 + dy + 1, 1000 - dx:1000 + dx + 1]))
 
             # We have already gone through the trouble of getting the "eligible" pixels. Rehydrate.
             pix_by_sexcat_id = {}
@@ -961,6 +955,7 @@ class AllStages():
         parser.add_option('--gal_mag_range', default=(13, 22, 0.5), nargs=2, type='float', help='gal mag tuple: (min, max, bin size)')
         parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=2, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
         parser.add_option('--gal_fake_mag_range', default=(18, 25, 5000, 0.2), nargs=2, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--gal_fake_fwhm_factor', default=2.0, type='float', help='Factor times image FWHM to set fake star psf size in pixels')
 
         parser.add_option('--plant_in_galaxies', default=False, action="store_true",
                           help='if set, generate positions from the SExtractor galaxy mask')
@@ -1011,7 +1006,7 @@ if __name__ == "__main__":
             if options.plant_in_galaxies:
                 if options.gal_bin_to_process == "":
                     raise Exception("Which gal mag bin to process?")
-                detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range)
+                detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range, gal_fake_fwhm_factor=options.gal_fake_fwhm_factor)
             else:
                 detEff.plant_fakes(fake_mag_range=options.fake_mag_range, clobber=options.clobber)
 
