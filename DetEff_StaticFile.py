@@ -450,8 +450,8 @@ class DetermineEfficiencies():
     def galaxy_plant(self, gal_fake_mag_range, clobber=False):
 
         # Generate fakes for all files to be processed
-        fake_mags = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1], gal_fake_mag_range[2])
-        fake_mags_iter = iter(fake_mags)
+        # fake_mags = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1], gal_fake_mag_range[2])
+        # fake_mags_iter = iter(fake_mags)
 
         # Loop over all files...
         for i, img in enumerate(self.image_names):
@@ -544,7 +544,8 @@ class DetermineEfficiencies():
                 for x in psf_loc_x:
                     for y in psf_loc_y:
                         if segmap[y, x] == sid:
-                            m = next(fake_mags_iter)
+                            # m = next(fake_mags_iter)
+                            m = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1])
                             injected_fakes.append((x, y, m, glade_id, glade_B, sex_mag))
 
                 for x, y, m, gi, gg, g in injected_fakes:
