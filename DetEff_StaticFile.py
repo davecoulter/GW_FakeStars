@@ -92,6 +92,11 @@ class DetermineEfficiencies():
 
         if self.options.plant_in_galaxies:
             galstr = 'gal_' + gal_bin_to_process
+
+            tokens = gal_bin_to_process.split("_")
+            self.start_mag = float(tokens[0])
+            self.end_mag = float(tokens[1])
+
         else:
             galstr = ''
 
@@ -506,7 +511,10 @@ class DetermineEfficiencies():
             glade_Bs = list(sexcat_table["glade_B"])
             sex_mags = list(sexcat_table["sex_mag"])
             for j, sid in enumerate(sexcat_ids):
-                galaxy_by_sexcat_id[sid] = (glade_ids[j], glade_Bs[j], sex_mags[j])
+
+                # Only process galaxies in our gal mag bin...
+                if sex_mags[j] >= self.start_mag and sex_mags[j] <= self.end_mag:
+                    galaxy_by_sexcat_id[sid] = (glade_ids[j], glade_Bs[j], sex_mags[j])
 
             # Keep track of the SExtractor galaxy pixels by sexcat_id
             pixel_table = at.Table.read(file_association.pixel_good, format='ascii.ecsv')
@@ -514,10 +522,14 @@ class DetermineEfficiencies():
             good_pix_x = list(pixel_table["x"])
             good_pix_y = list(pixel_table["y"])
             for j, sid in enumerate(sexcat_ids):
-                if sid not in pix_by_sexcat_id:
-                    pix_by_sexcat_id[sid] = [[], []]
-                pix_by_sexcat_id[sid][0].append(good_pix_x[j])
-                pix_by_sexcat_id[sid][1].append(good_pix_y[j])
+
+                # Only process galaxies in our gal mag bin...
+                if sid in galaxy_by_sexcat_id:
+                    if sid not in pix_by_sexcat_id:
+                        pix_by_sexcat_id[sid] = [[], []]
+
+                    pix_by_sexcat_id[sid][0].append(good_pix_x[j])
+                    pix_by_sexcat_id[sid][1].append(good_pix_y[j])
 
 
             # Actually inject the fakes
