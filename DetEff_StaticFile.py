@@ -218,6 +218,9 @@ class DetermineEfficiencies():
                     model_props = sexcat_table.meta['comment']
                     f = model_props[0].split("=")[1].strip()
 
+                    import pdb; pdb.set_trace()
+
+
                     if f == image_file:
                         print("Found %s!" % f)
                         sexcat_good = s
