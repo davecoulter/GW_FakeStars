@@ -599,7 +599,7 @@ class DetermineEfficiencies():
 
     def do_phot(self, iteration):
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
         # Copy over log files into the new fake log dir
@@ -643,7 +643,7 @@ class DetermineEfficiencies():
                                                   self.fake_image_dir).replace('.outlist', '.tmp.outlist'),
                                         f.replace(self.image_dir, self.fake_image_dir)))
 
-        raise Exception("Stop!! Check logs!")
+        # raise Exception("Stop!! Check logs!")
 
         for img in self.image_names:
             file_association = None
