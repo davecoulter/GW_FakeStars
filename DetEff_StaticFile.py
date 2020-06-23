@@ -599,7 +599,6 @@ class DetermineEfficiencies():
 
     def do_phot(self, iteration):
 
-        import pdb; pdb.set_trace()
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
         # Copy over log files into the new fake log dir
@@ -622,6 +621,8 @@ class DetermineEfficiencies():
             fout = open(tmp_destination_path, 'w')
 
             for line in fin:
+                line = line.replace('\n', '')
+
                 # Only process files in our image in-list
                 base_name = line.split(" ")[0]
                 if base_name not in image_base_names:
@@ -640,6 +641,8 @@ class DetermineEfficiencies():
 
                 for line in fin:
                     line = line.replace('\n', '')
+
+                    import pdb; pdb.set_trace()
 
                     # Only process files in our image in-list
                     base_name = line.split(" ")[0]
