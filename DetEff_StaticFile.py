@@ -599,20 +599,28 @@ class DetermineEfficiencies():
 
     def do_phot(self, iteration):
 
+        image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
+
         # Copy over log files into the new fake log dir
         files = glob.glob('%s/*' % self.log_path)
         for f in files:
             if 'fake' not in f:
-                os.system('cp %s %s' % (f, f.replace(self.image_dir, self.fake_image_dir)))
+                if '.reg' not in f: # don't need to copy over the region files...
+                    os.system('cp %s %s' % (f, f.replace(self.image_dir, self.fake_image_dir)))
 
             # tap into this right after ABSPHOT, and before -diff MATCHTEMPL
             if 'ABSPHOT.outlist' in f:
 
                 fin = open(f.replace(self.image_dir, self.fake_image_dir))
-                fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'),'w')
+                fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'), 'w')
 
                 for line in fin:
                     line = line.replace('\n', '')
+
+                    # Only process files in our image in-list
+                    base_name = line.split(" ")[0]
+                    if base_name not in image_base_names:
+                        continue
 
                     date_match = re.findall(r"ut1\d{5}", line)[0]
 
@@ -622,18 +630,29 @@ class DetermineEfficiencies():
                         lineparts[5] = lineparts[5].replace(self.image_dir, self.fake_image_dir)
                         lineparts[6] = lineparts[6].replace(self.image_dir, self.fake_image_dir)
 
-                        print(" ".join(lineparts),file=fout)
+                        print(" ".join(lineparts), file=fout)
                     else:
-                        print(line.replace(date_match, '{0}_fake'.format(date_match)).replace(self.image_dir, self.fake_image_dir), file=fout)
+                        print(line.replace(date_match,
+                                           '{0}_fake'.format(date_match)).replace(self.image_dir, self.fake_image_dir),
+                              file=fout)
 
                 fout.close()
                 fin.close()
-                os.system('mv %s %s' % (f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'),
+                os.system('mv %s %s' % (f.replace(self.image_dir,
+                                                  self.fake_image_dir).replace('.outlist', '.tmp.outlist'),
                                         f.replace(self.image_dir, self.fake_image_dir)))
 
+        raise Exception("Stop!! Check logs!")
+
         for img in self.image_names:
-            try: file_association = self.file_associations[img]
-            except: continue
+            file_association = None
+            try:
+                file_association = self.file_associations[img]
+            except:
+                print("\n\n*** NO FILE ASSOCIATION FOR %s ***\n\n" % img)
+                raise Exception("Stop!")
+                # continue
+
             os.system('rsync -avz %s %s' % (file_association.image_mask_file, file_association.fake_image_mask_file))
             os.system('rsync -avz %s %s' % (file_association.image_noise_file, file_association.fake_image_noise_file))
             os.system('rsync -avz %s %s' % (file_association.image_dcmp_file, file_association.fake_image_dcmp_file))
