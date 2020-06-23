@@ -609,6 +609,21 @@ class DetermineEfficiencies():
                 if '.reg' not in f: # don't need to copy over the region files...
                     os.system('cp %s %s' % (f, f.replace(self.image_dir, self.fake_image_dir)))
 
+
+            # delete file contents when it deals with files we're not currently processings...
+            fin = open(f.replace(self.image_dir, self.fake_image_dir))
+            fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'), 'w')
+
+            for line in fin:
+                # Only process files in our image in-list
+                base_name = line.split(" ")[0]
+                if base_name not in image_base_names:
+                    continue
+                print(line, file=fout)
+
+            fout.close()
+            fin.close()
+
             # tap into this right after ABSPHOT, and before -diff MATCHTEMPL
             if 'ABSPHOT.outlist' in f:
 
