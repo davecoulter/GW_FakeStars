@@ -611,8 +611,11 @@ class DetermineEfficiencies():
 
 
             # delete file contents when it deals with files we're not currently processings...
-            fin = open(f.replace(self.image_dir, self.fake_image_dir))
-            fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'), 'w')
+            destination_path = f.replace(self.image_dir, self.fake_image_dir)
+            tmp_destination_path = destination_path + ".tmp"
+
+            fin = open(destination_path)
+            fout = open(tmp_destination_path, 'w')
 
             for line in fin:
                 # Only process files in our image in-list
@@ -623,6 +626,7 @@ class DetermineEfficiencies():
 
             fout.close()
             fin.close()
+            os.system('mv %s %s' % (tmp_destination_path, destination_path))
 
             # tap into this right after ABSPHOT, and before -diff MATCHTEMPL
             if 'ABSPHOT.outlist' in f:
