@@ -603,8 +603,12 @@ class DetermineEfficiencies():
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
         # Copy over log files into the new fake log dir
-        files = glob.glob('%s/[!galaxy_demographics]*' % self.log_path)
+        files = glob.glob('%s/*' % self.log_path)
         for f in files:
+            # skip this directory...
+            if "galaxy_demographics" in f:
+                continue
+
             if 'fake' not in f:
                 if '.reg' not in f: # don't need to copy over the region files...
                     os.system('cp %s %s' % (f, f.replace(self.image_dir, self.fake_image_dir)))
