@@ -678,7 +678,7 @@ class DetermineEfficiencies():
 
 
 
-        raise Exception("Stop!! Check logs!")
+        # raise Exception("Stop!! Check logs!")
 
         for img in self.image_names:
             file_association = None
