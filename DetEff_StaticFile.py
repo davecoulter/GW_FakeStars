@@ -613,36 +613,16 @@ class DetermineEfficiencies():
                     os.system('cp %s %s' % (f, f.replace(self.image_dir, self.fake_image_dir)))
 
 
-            # delete file contents when it deals with files we're not currently processings...
-            destination_path = f.replace(self.image_dir, self.fake_image_dir)
-            tmp_destination_path = destination_path + ".tmp"
+            if "outlist" in f:
+                # delete file contents when it deals with files we're not currently processings...
+                destination_path = f.replace(self.image_dir, self.fake_image_dir)
+                tmp_destination_path = destination_path + ".tmp"
 
-            fin = open(destination_path)
-            fout = open(tmp_destination_path, 'w')
-
-            for line in fin:
-                line = line.replace('\n', '')
-
-                # Only process files in our image in-list
-                base_name = line.split(" ")[0]
-                if base_name not in image_base_names:
-                    continue
-                print(line, file=fout)
-
-            fout.close()
-            fin.close()
-            os.system('mv %s %s' % (tmp_destination_path, destination_path))
-
-            # tap into this right after ABSPHOT, and before -diff MATCHTEMPL
-            if 'ABSPHOT.outlist' in f:
-
-                fin = open(f.replace(self.image_dir, self.fake_image_dir))
-                fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'), 'w')
+                fin = open(destination_path)
+                fout = open(tmp_destination_path, 'w')
 
                 for line in fin:
                     line = line.replace('\n', '')
-
-                    import pdb; pdb.set_trace()
 
                     # Only process files in our image in-list
                     base_name = line.split(" ")[0]
@@ -650,24 +630,51 @@ class DetermineEfficiencies():
                         continue
 
                     date_match = re.findall(r"ut1\d{5}", line)[0]
+                    lineparts = line.split()
+                    lineparts[0] = lineparts[0].replace(date_match, '{0}_fake'.format(date_match))
+                    lineparts[5] = lineparts[5].replace(self.image_dir, self.fake_image_dir)
+                    lineparts[6] = lineparts[6].replace(self.image_dir, self.fake_image_dir)
+                    print(" ".join(lineparts), file=fout)
 
-                    if self.image_dir == date_match:
-                        lineparts = line.split()
-                        lineparts[0] = lineparts[0].replace(date_match, '{0}_fake'.format(date_match))
-                        lineparts[5] = lineparts[5].replace(self.image_dir, self.fake_image_dir)
-                        lineparts[6] = lineparts[6].replace(self.image_dir, self.fake_image_dir)
-
-                        print(" ".join(lineparts), file=fout)
-                    else:
-                        print(line.replace(date_match,
-                                           '{0}_fake'.format(date_match)).replace(self.image_dir, self.fake_image_dir),
-                              file=fout)
+                    # print(line, file=fout)
 
                 fout.close()
                 fin.close()
-                os.system('mv %s %s' % (f.replace(self.image_dir,
-                                                  self.fake_image_dir).replace('.outlist', '.tmp.outlist'),
-                                        f.replace(self.image_dir, self.fake_image_dir)))
+                os.system('mv %s %s' % (tmp_destination_path, destination_path))
+
+            # tap into this right after ABSPHOT, and before -diff MATCHTEMPL
+            # if 'ABSPHOT.outlist' in f:
+            #
+            #     fin = open(f.replace(self.image_dir, self.fake_image_dir))
+            #     fout = open(f.replace(self.image_dir, self.fake_image_dir).replace('.outlist', '.tmp.outlist'), 'w')
+            #
+            #     for line in fin:
+            #         line = line.replace('\n', '')
+            #
+            #         # Only process files in our image in-list
+            #         base_name = line.split(" ")[0]
+            #         if base_name not in image_base_names:
+            #             continue
+            #
+            #         date_match = re.findall(r"ut1\d{5}", line)[0]
+            #
+            #         if self.image_dir == date_match:
+            #             lineparts = line.split()
+            #             lineparts[0] = lineparts[0].replace(date_match, '{0}_fake'.format(date_match))
+            #             lineparts[5] = lineparts[5].replace(self.image_dir, self.fake_image_dir)
+            #             lineparts[6] = lineparts[6].replace(self.image_dir, self.fake_image_dir)
+            #
+            #             print(" ".join(lineparts), file=fout)
+            #         else:
+            #             print(line.replace(date_match,
+            #                                '{0}_fake'.format(date_match)).replace(self.image_dir, self.fake_image_dir),
+            #                   file=fout)
+            #
+            #     fout.close()
+            #     fin.close()
+            #     os.system('mv %s %s' % (f.replace(self.image_dir,
+            #                                       self.fake_image_dir).replace('.outlist', '.tmp.outlist'),
+            #                             f.replace(self.image_dir, self.fake_image_dir)))
 
 
 
