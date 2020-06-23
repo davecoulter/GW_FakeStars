@@ -599,6 +599,7 @@ class DetermineEfficiencies():
 
     def do_phot(self, iteration):
 
+        import pdb; pdb.set_trace()
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
         # Copy over log files into the new fake log dir
