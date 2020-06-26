@@ -1,0 +1,35 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=s005aae27609.i.ut190603.4072_stch_1.sw.dcmp, DB ID=14816, Field
+#       Name=s005aae27609, RA (deg)=254.1702, Dec (deg)=-6.496, MJD=58638.08641, Exp
+#       Time (sec)=360.0, Lim Mag=21.9763, Instrument=SWOPE, E(B-V)=0.607107493758,
+#     Filter=SDSS i, A_lambda=1.030868524401084, Net 2D Prob=0.0001434142212107, Redistributed
+#       2D Prob=8.853686845502172e-05, Net 4D Prob=0.00011485267596521875, Weighted
+#       Mean Pixel Comp=0.38144194416489907, Weighted Mean Pixel Dist=153.58694201886505]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+29359 253.997955 -6.152964 None None None 16555950-0609106 None 9.27581249538e-07 0.022822 95.0722656144 2.28173437475 14.947 11.619
+256477 253.995468 -6.294353 None None None 16555891-0617396 None 1.03266470593e-06 0.049742 211.398642701 5.07356742482 16.849 13.262
+325661 253.998 -6.15299 None None 1036167 None None 6.2935649917e-06 0.0292651946326 122.50663355 2.94015920521 16.58 nan
+8417 254.309418 -6.230837 None None None 16571426-0613510 None 1.03763561592e-05 0.026117 109.069652407 2.61767165777 14.399 10.638
+325643 254.309 -6.23081 None None 1035297 None None 7.68520132484e-06 0.0288724944362 120.827162359 2.89985189662 16.19 nan
+431197 254.47702 -6.273563 None None None 16575448-0616248 None 4.3901890514e-10 0.060492 259.089556029 6.2181493447 16.729 13.699
+1090712 254.330109 -6.273887 None None None 16571922-0616259 None 4.44346452684e-15 0.070749 305.240909203 7.32578182087 16.861 13.703
+1091086 254.506836 -6.294203 None None None 16580164-0617391 None 5.56375164736e-14 0.068426 294.733556786 7.07360536285 17.285 13.796
+1090670 253.936523 -6.499917 None None None 16554476-0629597 None 2.9003077131e-18 0.076302 330.487948547 7.93171076512 16.671 13.272

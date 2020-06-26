@@ -1,0 +1,32 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=s005aae16005.r.ut190428.4150_stch_1.sw.dcmp, DB ID=14745, Field
+#       Name=s005aae16005, RA (deg)=246.3571, Dec (deg)=16.356, MJD=58602.39727, Exp
+#       Time (sec)=180.0, Lim Mag=22.4783, Instrument=SWOPE, E(B-V)=0.104416819029,
+#     Filter=SDSS r, A_lambda=0.23859243148126502, Net 2D Prob=9.30794069916e-05, Redistributed
+#       2D Prob=3.921909759273376e-05, Net 4D Prob=4.322423518766587e-05, Weighted Mean
+#       Pixel Comp=0.5786490389192842, Weighted Mean Pixel Dist=184.074513468]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+12292 246.408646 16.455 None None 58097 16253807+1627180 None 9.30782014559e-07 0.024369 101.635583818 2.43925401162 14.227 10.817
+12547 246.45813 16.576197 None None UGC10380 16254995+1634343 None 3.07434556193e-06 0.027208 113.719223171 2.72926135612 14.622 10.835
+1409405 246.296 16.50034 None None SDSSJ162510.99+163001.2 None None 0.0 0.132557106279 596.335420419 14.31205009 18.86 nan
+277383 246.233 16.32798 1506117 PGC1506117 PGC1506117 None None 6.90830641197e-12 0.0128186164093 52.9942942657 1.27186306238 17.83 nan
+494111 246.390091 16.364168 None None 1507002 16253362+1621510 None 3.11013669381e-12 0.07993 347.081310193 8.32995144462 16.733 13.572
+1222732 246.361 16.1216 None None 1501205 None None 0.0 0.232052006026 1108.81710115 26.6116104275 18.98 nan

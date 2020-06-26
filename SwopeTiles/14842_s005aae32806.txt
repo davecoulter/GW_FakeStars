@@ -1,0 +1,32 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=s005aae32806.i.ut190425.1051_stch_1.sw.dcmp, DB ID=14842, Field
+#       Name=s005aae32806, RA (deg)=253.0313, Dec (deg)=-16.4248, MJD=58599.1364, Exp
+#       Time (sec)=180.0, Lim Mag=21.2761, Instrument=SWOPE, E(B-V)=1.41073189473, Filter=SDSS
+#       i, A_lambda=2.39542275725154, Net 2D Prob=0.00010675033221400001, Redistributed
+#       2D Prob=8.354754778940276e-05, Net 4D Prob=0.00011279132182246139, Weighted
+#       Mean Pixel Comp=0.2188317099516931, Weighted Mean Pixel Dist=138.40686154786144]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+221541 252.674118 -16.22094 None None None 16504178-1613153 None 2.92437708184e-05 0.036877 155.249057335 3.72597737603 16.004 13.504
+977789 252.678452 -16.149273 None None None 16504282-1608573 None 0.0 0.159385 729.369166162 17.5048599879 18.208 14.048
+977790 252.722733 -16.270651 None None None 16505345-1616143 None 0.0 0.083312 362.619292962 8.70286303109 17.355 13.7
+977817 253.128342 -16.346935 None None None 16523080-1620489 None 0.0 0.107733 476.791784638 11.4430028313 17.224 13.26
+221551 252.996567 -16.704866 None None None 16515917-1642175 None 3.21465861107e-12 0.010486 43.2731498136 1.03855559553 15.551 13.741
+977804 252.942551 -16.540407 None None None 16514621-1632254 None 0.0 0.112412 499.05818996 11.977396559 17.79 13.326

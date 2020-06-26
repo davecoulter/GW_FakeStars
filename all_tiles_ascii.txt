@@ -66,6 +66,7 @@ s005aae20811.r.ut190425.1118_stch_1.sw.fits
 s005aae20811.r.ut190428.4156_stch_1.sw.fits
 s005aae20811.r.ut190603.4080_stch_1.sw.fits
 s005aae20811.r.ut190604.5101_stch_1.sw.fits
+s005aae20812.r.ut190603.4080_stch_1.sw.fits
 s005aae2130.i.ut190425.1089_stch_1.sw.fits
 s005aae2130.i.ut190429.5132_stch_1.sw.fits
 s005aae2130.i.ut190603.4085_stch_1.sw.fits
@@ -132,6 +133,8 @@ s005aae31407.i.ut190425.1012_stch_1.sw.fits
 s005aae31407.i.ut190425.1013_stch_1.sw.fits
 s005aae31407.i.ut190428.4033_stch_1.sw.fits
 s005aae31407.i.ut190428.4035_stch_1.sw.fits
+s005aae31408.i.ut190425.1012_stch_1.sw.fits
+s005aae31408.i.ut190425.1013_stch_1.sw.fits
 s005aae32029.i.ut190425.1053_stch_1.sw.fits
 s005aae32029.i.ut190425.1086_stch_1.sw.fits
 s005aae32029.i.ut190429.5117_stch_1.sw.fits
