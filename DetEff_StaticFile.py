@@ -467,9 +467,11 @@ class DetermineEfficiencies():
             try:
                 file_association = self.file_associations[img]
             except:
+                print("Could not find file association for: %s" % img)
                 continue
 
             if not clobber and os.path.exists(file_association.fake_image_file):
+                print("No overwrite and file exists! %s" % file_association.fake_image_file)
                 continue
 
             # Open the relevant data files, and extract vars
