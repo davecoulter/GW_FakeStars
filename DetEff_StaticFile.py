@@ -271,6 +271,7 @@ class DetermineEfficiencies():
             try:
                 file_association = self.file_associations[img]
             except:
+                print("Could not find file association for: %s" % img)
                 continue
 
             if not clobber and os.path.exists(file_association.fake_image_file):
@@ -451,7 +452,6 @@ class DetermineEfficiencies():
             image_hdu[0].data[:] = image_data
             image_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
             print('hi5')
-
 
     def galaxy_plant(self, gal_fake_mag_range, gal_fake_fwhm_factor, clobber=False):
 
