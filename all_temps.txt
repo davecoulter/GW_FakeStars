@@ -38,7 +38,6 @@ s005aae27067.i.ut190603.4073_stch_1.sw.fits
 s005aae27609.i.ut190603.4072_stch_1.sw.fits
 s005aae27872.i.ut190603.4069_stch_1.sw.fits
 s005aae28130.i.ut190603.4070_stch_1.sw.fits
-s005aae28130.i.ut190603.4071_stch_1.sw.fits
 s005aae2905.i.ut190428.4159_stch_1.sw.fits
 s005aae29437.i.ut190603.4068_stch_1.sw.fits
 s005aae2978.i.ut190428.4158_stch_1.sw.fits
