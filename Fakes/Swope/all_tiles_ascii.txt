@@ -83,7 +83,6 @@ s005aae29437.i.ut190429.5108_stch_1.sw.fits
 s005aae30744.i.ut190425.1055_stch_1.sw.fits
 s005aae30744.i.ut190429.5106_stch_1.sw.fits
 s005aae31407.i.ut190428.4033_stch_1.sw.fits
-s005aae31408.i.ut190425.1012_stch_1.sw.fits
 s005aae32029.i.ut190425.1053_stch_1.sw.fits
 s005aae32029.i.ut190425.1086_stch_1.sw.fits
 s005aae32029.i.ut190429.5117_stch_1.sw.fits

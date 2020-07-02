@@ -72,4 +72,3 @@ s005aae14697.i.ut190425.1079_stch_1.sw.fits
 s005aae15789.r.ut190428.4149_stch_1.sw.fits
 s005aae27067.i.ut190425.1059_stch_1.sw.fits
 s005aae15411.i.ut190429.5143_stch_1.sw.fits
-s005aae31408.i.ut190425.1012_stch_1.sw.fits

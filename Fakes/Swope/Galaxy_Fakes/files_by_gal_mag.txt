@@ -95,7 +95,6 @@ Galaxy Mag Bin (14.0, 14.5); Fake Star Capacity: 2663.20; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae0297.i.ut190425.1073_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae21797.i.ut190425.1076_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (14.5, 15.0); Fake Star Capacity: 4384.42; Runs: 1.00
@@ -153,7 +152,6 @@ Galaxy Mag Bin (14.5, 15.0); Fake Star Capacity: 4384.42; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae14697.i.ut190425.1079_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae21797.i.ut190425.1076_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (15.0, 15.5); Fake Star Capacity: 3209.39; Runs: 1.00
@@ -213,7 +211,6 @@ Galaxy Mag Bin (15.0, 15.5); Fake Star Capacity: 3209.39; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae0297.i.ut190425.1073_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae21797.i.ut190425.1076_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (15.5, 16.0); Fake Star Capacity: 2294.56; Runs: 1.00
@@ -279,7 +276,6 @@ Galaxy Mag Bin (15.5, 16.0); Fake Star Capacity: 2294.56; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae21797.i.ut190425.1076_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae27067.i.ut190425.1059_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (16.0, 16.5); Fake Star Capacity: 2277.49; Runs: 1.00
@@ -356,7 +352,6 @@ Galaxy Mag Bin (16.0, 16.5); Fake Star Capacity: 2277.49; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae21797.i.ut190425.1076_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae27067.i.ut190425.1059_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (16.5, 17.0); Fake Star Capacity: 2325.19; Runs: 1.00
@@ -440,7 +435,6 @@ Galaxy Mag Bin (16.5, 17.0); Fake Star Capacity: 2325.19; Runs: 1.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae15789.r.ut190428.4149_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae27067.i.ut190425.1059_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (17.0, 17.5); Fake Star Capacity: 1544.19; Runs: 2.00
@@ -518,7 +512,6 @@ Galaxy Mag Bin (17.0, 17.5); Fake Star Capacity: 1544.19; Runs: 2.00
 /data/LCO/Swope/workstch/gw190425/1/s005aae15789.r.ut190428.4149_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae27067.i.ut190425.1059_stch_1.sw.fits
 /data/LCO/Swope/workstch/gw190425/1/s005aae15411.i.ut190429.5143_stch_1.sw.fits
-/data/LCO/Swope/workstch/gw190425/1/s005aae31408.i.ut190425.1012_stch_1.sw.fits
 
 
 Galaxy Mag Bin (17.5, 18.0); Fake Star Capacity: 194.56; Runs: 15.00

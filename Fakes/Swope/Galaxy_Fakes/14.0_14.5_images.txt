@@ -28,4 +28,3 @@ s005aae2371.i.ut190425.1090_stch_1.sw.fits
 s005aae0297.i.ut190425.1073_stch_1.sw.fits
 s005aae21797.i.ut190425.1076_stch_1.sw.fits
 s005aae15411.i.ut190429.5143_stch_1.sw.fits
-s005aae31408.i.ut190425.1012_stch_1.sw.fits
