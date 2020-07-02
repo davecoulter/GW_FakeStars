@@ -1,0 +1,9 @@
+# Region file format: DS9 version 4.0 global
+
+global color=lightgreen
+ICRS
+circle(253.00605748,-17.126317417,30") # width=2 text="134421"
+circle(253.03181562,-17.053890519,30") # width=2 text="323649"
+circle(252.92017043,-16.922476454,30") # width=2 text="977805"
+circle(253.32645873,-16.840339184,30") # width=2 text="221563"
+circle(253.05032919,-16.752882409,30") # width=2 text="977809"

@@ -1,0 +1,6 @@
+s005aae14697.i.ut190429.5141_stch_1.sw.fits
+s005aae2369.i.ut190425.1091_stch_1.sw.fits
+s005aae0520.i.ut190425.1085_stch_1.sw.fits
+s005aae37244.i.ut190425.1015_stch_1.sw.fits
+s005aae37244.i.ut190428.4044_stch_1.sw.fits
+s005aae0520.i.ut190429.5134_stch_1.sw.fits
