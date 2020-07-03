@@ -563,9 +563,16 @@ class DetermineEfficiencies():
             for x, y, m, gi, gg, g in injected_fakes:
                 # import pdb; pdb.set_trace()
 
-                psf_flux = 10 ** (-0.4 * (m - psf_mag))
-                self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, g, gg, gi))
-                image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1] += psf_model * psf_flux
+                target_footprint = image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1]
+
+                if np.shape(target_footprint) == np.shape(psf_model):
+                    psf_flux = 10 ** (-0.4 * (m - psf_mag))
+                    self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, g, gg, gi))
+                    image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1] += psf_model * psf_flux
+                else:
+                    print("Target footprint different than PSF! Skipping")
+                    continue
+
 
             image_hdu[0].data[:] = image_data
             image_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
