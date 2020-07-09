@@ -701,7 +701,7 @@ class DetermineEfficiencies():
             os.system('rsync -avz %s %s' % (file_association.image_noise_file, file_association.fake_image_noise_file))
             os.system('rsync -avz %s %s' % (file_association.image_dcmp_file, file_association.fake_image_dcmp_file))
 
-        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000' % (self.fake_image_dir, self.template_dir))
+        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
 
     def get_phot(self, fake_mag_range, gal_mag_range):
 
