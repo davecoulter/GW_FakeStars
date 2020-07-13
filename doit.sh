@@ -29,24 +29,28 @@ input_dir="./Fakes/Swope/Galaxy_Fakes"
 gal_bin_arr=(
 "13.0_13.5"
 "13.0_13.5"
+"13.0_13.5"
 )
 
 bright_arr=(
 18
 20
+21
 )
 
 dim_arr=(
 21
 22
+25
 )
 
 fwhm_arr=(
 3.0
 3.0
+3.0
 )
 
-for i in `seq 0 ${#gal_bin_arr[@]}`; do
+for i in `seq 1 ${#gal_bin_arr[@]}`; do
 
   start=$SECONDS
 
@@ -58,6 +62,21 @@ for i in `seq 0 ${#gal_bin_arr[@]}`; do
   echo "${msg}"
 
   # Do work...
+  iterations=${i}+1.0
+  iteration_start=${i}+1.0
+
+  echo "iterations: ${iterations}; start: ${iteration_start}"
+
+#  python ./DetEff_StaticFile.py \
+#  --stage plant,photpipe \
+#  --image_list ${input_dir}/${gal_bin}_images.txt \
+#  --template_list ${input_dir}/${gal_bin}_temps.txt \
+#  --iteration_start 2 \
+#  --iterations 2 \
+#  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
+#  --gal_bin_to_process ${gal_bin} \
+#  --gal_fake_fwhm_factor ${fwhm_factor} \
+#  --plant_in_galaxies
 
   duration=$(( SECONDS - start ))
   msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
