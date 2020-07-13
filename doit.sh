@@ -67,7 +67,6 @@ for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
     iterations=$(expr $i + 1)
     iteration_start=${iterations}
-    effective_arr_len=$(expr $arr_len - $start_i)
 
     msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor}"
     msg="${msg} [${iterations}/${arr_len}] ..."
@@ -93,6 +92,7 @@ for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
   else
     echo "Skipping index ${i} ..."
+    echo "" #newline
   fi
 
 done
