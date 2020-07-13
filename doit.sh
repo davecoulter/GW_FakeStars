@@ -21,21 +21,39 @@ input_dir="./Fakes/Swope/Galaxy_Fakes"
 
 # fake_params for each run:
 # gal_bin, gal_fake_bright, gal_fake_dim, fwhm_factor
-fake_params=(
-("13.0_13.5", 18, 21, 3.0),
-("13.0_13.5", 20, 22, 3.0)
+#fake_params=(
+#("13.0_13.5", 18, 21, 3.0)
+#("13.0_13.5", 20, 22, 3.0)
+#)
+
+gal_bin_arr=(
+"13.0_13.5"
+"13.0_13.5"
 )
 
+bright_arr=(
+18
+20
+)
 
+dim_arr=(
+21
+22
+)
 
-for i in `seq 0 ${#fake_params[@]}`; do
+fwhm_arr=(
+3.0
+3.0
+)
+
+for i in `seq 0 ${#gal_bin_arr[@]}`; do
 
   start=$SECONDS
 
-  gal_bin=${fake_params[0]}
-  gal_fake_bright=${fake_params[1]}
-  gal_fake_dim=${fake_params[2]}
-  fwhm_factor=${fake_params[3]}
+  gal_bin=${gal_bin_arr[${i}]}
+  gal_fake_bright=${bright_arr[${i}]}
+  gal_fake_dim=${dim_arr[${i}]}
+  fwhm_factor=${fwhm_arr[${i}]}
   msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor} ..."
   echo "${msg}"
 
