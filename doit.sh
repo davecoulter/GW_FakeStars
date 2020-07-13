@@ -72,22 +72,22 @@ for i in "${!gal_bin_arr[@]}"; do # i==index, not object
     msg="${msg} [${iterations}/${arr_len}] ..."
     echo "${msg}"
 
-  #  # Do work...
-  #  python ./DetEff_StaticFile.py \
-  #  --stage plant,photpipe \
-  #  --image_list ${input_dir}/${gal_bin}_images.txt \
-  #  --template_list ${input_dir}/${gal_bin}_temps.txt \
-  #  --iteration_start ${iteration_start} \
-  #  --iterations ${iterations} \
-  #  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-  #  --gal_bin_to_process ${gal_bin} \
-  #  --gal_fake_fwhm_factor ${fwhm_factor} \
-  #  --plant_in_galaxies
-  #
-  #  duration=$(( SECONDS - start ))
-  #  msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
-  #  msg="${msg} fwhm_multipier=${fwhm_factor}. [${iterations}/${arr_len}] elapsed: ${duration} sec."
-  #  echo "${msg}"
+    # Do work...
+    python ./DetEff_StaticFile.py \
+    --stage plant,photpipe \
+    --image_list ${input_dir}/${gal_bin}_images.txt \
+    --template_list ${input_dir}/${gal_bin}_temps.txt \
+    --iteration_start ${iteration_start} \
+    --iterations ${iterations} \
+    --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
+    --gal_bin_to_process ${gal_bin} \
+    --gal_fake_fwhm_factor ${fwhm_factor} \
+    --plant_in_galaxies
+
+    duration=$(( SECONDS - start ))
+    msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
+    msg="${msg} fwhm_multipier=${fwhm_factor}. [${iterations}/${arr_len}] elapsed: ${duration} sec."
+    echo "${msg}"
     echo "" #newline
 
   else
