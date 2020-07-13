@@ -40,9 +40,9 @@ efficiency_magbins = np.linspace(18, 25, (dim-bright)/bin_size)
 base_gal_bin_path = "13.5_14.0"
 # gal_bin_subdirs = [1, 2, 3, 4]
 # gal_bin_subdirs = [5, 6]
-gal_bin_subdirs = [5]
-# dcmp_type = "cut.dcmp"
-dcmp_type = "diff.dcmp"
+gal_bin_subdirs = [7, 8, 9]
+dcmp_type = "cut.dcmp"
+# dcmp_type = "diff.dcmp"
 
 snr = 3.0
 model_mags = np.linspace(18.0, 25.0, 500)
@@ -105,9 +105,9 @@ class GalEfficiency:
 
             for m1, m2 in zip(self.efficiency_magbins[:-1], self.efficiency_magbins[1:]):
 
-                iDet = np.where((mag_sims[measuredfakemags.snr >= 3.0] >= m1) &
-                                (mag_sims[measuredfakemags.snr >= 3.0] <= m2) &
-                                (detmags[measuredfakemags.snr >= 3.0] != -99))[0]
+                iDet = np.where((mag_sims[measuredfakemags.snr >= self.snr] >= m1) &
+                                (mag_sims[measuredfakemags.snr >= self.snr] <= m2) &
+                                (detmags[measuredfakemags.snr >= self.snr] != -99))[0]
                 iAll = np.where((mag_sims >= m1) & (mag_sims <= m2))[0]
 
                 if len(iAll):
@@ -173,6 +173,8 @@ class GalFake:
     fakes_file = "fakemags.txt"
 
     def __init__(self, base_gal_bin_path, gal_bin_subdir):
+
+        self.gal_bin_subdir = gal_bin_subdir
         self.fakes_path = "{}/{}_{}/{}".format(base_path,
                                                base_gal_bin_path,
                                                gal_bin_subdir,
@@ -183,7 +185,7 @@ class GalFake:
 
     def measure_fakemags(self, fake_txtobj, dcmp_txtobj, reconstructed_filepath, zpt, output_file,
                          unrecovered_reg_file=None, dcmp_file=None, unrecovered_range=None,
-                         ds9_cmd_file=None):
+                         ds9_cmd_file=None, pass_file=None, fail_file=None):
 
 
         dcmp_header = fits.getheader(dcmp_file)
@@ -205,13 +207,6 @@ class GalFake:
             csvfile.write('global color=red dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1\n')
             csvfile.write("image\n")
 
-        # FOR DEBUG PURPOSES
-        unrecovered_reg_file.replace("reg", "txt")
-        with open(unrecovered_reg_file, 'w') as csvfile:
-            csvfile.write("# Region file format: DS9 version 4.0 global\n")
-            csvfile.write('global color=red dashlist=8 3 width=1 font="helvetica 10 normal roman" select=1 highlite=1 dash=0 fixed=0 edit=1 move=1 delete=1 include=1 source=1\n')
-            csvfile.write("image\n")
-
         # print(reconstructed_filepath)
         for x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id \
                 in zip(fake_txtobj.x[fake_txtobj.dcmpfile == reconstructed_filepath],
@@ -224,12 +219,17 @@ class GalFake:
             sep = np.sqrt((x - dcmp_txtobj.Xpos) ** 2. + (y - dcmp_txtobj.Ypos) ** 2.)
 
             # find where fake mag injection is < 2 pixels from DCMP measured source
-            if len(np.where(sep < 2)[0]):
+            # sep_arr = np.where(sep < 2)[0]
+            sep_arr = np.where(sep < 5)[0]
+            if len(sep_arr) > 0:
 
                 # source confusion: skip if there are multiple matches within 2 pix
                 iMin = np.where(sep == np.min(sep))[0]
                 if len(iMin) > 1:
                     continue
+
+                # csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
+
 
                 # Sanity on the values...
                 if (dcmp_txtobj.flux[iMin] < 0.0):  # reject if flux is < 0
@@ -238,12 +238,36 @@ class GalFake:
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id, -99, -99, -99),
                               file=fout)
 
-                    if mag >= m1 and mag <= m2:
-                        empty_reg = False
-                        with open(unrecovered_reg_file, 'a') as csvfile:
-                            csvfile.write('circle(%s,%s,%s") # width=4\n' % (x, y, fake_radius))
-                            csvfile.write('# text(%s,%s) textangle=360 color=red width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
+                    # If this star is within the mag range we're considering...
+                    # if mag >= m1 and mag <= m2:
+                    #     empty_reg = False
+                    #
+                    #     with open(fail_file, 'a') as csvfile:
+                    #         csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
+                    #                                                      dcmp_txtobj.flux[iMin][0],
+                    #                                                      dcmp_txtobj.chisqr[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Npos[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Nneg[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Fpos[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Fneg[iMin][0],
+                    #                                                      dcmp_txtobj.extendedness[iMin][0]))
+                    #
+                    #     with open(unrecovered_reg_file, 'a') as csvfile:
+                    #         csvfile.write('circle(%s,%s,%s") # width=4\n' % (x, y, fake_radius))
+                    #         csvfile.write('# text(%s,%s) textangle=360 color=red width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
                 else:
+                    # If this star is within the mag range we're considering...
+                    if mag >= m1 and mag <= m2:
+                        with open(pass_file, 'a') as csvfile:
+                            csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
+                                                                         dcmp_txtobj.flux[iMin][0],
+                                                                         dcmp_txtobj.chisqr[iMin][0],
+                                                                         dcmp_txtobj.pixchk_Npos[iMin][0],
+                                                                         dcmp_txtobj.pixchk_Nneg[iMin][0],
+                                                                         dcmp_txtobj.pixchk_Fpos[iMin][0],
+                                                                         dcmp_txtobj.pixchk_Fneg[iMin][0],
+                                                                         dcmp_txtobj.extendedness[iMin][0]))
+
                     with open(output_file, 'a') as fout:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.3f %.3f %.3f' %
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id,
@@ -257,11 +281,13 @@ class GalFake:
                           (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id, -99, -99, -99),
                           file=fout)
 
+                # If this star is within the mag range we're considering...
                 if mag >= m1 and mag <= m2:
+                    print("mag: %s, sep_arr: %s" % (mag, sep_arr))
                     empty_reg = False
                     with open(unrecovered_reg_file, 'a') as csvfile:
-                        csvfile.write('circle(%s,%s,%s") # width=4\n' % (x, y, fake_radius))
-                        csvfile.write('# text(%s,%s) textangle=360 color=red width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
+                        csvfile.write('circle(%s,%s,%s") # color=blue width=4\n' % (x, y, fake_radius))
+                        csvfile.write('# text(%s,%s) textangle=360 color=blue width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
 
         if empty_reg:
             # delete region file
@@ -274,15 +300,14 @@ class GalFake:
                     diff_fits_name = path_tokens.pop()
                     im_path = "/".join(path_tokens)
 
-
-                    tokens2 = diff_fits_name.split("_")
+                    name_tokens = diff_fits_name.split("_")
 
                     # remove the template portion...
-                    tokens2.pop()
-                    tokens2.pop()
-                    tokens2.pop()
+                    name_tokens.pop()
+                    name_tokens.pop()
+                    name_tokens.pop()
 
-                    im_name = "_".join(tokens2)
+                    im_name = "_".join(name_tokens)
                     im_file = im_path + "/" + im_name + ".sw.fits"
 
                     csvfile.write('ds9 %s -scale mode 99.5 -region %s %s -scale mode 99.5 -tile -lock frame wcs &\n\n'
@@ -299,6 +324,16 @@ ds9_commands = "{}/{}".format(gal_efficiency_3.output_dir, "ds9_cmds.txt")
 with open(ds9_commands, 'w') as csvfile:
     csvfile.write("# DS9 Comparison Commands\n")
 
+# DEBUG: Hold DCMP Parameters for objects that pass diffcut
+pass_diffcut = "{}/{}".format(gal_efficiency_3.output_dir, "pass_diffcut.txt")
+with open(pass_diffcut, 'w') as csvfile:
+    csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
+
+# DEBUG: Hold DCMP Parameters for objects that fail diffcut
+fail_diffcut = "{}/{}".format(gal_efficiency_3.output_dir, "fail_diffcut.txt")
+with open(fail_diffcut, 'w') as csvfile:
+    csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
+
 
 # Iterate over all gal_fakes
 for gf in gal_fakes:
@@ -310,7 +345,7 @@ for gf in gal_fakes:
             continue
 
         # region to hold unrecovered stars for this file
-        unrecovered_reg_file = f.replace("dcmp", "reg")
+        unrecovered_reg_file = f.replace(dcmp_type, "%s.reg" % gf.gal_bin_subdir)
         unrecovered_reg_path = "{}/{}".format(gal_efficiency_3.output_dir, unrecovered_reg_file)
 
         dcmp_file = "{}/{}".format(gf.dcmp_path, f)
@@ -333,7 +368,8 @@ for gf in gal_fakes:
         fakes = txtobj(gf.fakes_path)
         gf.measure_fakemags(fakes, dcmp, reconstructed_filepath, zpt, gal_efficiency_3.measured_fakes_output,
                             unrecovered_reg_file=unrecovered_reg_path, dcmp_file=dcmp_file,
-                            unrecovered_range=unrecorved_range, ds9_cmd_file=ds9_commands)
+                            unrecovered_range=unrecorved_range, ds9_cmd_file=ds9_commands, pass_file=pass_diffcut,
+                            fail_file=fail_diffcut)
 
 x0 = 20.0
 a = 0.8
