@@ -50,41 +50,50 @@ fwhm_arr=(
 3.0
 )
 
+arr_len=${#gal_bin_arr[@]}
+
+start_i=1 # use to skip to desired record
+
 for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
-  start=$SECONDS
+  if [ $i -ge $start_i ]; then
 
-  gal_bin=${gal_bin_arr[${i}]}
-  gal_fake_bright=${bright_arr[${i}]}
-  gal_fake_dim=${dim_arr[${i}]}
-  fwhm_factor=${fwhm_arr[${i}]}
+    start=$SECONDS
 
-  msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor} ..."
-  echo "${msg}"
+    gal_bin=${gal_bin_arr[${i}]}
+    gal_fake_bright=${bright_arr[${i}]}
+    gal_fake_dim=${dim_arr[${i}]}
+    fwhm_factor=${fwhm_arr[${i}]}
 
-  # Do work...
-  iterations=$(expr $i + 1)
-  iteration_start=${iterations}
+    iterations=$(expr $i + 1)
+    iteration_start=${iterations}
+    effective_arr_len=$(expr $arr_len - $start_i)
 
-  echo "iterations: ${iterations}; start: ${iteration_start}"
-  ((iter++))
+    msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor}"
+    msg="${msg} [${iterations}/${arr_len}] ..."
+    echo "${msg}"
 
-#  python ./DetEff_StaticFile.py \
-#  --stage plant,photpipe \
-#  --image_list ${input_dir}/${gal_bin}_images.txt \
-#  --template_list ${input_dir}/${gal_bin}_temps.txt \
-#  --iteration_start 2 \
-#  --iterations 2 \
-#  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-#  --gal_bin_to_process ${gal_bin} \
-#  --gal_fake_fwhm_factor ${fwhm_factor} \
-#  --plant_in_galaxies
+  #  # Do work...
+  #  python ./DetEff_StaticFile.py \
+  #  --stage plant,photpipe \
+  #  --image_list ${input_dir}/${gal_bin}_images.txt \
+  #  --template_list ${input_dir}/${gal_bin}_temps.txt \
+  #  --iteration_start ${iteration_start} \
+  #  --iterations ${iterations} \
+  #  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
+  #  --gal_bin_to_process ${gal_bin} \
+  #  --gal_fake_fwhm_factor ${fwhm_factor} \
+  #  --plant_in_galaxies
+  #
+  #  duration=$(( SECONDS - start ))
+  #  msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
+  #  msg="${msg} fwhm_multipier=${fwhm_factor}. [${iterations}/${arr_len}] elapsed: ${duration} sec."
+  #  echo "${msg}"
+    echo "" #newline
 
-  duration=$(( SECONDS - start ))
-  msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
-  msg="${msg} fwhm_multipier=${fwhm_factor}. Elapsed: ${duration} sec."
-  echo "${msg}"
-  echo "" #newline
+  else
+    echo "Skipping index ${i} ..."
+  fi
 
 done
 
