@@ -54,8 +54,8 @@ for i in `seq 0 ${#gal_bin_arr[@]}`; do
   gal_fake_bright=${bright_arr[${i}]}
   gal_fake_dim=${dim_arr[${i}]}
   fwhm_factor=${fwhm_arr[${i}]}
-  msg="\nProcessing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor} ..."
-  echo "${msg}"
+  msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor} ..."
+  echo "\n${msg}"
 
   # Do work...
 
