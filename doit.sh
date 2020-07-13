@@ -50,9 +50,7 @@ fwhm_arr=(
 3.0
 )
 
-iter=0
-#for i in `seq 1 ${#gal_bin_arr[@]}`; do
-for i in ${gal_bin_arr[@]}; do
+for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
   start=$SECONDS
 
@@ -60,12 +58,13 @@ for i in ${gal_bin_arr[@]}; do
   gal_fake_bright=${bright_arr[${i}]}
   gal_fake_dim=${dim_arr[${i}]}
   fwhm_factor=${fwhm_arr[${i}]}
+
   msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor} ..."
   echo "${msg}"
 
   # Do work...
-  iterations=$(expr $iter + 1)
-  iteration_start=$(expr $iter + 1)
+  iterations=$(expr $i + 1)
+  iteration_start=${iterations}
 
   echo "iterations: ${iterations}; start: ${iteration_start}"
   ((iter++))
