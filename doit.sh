@@ -1,38 +1,62 @@
 #!/bin/bash
 
 input_dir="./Fakes/Swope/Galaxy_Fakes"
-#gal_bin="13.0_13.5"
-#gal_fake_bright=18
-#gal_fake_dim=21
-#fwhm_factor=3.0
-
-#echo "Running gal fakes for (13.0, 13.5), gal_fake_mag_range=(${gal_fake_bright}, ${gal_fake_dim}) ..."
-#python ./DetEff_StaticFile.py \
-#  --stage plant,photpipe \
-#  --image_list ${input_dir}/${gal_bin}_images.txt \
-#  --template_list ${input_dir}/${gal_bin}_temps.txt \
-#  --iteration_start 1 \
-#  --iterations 1 \
-#  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-#  --gal_bin_to_process ${gal_bin} \
-#  --gal_fake_fwhm_factor ${fwhm_factor} \
-#  --plant_in_galaxies
-#echo "... Done running gal fakes for (13.0, 13.5), gal_fake_mag_range=({$gal_fake_bright}, {$gal_fake_dim})"
-
-# fake_params for each run:
-# gal_bin, gal_fake_bright, gal_fake_dim, fwhm_factor
-#fake_params=(
-#("13.0_13.5", 18, 21, 3.0)
-#("13.0_13.5", 20, 22, 3.0)
-#)
 
 gal_bin_arr=(
 "13.0_13.5"
 "13.0_13.5"
 "13.0_13.5"
+"13.5_14.0"
+"13.5_14.0"
+"13.5_14.0"
+"14.0_14.5"
+"14.0_14.5"
+"14.0_14.5"
+"14.5_15.0"
+"14.5_15.0"
+"14.5_15.0"
+"15.0_15.5"
+"15.0_15.5"
+"15.0_15.5"
+"15.5_16.0"
+"15.5_16.0"
+"15.5_16.0"
+"16.0_16.5"
+"16.0_16.5"
+"16.0_16.5"
+"16.5_17.0"
+"16.5_17.0"
+"16.5_17.0"
+"17.0_17.5"
+"17.0_17.5"
+"17.0_17.5"
 )
 
 bright_arr=(
+18
+20
+21
+18
+20
+21
+18
+20
+21
+18
+20
+21
+18
+20
+21
+18
+20
+21
+18
+20
+21
+18
+20
+21
 18
 20
 21
@@ -42,17 +66,65 @@ dim_arr=(
 21
 22
 25
+21
+22
+25
+21
+22
+25
+21
+22
+25
+21
+22
+25
+21
+22
+25
+21
+22
+25
+21
+22
+25
+21
+22
+25
 )
 
 fwhm_arr=(
 3.0
 3.0
 3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
+3.0
 )
 
+global_start=$SECONDS
 arr_len=${#gal_bin_arr[@]}
-
-start_i=1 # use to skip to desired record
+start_i=3 # use to skip to desired record
 
 for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
@@ -97,30 +169,5 @@ for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
 done
 
-#gal_fake_bright=20
-#gal_fake_dim=22
-#python ./DetEff_StaticFile.py \
-#  --stage plant,photpipe \
-#  --image_list ${input_dir}/${gal_bin}_images.txt \
-#  --template_list ${input_dir}/${gal_bin}_temps.txt \
-#  --iteration_start 2 \
-#  --iterations 2 \
-#  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-#  --gal_bin_to_process ${gal_bin} \
-#  --gal_fake_fwhm_factor ${fwhm_factor} \
-#  --plant_in_galaxies
-#echo "... Done running gal fakes for (13.0, 13.5), gal_fake_mag_range=({$gal_fake_bright}, {$gal_fake_dim})"
-#
-#gal_fake_bright=21
-#gal_fake_dim=25
-#python ./DetEff_StaticFile.py \
-#  --stage plant,photpipe \
-#  --image_list ${input_dir}/${gal_bin}_images.txt \
-#  --template_list ${input_dir}/${gal_bin}_temps.txt \
-#  --iteration_start 3 \
-#  --iterations 3 \
-#  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-#  --gal_bin_to_process ${gal_bin} \
-#  --gal_fake_fwhm_factor ${fwhm_factor} \
-#  --plant_in_galaxies
-#echo "... Done running gal fakes for (13.0, 13.5), gal_fake_mag_range=({$gal_fake_bright}, {$gal_fake_dim})"
+global_duration=$(( SECONDS - start ))
+echo "Full process elapsed: ${global_duration} sec."

@@ -37,10 +37,8 @@ efficiency_magbins = np.linspace(18, 25, (dim-bright)/bin_size)
 
 # RUN SETTINGS
 #   Which galaxy mag bin to process, and which data files to use
-base_gal_bin_path = "13.5_14.0"
-# gal_bin_subdirs = [1, 2, 3, 4]
-# gal_bin_subdirs = [5, 6]
-gal_bin_subdirs = [7, 8, 9]
+base_gal_bin_path = "13.0_13.5"
+gal_bin_subdirs = [1, 2, 3]
 dcmp_type = "cut.dcmp"
 # dcmp_type = "diff.dcmp"
 
@@ -220,19 +218,27 @@ class GalFake:
 
             # find where fake mag injection is < 2 pixels from DCMP measured source
             # sep_arr = np.where(sep < 2)[0]
-            sep_arr = np.where(sep < 5)[0]
-            if len(sep_arr) > 0:
+            # sep_arr = np.where(sep < 5)[0]
+            if len(np.where(sep < 5)[0]) > 0:
 
                 # source confusion: skip if there are multiple matches within 2 pix
                 iMin = np.where(sep == np.min(sep))[0]
                 if len(iMin) > 1:
                     continue
 
-                # csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
 
+                # HACK
+                flux_val = None
+                dflux_val = None
+                try:
+                    flux_val = dcmp_txtobj.flux[iMin]
+                    dflux_val = dcmp_txtobj.dflux[iMin]
+                except:
+                    flux_val = np.asarray([dcmp_txtobj.flux])[iMin]
+                    dflux_val = np.asarray([dcmp_txtobj.dflux])[iMin]
 
                 # Sanity on the values...
-                if (dcmp_txtobj.flux[iMin] < 0.0):  # reject if flux is < 0
+                if (flux_val < 0.0):  # reject if flux is < 0
                     with open(output_file, 'a') as fout:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.0f %.0f %0.f' %
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id, -99, -99, -99),
@@ -271,9 +277,9 @@ class GalFake:
                     with open(output_file, 'a') as fout:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.3f %.3f %.3f' %
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id,
-                               -2.5 * np.log10(dcmp_txtobj.flux[iMin]) + zpt,  # calculate mag
-                               1.086 * dcmp_txtobj.dflux[iMin] / dcmp_txtobj.flux[iMin],  # calculate mag err
-                               dcmp_txtobj.flux[iMin] / dcmp_txtobj.dflux[iMin]),  # SNR
+                               -2.5 * np.log10(flux_val) + zpt,  # calculate mag
+                               1.086 * dflux_val / flux_val,  # calculate mag err
+                               flux_val / dflux_val),  # SNR
                               file=fout)
             else:
                 with open(output_file, 'a') as fout:
@@ -283,7 +289,7 @@ class GalFake:
 
                 # If this star is within the mag range we're considering...
                 if mag >= m1 and mag <= m2:
-                    print("mag: %s, sep_arr: %s" % (mag, sep_arr))
+                    # print("mag: %s, sep_arr: %s" % (mag, sep_arr))
                     empty_reg = False
                     with open(unrecovered_reg_file, 'a') as csvfile:
                         csvfile.write('circle(%s,%s,%s") # color=blue width=4\n' % (x, y, fake_radius))
