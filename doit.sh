@@ -50,7 +50,9 @@ fwhm_arr=(
 3.0
 )
 
-for i in `seq 1 ${#gal_bin_arr[@]}`; do
+iter=0
+#for i in `seq 1 ${#gal_bin_arr[@]}`; do
+for i in ${gal_bin_arr[@]}; do
 
   start=$SECONDS
 
@@ -62,10 +64,11 @@ for i in `seq 1 ${#gal_bin_arr[@]}`; do
   echo "${msg}"
 
   # Do work...
-  iterations=${i}+1.0
-  iteration_start=${i}+1.0
+  iterations=$(expr $iter + 1)
+  iteration_start=$(expr $iter + 1)
 
   echo "iterations: ${iterations}; start: ${iteration_start}"
+  ((iter++))
 
 #  python ./DetEff_StaticFile.py \
 #  --stage plant,photpipe \
