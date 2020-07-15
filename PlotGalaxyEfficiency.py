@@ -35,17 +35,46 @@ bright = 18
 dim = 25
 efficiency_magbins = np.linspace(18, 25, (dim-bright)/bin_size)
 
+# current_band = "i"
+
 # RUN SETTINGS
 #   Which galaxy mag bin to process, and which data files to use
 base_gal_bin_path = "13.0_13.5"
-gal_bin_subdirs = [1, 2, 3]
+gal_bin_subdirs = [1,2,3]
+
+# base_gal_bin_path = "13.5_14.0"
+# gal_bin_subdirs = [4,5,6]
+
+# base_gal_bin_path = "14.0_14.5"
+# gal_bin_subdirs = [7,8,9]
+
+# base_gal_bin_path = "14.5_15.0"
+# gal_bin_subdirs = [10,11,12]
+
+# base_gal_bin_path = "15.0_15.5"
+# gal_bin_subdirs = [13,14,15]
+
+# base_gal_bin_path = "15.5_16.0"
+# gal_bin_subdirs = [16,17,18]
+
+# base_gal_bin_path = "16.0_16.5"
+# gal_bin_subdirs = [19,20,21]
+
+# base_gal_bin_path = "16.5_17.0"
+# gal_bin_subdirs = [22,23,24]
+
+# base_gal_bin_path = "17.0_17.5"
+# gal_bin_subdirs = [25,26,27]
+
+
+
 dcmp_type = "cut.dcmp"
 # dcmp_type = "diff.dcmp"
 
 snr = 3.0
 model_mags = np.linspace(18.0, 25.0, 500)
 # unrecorved_range = (18, 25)
-unrecorved_range = (18, 20)
+unrecorved_range = (19, 20)
 
 
 class GalEfficiency:
@@ -92,14 +121,15 @@ class GalEfficiency:
 
     def compute_efficiency(self, initial_guess):
 
-        measuredfakemags = txtobj(gal_efficiency_3.measured_fakes_output)
+        measuredfakemags = txtobj(self.measured_fakes_output)
 
         # Write file out so we can inspect it for debug purposes
         with open(self.efficiency_output, 'w') as fout:
-            print('# mag deteff N', file=fout)
+            print('# mag deteff N mean_gal_mag', file=fout)
 
             mag_sims = measuredfakemags.sim_mag
             detmags = measuredfakemags.detmag
+            mag_gal = measuredfakemags.mag_gal
 
             for m1, m2 in zip(self.efficiency_magbins[:-1], self.efficiency_magbins[1:]):
 
@@ -108,10 +138,21 @@ class GalEfficiency:
                                 (detmags[measuredfakemags.snr >= self.snr] != -99))[0]
                 iAll = np.where((mag_sims >= m1) & (mag_sims <= m2))[0]
 
+                iAll2 = np.where((mag_sims >= m1) & (mag_sims <= m2) &
+                                 (detmags == -99))[0]
+
+                mean_gal_mag = np.mean(mag_gal[iDet], axis=0)
+                undetected_mean_gal_mag = np.mean(mag_gal[iAll2], axis=0)
+
                 if len(iAll):
-                    print('%.2f %.3f %s' % ((m1 + m2) / 2., len(iDet) / float(len(iAll)), len(iAll)), file=fout)
+                    if len(iDet) > 0:
+                        print('%.2f %.3f %s %.3f' % ((m1 + m2) / 2., len(iDet) / float(len(iAll)), len(iAll), mean_gal_mag),
+                              file=fout)
+                    else:
+                        print('%.2f %.3f %s %.3f' % ((m1 + m2) / 2., len(iDet) / float(len(iAll)), len(iAll), undetected_mean_gal_mag),
+                              file=fout)
                 else:
-                    print('%.2f %.3f %s' % ((m1 + m2) / 2., np.nan, len(iAll)), file=fout)
+                    print('%.2f %.3f %s %.3f' % ((m1 + m2) / 2., np.nan, len(iAll), np.nan), file=fout)
 
         # Read in file. In the future, we can just go directly here without the writing step...
         with open(self.efficiency_output, 'r') as fin:
@@ -139,6 +180,12 @@ class GalEfficiency:
         self.fitted_x0 = minimize_result.x[0]
         self.fitted_a = minimize_result.x[1]
         self.fitted_n = minimize_result.x[2]
+
+        # Write out model parameter result
+        efficiency_param_file = "{}/{}".format(gal_efficiency_3.output_dir, "efficiency_params.txt")
+        with open(efficiency_param_file, 'w') as csvfile:
+            csvfile.write("# x0 a n\n")
+            csvfile.write("%s %s %s" % (self.fitted_x0, self.fitted_a, self.fitted_n))
 
     # Limiting mag model uses Eq 12 from:
     #   http://www.cfht.hawaii.edu/Science/CFHLS/T0007/T0007-docsu12.html
@@ -183,11 +230,11 @@ class GalFake:
 
     def measure_fakemags(self, fake_txtobj, dcmp_txtobj, reconstructed_filepath, zpt, output_file,
                          unrecovered_reg_file=None, dcmp_file=None, unrecovered_range=None,
-                         ds9_cmd_file=None, pass_file=None, fail_file=None):
+                         ds9_cmd_file=None):
 
 
         dcmp_header = fits.getheader(dcmp_file)
-        gal_fake_fwhm_factor = 5.0
+        gal_fake_fwhm_factor = 3.0
         fwhm = dcmp_header['FWHM']
         pix_scale_arc_sec = np.abs(dcmp_header['CD2_2']) * 3600.0
         psf_shape = int(np.ceil(gal_fake_fwhm_factor * fwhm))
@@ -263,16 +310,16 @@ class GalFake:
                     #         csvfile.write('# text(%s,%s) textangle=360 color=red width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
                 else:
                     # If this star is within the mag range we're considering...
-                    if mag >= m1 and mag <= m2:
-                        with open(pass_file, 'a') as csvfile:
-                            csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
-                                                                         dcmp_txtobj.flux[iMin][0],
-                                                                         dcmp_txtobj.chisqr[iMin][0],
-                                                                         dcmp_txtobj.pixchk_Npos[iMin][0],
-                                                                         dcmp_txtobj.pixchk_Nneg[iMin][0],
-                                                                         dcmp_txtobj.pixchk_Fpos[iMin][0],
-                                                                         dcmp_txtobj.pixchk_Fneg[iMin][0],
-                                                                         dcmp_txtobj.extendedness[iMin][0]))
+                    # if mag >= m1 and mag <= m2:
+                    #     with open(pass_file, 'a') as csvfile:
+                    #         csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
+                    #                                                      dcmp_txtobj.flux[iMin][0],
+                    #                                                      dcmp_txtobj.chisqr[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Npos[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Nneg[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Fpos[iMin][0],
+                    #                                                      dcmp_txtobj.pixchk_Fneg[iMin][0],
+                    #                                                      dcmp_txtobj.extendedness[iMin][0]))
 
                     with open(output_file, 'a') as fout:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.3f %.3f %.3f' %
@@ -319,6 +366,15 @@ class GalFake:
                     csvfile.write('ds9 %s -scale mode 99.5 -region %s %s -scale mode 99.5 -tile -lock frame wcs &\n\n'
                                   % (im_file, unrecovered_reg_file, diff_fits_file))
 
+
+
+
+
+
+
+
+
+
 # MAIN DRIVER SCRIPT
 # Spin up objects...
 gal_efficiency_3 = GalEfficiency(base_gal_bin_path, efficiency_magbins, snr=snr, dcmp_type=dcmp_type)
@@ -361,6 +417,11 @@ for gf in gal_fakes:
         utdate = filename_tokens[2].replace("_fake", "")
         img_id = filename_tokens[3][0:4]  # substring the ID out
 
+
+        # # HACK -- check the band
+        # if band != current_band:
+        #     continue
+
         reconstructed_filepath = "{server_img_path}/{field_name}.{band}.{utdate}.{img_id}_stch_1.sw.dcmp".format(
             server_img_path=server_img_path,
             field_name=field_name,
@@ -377,79 +438,26 @@ for gf in gal_fakes:
                             unrecovered_range=unrecorved_range, ds9_cmd_file=ds9_commands, pass_file=pass_diffcut,
                             fail_file=fail_diffcut)
 
+
+
+
+
+
+
+
+
+
+# FITS
 x0 = 20.0
 a = 0.8
 n = 0.99
 initial_guess = np.asarray([x0, a, n])
-
 gal_efficiency_3.compute_efficiency(initial_guess)
 
-# region load an arbitrary uniform efficiency curve for reference
-# u_path_formatter = "{}/{}"
-#
-# u_server_img_path = "/data/LCO/Swope/workstch/gw190425/1"
-# u_base_path = "./Fakes/Swope/Uniform_Fakes"
-#
-# u_measured_uniform_fakes_file = "measuredfakemags.txt"
-# u_measured_uniform_fakes_path = u_path_formatter.format(u_base_path, u_measured_uniform_fakes_file)
-#
-# uniform_efficiencies_file3 = "efficiencies3.txt"
-# uniform_efficiencies_file10 = "efficiencies10.txt"
-# uniform_efficiencies_path3 = u_path_formatter.format(u_base_path, uniform_efficiencies_file3)
-# uniform_efficiencies_path10 = u_path_formatter.format(u_base_path, uniform_efficiencies_file10)
-#
-# uniform_1 = "gw190425_fake_1_gw190425tmpl"
-# uniform_2 = "gw190425_fake_2_gw190425tmpl"
-# fakes_file = "fakemags.txt"
-# uniform_1_path = u_path_formatter.format(u_base_path, uniform_1)
-# uniform_2_path = u_path_formatter.format(u_base_path, uniform_2)
-# uniform_1_fakes = u_path_formatter.format(uniform_1_path, fakes_file)
-# uniform_2_fakes = u_path_formatter.format(uniform_2_path, fakes_file)
-#
-#
-# u_efficiency3 = []
-# u_number3 = []
-# u_mag_bins3 = []
-# u_error_high3 = []
-# u_error_low3 = []
-#
-#
-# with open(uniform_efficiencies_path3, 'r') as fin:
-#     csv_reader = csv.reader(fin, delimiter=' ')
-#     next(csv_reader)
-#
-#     for row in csv_reader:
-#         u_mag_bins3.append(float(row[0]))
-#         u_efficiency3.append(float(row[1]))
-#         u_number3.append(float(row[2]))
-#
-# for index, e in enumerate(u_efficiency3):
-#     yes = e * u_number3[index]
-#     no = (1.0 - e) * u_number3[index]
-#     ci = binomial(yes, no)
-#
-#     u_error_high3.append(ci[0])
-#     u_error_low3.append(ci[1])
-#
-# u_model_mags = np.linspace(18.0, 25.0, 500)
-#
-# # Estimate errors as average for now...
-# u_errors3 = np.mean([u_error_high3, u_error_low3], axis=0)
-# u_result3 = minimize(chi_square_s_curve, initial_guess, args=(u_mag_bins3, u_efficiency3, u_errors3))
-# u_fitted_params3 = u_result3.x
-# u_x0_3_fit = u_fitted_params3[0]
-# u_a_3_fit = u_fitted_params3[1]
-# u_n_3_fit = u_fitted_params3[2]
-# u_fitted_efficiency3 = limiting_mag_model(u_model_mags, u_x0_3_fit, u_a_3_fit, u_n_3_fit)
-# endregion
 
 # PLOTS
 fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111)
-
-# Overplot UNIFORM?
-# ax.plot(u_model_mags, u_fitted_efficiency3,'b', label="Uniform SNR 3")
-# ax.errorbar(u_mag_bins3, u_efficiency3, yerr=[u_error_high3, u_error_low3], fmt='rx')
 
 ax.plot(model_mags, gal_efficiency_3.computed_lim_mag_model(model_mags),
         'g', label="Galaxy Mag `%s` SNR 3" % base_gal_bin_path)
@@ -458,6 +466,7 @@ ax.errorbar(gal_efficiency_3.central_mag_bins, gal_efficiency_3.efficiency,
 
 ax.set_xlabel("mag")
 ax.set_ylabel("Efficiency")
+ax.grid()
 ax.legend()
 
 output_plot = "{}/{}_{}.png".format(gal_efficiency_3.output_dir, base_gal_bin_path, "SNR_%s" % snr)
