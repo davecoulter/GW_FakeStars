@@ -128,7 +128,7 @@ start_i=12 # index to start (i.e. skips indices < start_i)
 stop_i=14 # index to stop after (i.e. skips indices > stop_i)
 
 # Hack for single run use...
-dir_append=1
+dir_append=4
 
 for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
