@@ -35,12 +35,13 @@ bright = 18
 dim = 25
 efficiency_magbins = np.linspace(18, 25, (dim-bright)/bin_size)
 
-# current_band = "i"
+# TODO: this process needs to be formalized to see what is what in band, and only process the fakes within 1 band...
+current_band = "i"
 
 # RUN SETTINGS
 #   Which galaxy mag bin to process, and which data files to use
-base_gal_bin_path = "13.0_13.5"
-gal_bin_subdirs = [1,2,3]
+# base_gal_bin_path = "13.0_13.5"
+# gal_bin_subdirs = [1,2,3]
 
 # base_gal_bin_path = "13.5_14.0"
 # gal_bin_subdirs = [4,5,6]
@@ -51,8 +52,8 @@ gal_bin_subdirs = [1,2,3]
 # base_gal_bin_path = "14.5_15.0"
 # gal_bin_subdirs = [10,11,12]
 
-# base_gal_bin_path = "15.0_15.5"
-# gal_bin_subdirs = [13,14,15]
+base_gal_bin_path = "15.0_15.5"
+gal_bin_subdirs = [13,14,15]
 
 # base_gal_bin_path = "15.5_16.0"
 # gal_bin_subdirs = [16,17,18]
@@ -273,8 +274,7 @@ class GalFake:
                 if len(iMin) > 1:
                     continue
 
-
-                # HACK
+                # HACK: if there's only one value in dcmp_txtobj.flux wrap it in an array so indexing doesn't fail.
                 flux_val = None
                 dflux_val = None
                 try:
@@ -290,37 +290,7 @@ class GalFake:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.0f %.0f %0.f' %
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id, -99, -99, -99),
                               file=fout)
-
-                    # If this star is within the mag range we're considering...
-                    # if mag >= m1 and mag <= m2:
-                    #     empty_reg = False
-                    #
-                    #     with open(fail_file, 'a') as csvfile:
-                    #         csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
-                    #                                                      dcmp_txtobj.flux[iMin][0],
-                    #                                                      dcmp_txtobj.chisqr[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Npos[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Nneg[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Fpos[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Fneg[iMin][0],
-                    #                                                      dcmp_txtobj.extendedness[iMin][0]))
-                    #
-                    #     with open(unrecovered_reg_file, 'a') as csvfile:
-                    #         csvfile.write('circle(%s,%s,%s") # width=4\n' % (x, y, fake_radius))
-                    #         csvfile.write('# text(%s,%s) textangle=360 color=red width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (x, y, mag))
                 else:
-                    # If this star is within the mag range we're considering...
-                    # if mag >= m1 and mag <= m2:
-                    #     with open(pass_file, 'a') as csvfile:
-                    #         csvfile.write('%s %s %s %s %s %s %s %s\n' % (dcmp_txtobj.type[iMin][0],
-                    #                                                      dcmp_txtobj.flux[iMin][0],
-                    #                                                      dcmp_txtobj.chisqr[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Npos[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Nneg[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Fpos[iMin][0],
-                    #                                                      dcmp_txtobj.pixchk_Fneg[iMin][0],
-                    #                                                      dcmp_txtobj.extendedness[iMin][0]))
-
                     with open(output_file, 'a') as fout:
                         print('%s %.2f %.2f %.3f %.3f %.3f %.0f %.3f %.3f %.3f' %
                               (reconstructed_filepath, x, y, mag, mag_gal, mag_gal_GLADE, GLADE_gal_id,
@@ -336,7 +306,6 @@ class GalFake:
 
                 # If this star is within the mag range we're considering...
                 if mag >= m1 and mag <= m2:
-                    # print("mag: %s, sep_arr: %s" % (mag, sep_arr))
                     empty_reg = False
                     with open(unrecovered_reg_file, 'a') as csvfile:
                         csvfile.write('circle(%s,%s,%s") # color=blue width=4\n' % (x, y, fake_radius))
@@ -386,15 +355,25 @@ ds9_commands = "{}/{}".format(gal_efficiency_3.output_dir, "ds9_cmds.txt")
 with open(ds9_commands, 'w') as csvfile:
     csvfile.write("# DS9 Comparison Commands\n")
 
-# DEBUG: Hold DCMP Parameters for objects that pass diffcut
-pass_diffcut = "{}/{}".format(gal_efficiency_3.output_dir, "pass_diffcut.txt")
-with open(pass_diffcut, 'w') as csvfile:
-    csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
 
-# DEBUG: Hold DCMP Parameters for objects that fail diffcut
-fail_diffcut = "{}/{}".format(gal_efficiency_3.output_dir, "fail_diffcut.txt")
-with open(fail_diffcut, 'w') as csvfile:
-    csvfile.write("# dophot_type flux chisqr pixchk_Npos pixchk_Nneg pixchk_Fpos pixchk_Fneg extendedness\n")
+# LOAD ALL TEGLON-GENERATED SWOPE TILES
+# swope_tile_dict = {}
+# swope_tiles = glob.glob("./Fakes/Swope/SwopeTiles/*.txt")
+# for st in swope_tiles:
+#     glade_swope_tile = at.Table.read("./Fakes/Swope/SwopeTiles/%s" % st, format='ascii.ecsv')
+#     model_props = glade_swope_tile.meta['comment']
+#     dcmp_file = model_props[0].split("=")[1].strip()
+#     dcmp_base = dcmp_file.replace('.sw.dcmp', '')
+#     swope_tile_dict[dcmp_base] = []
+
+    # How do I know which of these galaxies is associated?
+    # I have a bunch of RA/Decs in this file... but the fakes only have X,Y positions...
+    # I need to relate these to each other, but other than position, I don't have a good way to do that.
+
+    # sexcat_good contains sexcat id, ra/dec, sex mag, num pix
+    # pixel_good contains the pixels in X,Y space
+    # SwopeDemographics/<db_id>_<field>.reg has galaxy coords in RA/Dec, with text as ID
+
 
 
 # Iterate over all gal_fakes
@@ -410,6 +389,11 @@ for gf in gal_fakes:
         unrecovered_reg_file = f.replace(dcmp_type, "%s.reg" % gf.gal_bin_subdir)
         unrecovered_reg_path = "{}/{}".format(gal_efficiency_3.output_dir, unrecovered_reg_file)
 
+        # store radial information per fake, per image...
+        radial_reg_file = f.replace(dcmp_type, "%s.radial.reg" % gf.gal_bin_subdir)
+        radial_reg_path = "{}/{}".format(gal_efficiency_3.output_dir, radial_reg_file)
+
+
         dcmp_file = "{}/{}".format(gf.dcmp_path, f)
         filename_tokens = f.split(".")
         field_name = filename_tokens[0]
@@ -418,9 +402,9 @@ for gf in gal_fakes:
         img_id = filename_tokens[3][0:4]  # substring the ID out
 
 
-        # # HACK -- check the band
-        # if band != current_band:
-        #     continue
+        # HACK -- check the band
+        if band != current_band:
+            continue
 
         reconstructed_filepath = "{server_img_path}/{field_name}.{band}.{utdate}.{img_id}_stch_1.sw.dcmp".format(
             server_img_path=server_img_path,
@@ -435,8 +419,7 @@ for gf in gal_fakes:
         fakes = txtobj(gf.fakes_path)
         gf.measure_fakemags(fakes, dcmp, reconstructed_filepath, zpt, gal_efficiency_3.measured_fakes_output,
                             unrecovered_reg_file=unrecovered_reg_path, dcmp_file=dcmp_file,
-                            unrecovered_range=unrecorved_range, ds9_cmd_file=ds9_commands, pass_file=pass_diffcut,
-                            fail_file=fail_diffcut)
+                            unrecovered_range=unrecorved_range, ds9_cmd_file=ds9_commands)
 
 
 

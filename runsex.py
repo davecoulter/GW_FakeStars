@@ -52,7 +52,10 @@ def getHostMatchfromSex(imfile,eventra,eventdec,sextable=None,maxRparam=6,return
 def runsex(imfile, wtfile=None, maskfile=None, zpt=None, segmapname=None):
 
     imroot, imext = os.path.splitext(imfile)
-    tmpcatname = "%s.sexcat.txt" % (imroot)
+    # tmpcatname = "%s.sexcat.txt" % (imroot)
+
+    # temporary hack
+    tmpcatname = "%s.sexcat2.txt" % (imroot)
     if os.path.exists(tmpcatname):
         os.system('rm %s' % tmpcatname)
 
