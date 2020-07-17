@@ -308,7 +308,7 @@ for sf_index, sf in enumerate(swope_files):
         for i, good_id in enumerate(good_ids):
             good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
 
-            import pdb; pdb.set_trace()
+            # import pdb; pdb.set_trace()
 
             # send over the good pixel indices, the galaxy X/Y position, and the galaxy flux radius
             pixel_tup_dict[good_id] = (good_galaxy_indices, gal_xy[i], flux_radii[i])
