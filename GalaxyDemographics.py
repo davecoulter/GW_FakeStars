@@ -72,22 +72,20 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         ggi = pixel_tuple[0]
         gxy = pixel_tuple[1]
         gfr = pixel_tuple[2]
+        s1D = Sersic1D(amplitude=1, r_eff=gfr)
+        # assuming this... from Ryan (7/15/2020): "it looks like n = 2 might be a good sersic index it is both
+        # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
+        # the size of your PSF"
+        s1D.n = 2.0
 
         arr_len = np.shape(ggi)[1]
-
         for i in range(arr_len):
             x = ggi[1][i]
             y = ggi[0][i]
 
             sep = np.sqrt((x - gxy[0])**2.0 + (y - gxy[1])**2.0)
-            r_eff = sep/gfr # fraction of a flux radius
-
-            s1 = Sersic1D(amplitude=1, r_eff=r_eff)
-            # assuming this... from Ryan (7/15/2020): "it looks like n = 2 might be a good sersic index it is both
-            # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
-            # the size of your PSF"
-            s1.n = 2.0
-            weight = s1(sep)
+            r = sep/gfr # fraction of a flux radius
+            weight = s1D(r)
 
             weighted_pixels[sxct_id].append((x, y, sep, weight))
             result_table2.add_row([sxct_id, x, y, sep, weight])
