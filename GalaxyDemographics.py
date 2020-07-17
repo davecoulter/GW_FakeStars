@@ -85,7 +85,8 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
         sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
         seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
-        weights = s1D(seps)
+        # weights = s1D(seps)
+        weights = np.linspace(0,1,len(seps))
 
         for x, y, s, w in zip(xx, yy, seps, weights):
             weighted_pixels[sxct_id].append((x, y, s, w))
