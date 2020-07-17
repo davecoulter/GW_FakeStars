@@ -62,7 +62,6 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     for sxct_id, pixel_tuple in pixel_tuple_dict.items():
 
-        import pdb; pdb.set_trace()
         weighted_pixels[sxct_id] = []
         # Build table for valid galaxy pixels
 
@@ -309,6 +308,8 @@ for sf_index, sf in enumerate(swope_files):
         pixel_tup_dict = {}
         for i, good_id in enumerate(good_ids):
             good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
+
+            import pdb; pdb.set_trace()
 
             # send over the good pixel indices, the galaxy X/Y position, and the galaxy flux radius
             pixel_tup_dict[good_id] = (good_galaxy_indices, gal_xy[i], flux_radii[i])
