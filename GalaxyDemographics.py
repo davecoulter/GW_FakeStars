@@ -59,8 +59,10 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     weighted_pixels = {}
 
+
     for sxct_id, pixel_tuple in pixel_tuple_dict.items():
 
+        import pdb; pdb.set_trace()
         weighted_pixels[sxct_id] = []
         # Build table for valid galaxy pixels
 
