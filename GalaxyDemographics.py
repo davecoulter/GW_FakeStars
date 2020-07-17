@@ -77,18 +77,31 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
         # the size of your PSF"
         s1D.n = 2.0
+        xx = []
+        yy = []
+        for p in ggi:
+            xx.append(p[0])
+            yy.append(p[1])
 
-        arr_len = np.shape(ggi)[1]
-        for i in range(arr_len):
-            x = ggi[1][i]
-            y = ggi[0][i]
+        sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
+        seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
+        weights = s1D(seps)
 
-            sep = np.sqrt((x - gxy[0])**2.0 + (y - gxy[1])**2.0)
-            r = sep/gfr # fraction of a flux radius
-            weight = s1D(r)
+        for x, y, s, w in zip(xx, yy, seps, weights):
+            weighted_pixels[sxct_id].append((x, y, s, w))
+            result_table2.add_row([sxct_id, x, y, s, w])
 
-            weighted_pixels[sxct_id].append((x, y, sep, weight))
-            result_table2.add_row([sxct_id, x, y, sep, weight])
+        # arr_len = np.shape(ggi)[1]
+        # for i in range(arr_len):
+        #     x = ggi[1][i]
+        #     y = ggi[0][i]
+        #
+        #     sep = np.sqrt((x - gxy[0])**2.0 + (y - gxy[1])**2.0)
+        #     r = sep/gfr # fraction of a flux radius
+        #     weight = s1D(r)
+        #
+        #     weighted_pixels[sxct_id].append((x, y, sep, weight))
+        #     result_table2.add_row([sxct_id, x, y, sep, weight])
     result_table2.write(ascii_ecsv_fpath2, overwrite=True, format='ascii.ecsv')
 
     # Tile region
