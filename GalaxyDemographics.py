@@ -62,6 +62,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     for sxct_id, pixel_tuple in pixel_tuple_dict.items():
 
+        import pdb; pdb.set_trace()
         weighted_pixels[sxct_id] = []
         # Build table for valid galaxy pixels
 
@@ -84,9 +85,10 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         #     yy.append(p[1])
 
         sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
-        seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
+        # seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
+        seps = np.linspace(0,1,len(xx))
         # weights = s1D(seps)
-        weights = np.linspace(0,1,len(seps))
+        weights = np.linspace(0, 1, len(seps))
 
         for x, y, s, w in zip(xx, yy, seps, weights):
             weighted_pixels[sxct_id].append((x, y, s, w))
