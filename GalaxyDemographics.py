@@ -170,7 +170,7 @@ global_t1 = time.time()
 # get all the swope files...
 swope_files = []
 swope_file_base_path = "/data/LCO/Swope/workstch/gw190425/1"
-with open("./all_tiles_ascii.txt", 'r') as csvfile:
+with open("./Fakes/Swope/all_tiles_ascii.txt", 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     for row in csvreader:
         f = "%s/%s" % (swope_file_base_path, row[0])
@@ -189,7 +189,7 @@ for sf_index, sf in enumerate(swope_files):
     field_name = tokens[0]
     photpipe_id = tokens[3].replace('_stch_1', '')
 
-    glade_files = glob.glob('SwopeTiles/*%s*txt' % field_name)
+    glade_files = glob.glob('./Fakes/Swope/SwopeTiles/*%s*txt' % field_name)
     db_id = -9999
 
     for gf in glade_files:
@@ -210,7 +210,7 @@ for sf_index, sf in enumerate(swope_files):
         logging.debug("Skipping %s" % sf)
         continue
 
-    glade_path = "./SwopeTiles"
+    glade_path = "./Fakes/Swope/SwopeTiles"
     glade_file_name = "%s_%s.txt" % (db_id, field_name)
     glade_file_path = "%s/%s" % (glade_path, glade_file_name)
 
