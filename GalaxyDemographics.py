@@ -77,11 +77,11 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
         # the size of your PSF"
         s1D.n = 2.0
-        xx = []
-        yy = []
-        for p in ggi:
-            xx.append(p[0])
-            yy.append(p[1])
+        xx = ggi[0]
+        yy = ggi[1]
+        # for p in ggi:
+        #     xx.append(p[0])
+        #     yy.append(p[1])
 
         sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
         seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
