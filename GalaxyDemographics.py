@@ -73,8 +73,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         gxy = pixel_tuple[1]
         gfr = pixel_tuple[2]
 
-        arr_len = np.shape(ggi[0])[1]
-
+        arr_len = np.shape(ggi)[1]
 
         for i in range(arr_len):
             x = ggi[1][i]
