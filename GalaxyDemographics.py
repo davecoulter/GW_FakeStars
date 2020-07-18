@@ -14,7 +14,7 @@ import time
 from astropy.table import Table
 import csv
 import logging
-from astropy.modeling.models import Sersic1D
+from astropy.modeling.models import Sersic1D, Sersic2D
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import colors
@@ -23,7 +23,7 @@ logging.basicConfig(filename='GalaxyDemographics.log', level=logging.DEBUG)
 
 
 def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords,
-                          pixel_tuple_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta):
+                          pixel_tuple_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta, ellip):
 
     galaxy_rows = []
 
@@ -32,15 +32,15 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
     ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
     print("Creating `%s`" % ascii_ecsv_fpath)
     cols = ['sexcat_id', 'glade_id', 'ra_dec', 'dec_dec', 'glade_B', 'filter', 'sex_mag', 'num_pixels',
-            'flux_radius', 'x', 'y', 'cxx', 'cyy', 'cxy', 'A', 'B', 'theta']
-    dtype = ['i4', 'i4', 'f8', 'f8', 'f8', 'U64', 'f8', 'i4', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8']
+            'flux_radius', 'x', 'y', 'cxx', 'cyy', 'cxy', 'A', 'B', 'theta', 'ellip']
+    dtype = ['i4', 'i4', 'f8', 'f8', 'f8', 'U64', 'f8', 'i4', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8', 'f8']
     result_table = Table(dtype=dtype, names=cols)
     meta = ["{key}={value}".format(key="image_file", value=image_file)]
     result_table.meta['comment'] = meta
 
-    for sexcat_id, glade_id, coord_tup, b, sex_mag, num_pix, flux_rad, xy_tup, _cxx, _cyy, _cxy, _A, _B, _theta in \
-            zip(good_ids, glade_ids, gal_coords, glade_bmags, sex_mags, pixels, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta):
-        galaxy_rows.append([sexcat_id, glade_id, coord_tup[0], coord_tup[1], b, filtr, sex_mag, num_pix, flux_rad, xy_tup[0], xy_tup[1], _cxx, _cyy, _cxy, _A, _B, _theta])
+    for sexcat_id, glade_id, coord_tup, b, sex_mag, num_pix, flux_rad, xy_tup, _cxx, _cyy, _cxy, _A, _B, _theta, _ellip in \
+            zip(good_ids, glade_ids, gal_coords, glade_bmags, sex_mags, pixels, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta, ellip):
+        galaxy_rows.append([sexcat_id, glade_id, coord_tup[0], coord_tup[1], b, filtr, sex_mag, num_pix, flux_rad, xy_tup[0], xy_tup[1], _cxx, _cyy, _cxy, _A, _B, _theta, _ellip])
 
     for r in galaxy_rows:
         result_table.add_row(r)
@@ -73,15 +73,18 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         ggi = pixel_tuple[0]
         gxy = pixel_tuple[1]
         gfr = pixel_tuple[2]
+        gel = pixel_tuple[3]
+        gth = pixel_tuple[4]
 
         print("sxct_id: %s; num_pix: %s" % (sxct_id, len(ggi[0])))
 
         # print("num indices: %s" % len(ggi[0]))
-        s1D = Sersic1D(amplitude=1, r_eff=gfr)
+        # s1D = Sersic1D(amplitude=1, r_eff=gfr)
+
         # assuming this... from Ryan (7/15/2020): "it looks like n = 2 might be a good sersic index it is both
         # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
         # the size of your PSF"
-        s1D.n = 2.0
+        s2D = Sersic2D(amplitude=1, r_eff=gfr, n=2.0, x_0=gxy[0], y_0=gxy[1], ellip=gel, theta=np.radians(gth))
 
         arr_len = np.shape(ggi)[1]
         for i in range(arr_len):
@@ -89,7 +92,8 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             y = ggi[0][i]
 
             sep = np.sqrt((x - gxy[0])**2.0 + (y - gxy[1])**2.0)
-            weight = s1D(sep)
+            # weight = s1D(sep)
+            weight = s2D(x, y)
 
             weighted_pixels[sxct_id].append((x, y, sep, weight))
             result_table2.add_row([sxct_id, x, y, sep, weight])
@@ -241,8 +245,8 @@ for sf_index, sf in enumerate(swope_files):
         sextable = runsex(sf, segmapname=segmap_file, zpt=fits.getval(sf, 'ZPTMAG'))
         segmap = fits.getdata(segmap_file)
 
-        good_ids, glade_ids, glade_bmags, measured_mags, gal_coords, gal_xy, flux_radii, cxx, cyy, cxy, A, B, theta = \
-            [], [], [], [], [], [], [], [], [], [], [], [], []
+        good_ids, glade_ids, glade_bmags, measured_mags, gal_coords, gal_xy, flux_radii, cxx, cyy, cxy, A, B, theta, ellip = \
+            [], [], [], [], [], [], [], [], [], [], [], [], [], []
         try:
             glade = at.Table.read(glade_file_path, format='ascii.ecsv')
 
@@ -291,6 +295,7 @@ for sf_index, sf in enumerate(swope_files):
                 A.append(sextable.A_IMAGE[i])
                 B.append(sextable.B_IMAGE[i])
                 theta.append(sextable.THETA_IMAGE[i])
+                ellip.append(sextable.ELLIPTICITY[i])
 
                 # Zero out entries in the segmap that not matched galaxies
         for i in sextable.NUMBER:
@@ -308,12 +313,12 @@ for sf_index, sf in enumerate(swope_files):
             # import pdb; pdb.set_trace()
 
             # send over the good pixel indices, the galaxy X/Y position, and the galaxy flux radius
-            pixel_tup_dict[good_id] = (good_galaxy_indices, gal_xy[i], flux_radii[i])
+            pixel_tup_dict[good_id] = (good_galaxy_indices, gal_xy[i], flux_radii[i], ellip[i], theta[i])
             gal_pix = segmap[good_galaxy_indices]
             pixels.append(len(gal_pix))
 
         write_good_sexcat_ids(glade_file_name, sf, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
-                              gal_coords, pixel_tup_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta)
+                              gal_coords, pixel_tup_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta, ellip)
 
         t2 = time.time()
         print("\n********************")
