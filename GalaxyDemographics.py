@@ -59,10 +59,12 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     weighted_pixels = {}
 
-
+    print("Num galaxies: %s" % len(pixel_tuple_dict))
     for sxct_id, pixel_tuple in pixel_tuple_dict.items():
 
-        import pdb; pdb.set_trace()
+        print("sxct_id: %s" % sxct_id)
+
+        # import pdb; pdb.set_trace()
         weighted_pixels[sxct_id] = []
         # Build table for valid galaxy pixels
 
@@ -73,24 +75,20 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         ggi = pixel_tuple[0]
         gxy = pixel_tuple[1]
         gfr = pixel_tuple[2]
+
+        print("num indices: %s" % len(ggi[0]))
         s1D = Sersic1D(amplitude=1, r_eff=gfr)
         # assuming this... from Ryan (7/15/2020): "it looks like n = 2 might be a good sersic index it is both
         # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
         # the size of your PSF"
         s1D.n = 2.0
-        xx = ggi[0]
-        yy = ggi[1]
-        # for p in ggi:
-        #     xx.append(p[0])
-        #     yy.append(p[1])
-
         sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
-        # seps = sep(gxy[0], gxy[1], np.asarray(xx), np.asarray(yy))
-        seps = np.linspace(0,1,len(xx))
-        # weights = s1D(seps)
-        weights = np.linspace(0, 1, len(seps))
+        seps = sep(gxy[0], gxy[1], np.asarray(ggi[0]), np.asarray(ggi[1]))
+        weights = s1D(seps)
 
-        for x, y, s, w in zip(xx, yy, seps, weights):
+        print("\tSeps and Weights done.")
+
+        for x, y, s, w in zip(ggi[0], ggi[1], seps, weights):
             weighted_pixels[sxct_id].append((x, y, s, w))
             result_table2.add_row([sxct_id, x, y, s, w])
 
@@ -105,6 +103,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         #
         #     weighted_pixels[sxct_id].append((x, y, sep, weight))
         #     result_table2.add_row([sxct_id, x, y, sep, weight])
+    print("Writing good pixels")
     result_table2.write(ascii_ecsv_fpath2, overwrite=True, format='ascii.ecsv')
 
     # Tile region
@@ -320,8 +319,10 @@ for sf_index, sf in enumerate(swope_files):
         pixels = []
         pixel_tup_dict = {}
         for i, good_id in enumerate(good_ids):
-            good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == i))
+            good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == good_id))
 
+            print("sxct_id: %s" % good_id)
+            print("\tnum good indices: %s" % len(good_galaxy_indices[0]))
             # import pdb; pdb.set_trace()
 
             # send over the good pixel indices, the galaxy X/Y position, and the galaxy flux radius
