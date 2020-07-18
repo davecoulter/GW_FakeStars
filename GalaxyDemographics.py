@@ -155,8 +155,8 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
             for pixel_tuple in pixel_list:
                 # (x, y, sep, weight)
-                x = pixel_tuple[1]
-                y = pixel_tuple[0]
+                x = pixel_tuple[0]
+                y = pixel_tuple[1]
                 w = pixel_tuple[3]
                 clr = plt.cm.viridis(norm(w))
                 hex_clr = matplotlib.colors.rgb2hex(clr)
