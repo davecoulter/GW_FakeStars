@@ -62,8 +62,6 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
     print("Num galaxies: %s" % len(pixel_tuple_dict))
     for sxct_id, pixel_tuple in pixel_tuple_dict.items():
 
-        print("sxct_id: %s" % sxct_id)
-
         # import pdb; pdb.set_trace()
         weighted_pixels[sxct_id] = []
         # Build table for valid galaxy pixels
@@ -76,7 +74,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         gxy = pixel_tuple[1]
         gfr = pixel_tuple[2]
 
-
+        print("sxct_id: %s; num_pix: %s" % (sxct_id, len(ggi[0])))
 
         # print("num indices: %s" % len(ggi[0]))
         s1D = Sersic1D(amplitude=1, r_eff=gfr)
@@ -85,26 +83,13 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         # the size of your PSF"
         s1D.n = 2.0
 
-        # sep = lambda x0, y0, x, y: np.sqrt((x - x0) ** 2.0 + (y - y0) ** 2.0)
-        # seps = sep(gxy[0], gxy[1], np.asarray(ggi[0]), np.asarray(ggi[1]))
-        # weights = s1D(seps)
-        #
-        # print("\tSeps and Weights done.")
-        #
-        # for x, y, s, w in zip(ggi[0], ggi[1], seps, weights):
-        #     weighted_pixels[sxct_id].append((x, y, s, w))
-        #     result_table2.add_row([sxct_id, x, y, s, w])
-
-
-
         arr_len = np.shape(ggi)[1]
         for i in range(arr_len):
             x = ggi[1][i]
             y = ggi[0][i]
 
             sep = np.sqrt((x - gxy[0])**2.0 + (y - gxy[1])**2.0)
-            r = sep/gfr # fraction of a flux radius
-            weight = s1D(r)
+            weight = s1D(sep)
 
             weighted_pixels[sxct_id].append((x, y, sep, weight))
             result_table2.add_row([sxct_id, x, y, sep, weight])
@@ -125,7 +110,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             glade_id = r[1]
             ra = r[2]
             dec = r[3]
-            csvfile.write('circle(%s,%s,30") # width=2 text="%s/%s"\n' % (ra, dec, sexcat_id, glade_id))
+            csvfile.write('circle(%s,%s,30") # width=2 text="sxct_id: %s | db_id: %s"\n' % (ra, dec, int(sexcat_id), int(glade_id)))
 
         print("Done w/ Galaxy Position Region File")
 
@@ -138,14 +123,6 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         csvfile.write("global color=red\n")
         csvfile.write("image\n")
 
-        # for sxct_id, pixel_tuple in pixel_tuple_dict.items():
-        #     # Build table for valid galaxy pixels
-        #     arr_len = np.shape(pixel_tuple)[1]
-        #
-        #     for i in range(arr_len):
-        #         x = pixel_tuple[1][i]
-        #         y = pixel_tuple[0][i]
-        #         csvfile.write('circle(%s,%s,1") # \n' % (x, y))
         for sxct_id, pixel_list in weighted_pixels.items():
 
             weights = []
@@ -326,8 +303,8 @@ for sf_index, sf in enumerate(swope_files):
         for i, good_id in enumerate(good_ids):
             good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == good_id))
 
-            print("sxct_id: %s" % good_id)
-            print("\tnum good indices: %s" % len(good_galaxy_indices[0]))
+            # print("sxct_id: %s" % good_id)
+            # print("\tnum good indices: %s" % len(good_galaxy_indices[0]))
             # import pdb; pdb.set_trace()
 
             # send over the good pixel indices, the galaxy X/Y position, and the galaxy flux radius
