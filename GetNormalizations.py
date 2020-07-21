@@ -35,6 +35,8 @@ dtype = ['U64', 'i4', 'i4', 'f8']
 normalization_table = Table(dtype=dtype, names=cols)
 
 for i in images:
+    t0 = time.time()
+    print("... Processing `%s`; [%s/%s]" % (i, i+1, len(images)))
     mask_file = i.replace('fits', 'mask.fits.gz')
 
     mask_hdu = fits.open("{}/{}".format(working_base_path, mask_file))
@@ -45,6 +47,8 @@ for i in images:
     normalization = float(num_masked)/float(total_pix)
 
     normalization_table.add_row([i, num_masked, total_pix, normalization])
+    t1 = time.time()
+    print("\t... done. %s sec." % (t1-t0))
 
 output_path = "/data/LCO/Swope/logstch/gw190425/1/tile_normalizations.txt"
 normalization_table.write(output_path, overwrite=True, format='ascii.ecsv')
