@@ -46,6 +46,7 @@ for i, img in enumerate(images):
     total_pix = len(mask_data)
     normalization = (1.0 - float(num_masked))/float(total_pix)
 
+    import pdb; pdb.set_trace()
     print("\tnum_masked: %s; total pix: %s; norm: %s" % (num_masked, total_pix, normalization))
 
     normalization_table.add_row([img, num_masked, total_pix, normalization])
