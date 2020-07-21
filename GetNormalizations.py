@@ -34,10 +34,10 @@ cols = ['img_file', 'num_masked_pix', 'total_pix', 'normalization']
 dtype = ['U64', 'i4', 'i4', 'f8']
 normalization_table = Table(dtype=dtype, names=cols)
 
-for i in images:
+for i, img in enumerate(images):
     t0 = time.time()
-    print("... Processing `%s`; [%s/%s]" % (i, str(i+1), len(images)))
-    mask_file = i.replace('fits', 'mask.fits.gz')
+    print("... Processing `%s`; [%s/%s]" % (img, i+1, len(images)))
+    mask_file = img.replace('fits', 'mask.fits.gz')
 
     mask_hdu = fits.open("{}/{}".format(working_base_path, mask_file))
     mask_data = mask_hdu[0].data.astype('float')
@@ -46,7 +46,7 @@ for i in images:
     total_pix = len(mask_data)
     normalization = float(num_masked)/float(total_pix)
 
-    normalization_table.add_row([i, num_masked, total_pix, normalization])
+    normalization_table.add_row([img, num_masked, total_pix, normalization])
     t1 = time.time()
     print("\t... done. %s sec." % (t1-t0))
 
