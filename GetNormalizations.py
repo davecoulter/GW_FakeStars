@@ -36,7 +36,7 @@ normalization_table = Table(dtype=dtype, names=cols)
 
 for i in images:
     t0 = time.time()
-    print("... Processing `%s`; [%s/%s]" % (i, i+1, len(images)))
+    print("... Processing `%s`; [%s/%s]" % (i, str(i+1), len(images)))
     mask_file = i.replace('fits', 'mask.fits.gz')
 
     mask_hdu = fits.open("{}/{}".format(working_base_path, mask_file))
