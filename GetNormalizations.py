@@ -42,9 +42,11 @@ for i, img in enumerate(images):
     mask_hdu = fits.open("{}/{}".format(working_base_path, mask_file))
     mask_data = mask_hdu[0].data.astype('float')
 
-    num_masked = len(np.where(mask_data != 144.0))
+    num_masked = len(np.where(mask_data == 144.0))
     total_pix = len(mask_data)
-    normalization = float(num_masked)/float(total_pix)
+    normalization = (1.0 - float(num_masked))/float(total_pix)
+
+    print("\tnum_masked: %s; total pix: %s; norm: %s" % (num_masked, total_pix, normalization))
 
     normalization_table.add_row([img, num_masked, total_pix, normalization])
     t1 = time.time()
