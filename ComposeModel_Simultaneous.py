@@ -60,13 +60,14 @@ gal_mag_keys = [
 
 central_galmags = []
 central_psfmag_bins = []
-efficiency = []
+unweighted_efficiency = []
+weighted_efficiency = []
 number = []
 error_high = []
 error_low = []
 
 for gm in gal_mag_keys:
-    efficiencies_path = "./Fakes/Swope/Galaxy_Fakes/%s_%s.cut.dcmp/efficiencies_3.0.txt" % gm
+    efficiencies_path = "./Fakes/Swope/Galaxy_Fakes/%s_%s.cut.dcmp/efficiencies_10.0.txt" % gm
     central_gal_mag = (gm[1] - gm[0]) / 2.0 + gm[0]
 
     with open(efficiencies_path, 'r') as csvfile:
@@ -75,11 +76,12 @@ for gm in gal_mag_keys:
 
         for row in csv_reader:
             central_psfmag_bins.append(float(row[0]))
-            efficiency.append(float(row[1]))
-            number.append(central_gal_mag)
+            unweighted_efficiency.append(float(row[1]))
+            weighted_efficiency.append(float(row[2]))
+            number.append(float(row[3]))
             central_galmags.append(central_gal_mag)
 
-for eff, num in zip(efficiency, number):
+for eff, num in zip(weighted_efficiency, number):
     yes = eff * num
     no = (1.0 - eff) * num
     ci = binomial(yes, no)
@@ -94,7 +96,7 @@ mean_errors = np.mean([error_high, error_low], axis=0)
 
 
 minimize_result = minimize(chi_square_s_curve, initial_guess, args=(np.asarray(central_galmags), central_psfmag_bins,
-                                                                    efficiency, mean_errors))
+                                                                    weighted_efficiency, mean_errors))
 
 
 
@@ -115,7 +117,7 @@ fig = plt.figure(figsize=(10, 10))
 ax = fig.add_subplot(111)
 
 model_gal_mags = np.linspace(13.25, 17.25, 9)
-psf_mag = np.linspace(18.0, 25.0, len(efficiency))
+psf_mag = np.linspace(18.0, 25.0, len(weighted_efficiency))
 for gm in model_gal_mags:
 
     y = lim_mag(psf_mag, gm, fitted_m_n, fitted_b_n, fitted_m_a, fitted_b_a, fitted_m_x0, fitted_b_x0)

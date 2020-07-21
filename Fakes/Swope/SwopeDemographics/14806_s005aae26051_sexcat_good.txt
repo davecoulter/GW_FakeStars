@@ -1,0 +1,51 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data/LCO/Swope/workstch/gw190425/1/s005aae26051.i.ut190429.5102_stch_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+462 1083796 253.65562966 -3.7079916558 18.087 i 16.4944 518 8.912 2049.158 635.388 0.019153707 0.054100763 -0.0014915977 7.229 4.299 1.2 0.405
+1900 430837 253.61519237 -3.626526068 16.133 i 15.751 1161 10.879 2383.125 1309.592 0.011906526 0.027714655 0.0077867401 9.535 5.911 -13.1 0.38
+3537 1083780 253.48213929 -3.5168227603 16.853 i 16.4263 842 9.66 3482.198 2217.386 0.027516883 0.031191347 0.036432199 9.515 4.58 -42.1 0.519
+4000 254701 253.72566341 -3.4779179813 14.933 i 14.6797 3153 17.216 1470.586 2539.416 0.0069897538 0.0066744536 0.0034628583 14.012 10.802 -47.6 0.229
+5171 1083798 253.60193478 -3.4151960805 17.541 i 16.8495 469 5.622 2492.678 3058.53 0.053898506 0.046320666 -0.003538023 4.666 4.292 77.5 0.08
+5526 1083779 253.47403833 -3.3892195937 17.426 i 16.4184 538 5.964 3549.293 3273.406 0.04801568 0.048223149 -0.0027209942 4.625 4.495 42.8 0.028
+5972 1195806 253.57681199 -3.3497492514 17.48 i 15.0263 1818 11.569 2700.254 3600.153 0.015864976 0.011429956 -0.0016031106 9.412 7.904 80.1 0.16

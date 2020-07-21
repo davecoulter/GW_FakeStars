@@ -1,0 +1,28 @@
+# Region file format: DS9 version 4.0 global
+
+global color=lightgreen
+ICRS
+circle(233.67899892,27.051491307,30") # width=2 text="sxct_id: 2 | db_id: 2422728"
+circle(233.74536764,27.082190525,30") # width=2 text="sxct_id: 109 | db_id: 336582"
+circle(233.92718771,27.11842482,30") # width=2 text="sxct_id: 284 | db_id: 62202"
+circle(233.86570659,27.150303215,30") # width=2 text="sxct_id: 453 | db_id: 296203"
+circle(233.93135819,27.14235217,30") # width=2 text="sxct_id: 463 | db_id: 2422841"
+circle(234.16363903,27.154902719,30") # width=2 text="sxct_id: 471 | db_id: 71687"
+circle(233.70764026,27.169737432,30") # width=2 text="sxct_id: 625 | db_id: 2422742"
+circle(234.10839432,27.188958663,30") # width=2 text="sxct_id: 757 | db_id: 2422939"
+circle(233.93346403,27.230330556,30") # width=2 text="sxct_id: 921 | db_id: 71699"
+circle(233.97244693,27.247205943,30") # width=2 text="sxct_id: 970 | db_id: 71704"
+circle(234.13632533,27.257479861,30") # width=2 text="sxct_id: 1108 | db_id: 403224"
+circle(234.06332492,27.304241008,30") # width=2 text="sxct_id: 1234 | db_id: 14652"
+circle(233.80289765,27.29165397,30") # width=2 text="sxct_id: 1302 | db_id: 403190"
+circle(233.81134851,27.324856166,30") # width=2 text="sxct_id: 1322 | db_id: 13997"
+circle(233.79691586,27.335726067,30") # width=2 text="sxct_id: 1518 | db_id: 1233130"
+circle(233.81423791,27.35056388,30") # width=2 text="sxct_id: 1594 | db_id: 62201"
+circle(233.92450663,27.375326881,30") # width=2 text="sxct_id: 1688 | db_id: 71736"
+circle(233.86603361,27.382553177,30") # width=2 text="sxct_id: 1766 | db_id: 403198"
+circle(234.05789116,27.393256779,30") # width=2 text="sxct_id: 1846 | db_id: 1143336"
+circle(234.16851922,27.396096673,30") # width=2 text="sxct_id: 1853 | db_id: 634175"
+circle(233.65951041,27.457232859,30") # width=2 text="sxct_id: 2257 | db_id: 1233250"
+circle(233.74010229,27.474396285,30") # width=2 text="sxct_id: 2268 | db_id: 2422758"
+circle(233.80287295,27.466447205,30") # width=2 text="sxct_id: 2347 | db_id: 1233261"
+circle(234.15392212,27.526156113,30") # width=2 text="sxct_id: 2516 | db_id: 379474"

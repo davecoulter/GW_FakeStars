@@ -1,0 +1,52 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data/LCO/Swope/workstch/gw190425/1/s005aae32029.i.ut190425.1053_stch_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+443 427023 253.02340631 -15.131397354 15.853 i 17.5709 157 4.187 1933.687 672.924 0.13295938 0.10496756 -0.0076221433 3.094 2.737 82.4 0.115
+1580 3187 252.72251589 -15.003930607 12.812 i 13.5792 4183 13.331 4338.747 1726.623 0.0061549451 0.0094791604 -0.0045603337 14.149 9.695 27.0 0.315
+2135 221549 252.97579052 -14.987040386 16.101 i 17.41 168 4.008 2314.131 1867.636 0.066282406 0.19442952 0.057701517 4.08 2.233 -12.1 0.453
+3153 394640 253.07395046 -14.907032632 19.51 i 15.7543 651 6.791 1529.136 2529.624 0.039385833 0.036114965 -5.9944545e-05 5.262 5.039 89.5 0.042
+3381 19909 252.80320136 -14.886269637 14.619 i 14.7907 1467 10.046 3694.552 2701.018 0.016506145 0.017592551 -0.020539202 12.158 6.049 43.5 0.502
+4517 427024 253.13642958 -14.818305707 16.376 i 17.1368 228 6.291 1028.963 3263.647 0.080763511 0.083645977 -0.024649011 3.785 3.251 41.7 0.141
+5907 21306 252.83367076 -14.744058639 14.539 i 14.6873 1734 11.24 3451.647 3878.126 0.0095985448 0.019741233 -0.0024974281 10.288 7.09 6.9 0.311
+6598 221557 252.9971427 -14.711469461 15.825 i 16.0948 590 7.5 2143.297 4148.231 0.03416916 0.041748423 -0.0022748625 5.423 4.884 8.4 0.099

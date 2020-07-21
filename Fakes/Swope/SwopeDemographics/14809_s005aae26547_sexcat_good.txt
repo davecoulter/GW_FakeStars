@@ -1,0 +1,52 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data/LCO/Swope/workstch/gw190425/1/s005aae26547.i.ut190429.5091_stch_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+1427 430569 255.99525203 -4.6581842453 16.56 i 16.4581 475 5.732 3341.357 995.767 0.045692444 0.054836124 0.018284844 4.997 4.066 -31.7 0.186
+2298 1078493 256.00407725 -4.6073224198 17.033 i 16.6172 236 2.724 3268.632 1416.708 0.11204118 0.13669011 0.0090838578 2.998 2.697 -10.1 0.101
+3475 1078494 256.04820309 -4.5363505301 17.696 i 17.1674 243 3.845 2904.695 2004.115 0.15156016 0.077650718 -0.11370972 4.623 2.341 61.5 0.494
+4297 1078531 256.20089759 -4.488168128 17.684 i 17.2193 181 2.634 1644.934 2402.871 0.13193491 0.14520852 0.097104065 3.341 2.309 -41.1 0.309
+4408 255798 255.92337524 -4.4670156606 15.807 i 15.1607 1406 8.929 3934.684 2577.723 0.020152418 0.021003526 -0.0067463671 7.63 6.458 41.4 0.154
+5678 1078530 256.20105178 -4.4035125865 18.083 i 17.3742 231 5.151 1643.591 3103.47 0.077206172 0.11506709 0.075302921 4.304 2.689 -31.7 0.375
+6225 1078500 256.15734648 -4.3622402012 17.337 i 16.9492 367 6.353 2004.209 3445.062 0.13618824 0.035200126 -0.08993914 7.437 2.554 69.2 0.657
+6730 1078501 256.07628163 -4.3096998505 17.076 i 16.7019 497 7.83 2673.18 3879.873 0.04562071 0.036560457 0.032055348 6.397 4.161 -52.9 0.35
