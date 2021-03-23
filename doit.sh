@@ -4,6 +4,8 @@
 input_dir="./Fakes/Thacher/Galaxy_Fakes"
 root_path="/data2/THACHER/workspace"
 field_name_start="t005"
+log_base="logs"
+work_base="workspace"
 
 #gal_bin_arr=(
 #"13.0_13.5" # 0
@@ -173,6 +175,8 @@ echo "${msg}"
 # Do work... #  --stage plant,photpipe \
 python ./DetEff_StaticFile.py \
 --root_path ${root_path} \
+--log_base ${log_base} \
+--work_base ${work_base} \
 --field_name_start ${field_name_start} \
 --stage plant,photpipe \
 --image_list ${input_dir}/${gal_bin}_images.txt \

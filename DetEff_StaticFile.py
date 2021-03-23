@@ -60,7 +60,7 @@ class FileAssociation():
 
 class DetermineEfficiencies():
 
-    def __init__(self, root_path, image_dir, template_dir, image_list, template_list):
+    def __init__(self, root_path, log_base, work_base, image_dir, template_dir, image_list, template_list):
 
         self.root_path = root_path
         self.image_dir = image_dir
@@ -68,7 +68,7 @@ class DetermineEfficiencies():
 
         self.image_path = "{0}/{1}/1".format(self.root_path, self.image_dir)
         self.template_path = "{0}/{1}/1".format(self.root_path, self.template_dir)
-        self.log_path = self.image_path.replace("workstch", "logstch")
+        self.log_path = self.image_path.replace(work_base, log_base)
 
         self.image_list = image_list
         self.template_list = template_list
@@ -1217,6 +1217,10 @@ class AllStages():
 
         parser.add_option('--root_path', default='$PIPE_DATA/workstch', type='string', help='Root directory')
         parser.add_option('--image_dir', default='gw190425', type='string', help='Image directory')
+
+        parser.add_option('--log_base', default='workstch', type='string', help='Root directory')
+        parser.add_option('--work_base', default='logstch', type='string', help='Image directory')
+
         parser.add_option('--field_name_start', default='s005', type='string', help='Image directory')
         parser.add_option('--template_dir', default='gw190425tmpl', type='string', help='Template directory')
         parser.add_option('--image_list', default='gw190425/<change this to the one you want>.txt', type='string', help='File with all observations')
@@ -1263,10 +1267,12 @@ if __name__ == "__main__":
     options,  args = parser.parse_args()
 
     detEff = DetermineEfficiencies(root_path=os.path.expandvars(options.root_path),
-                                    image_dir=options.image_dir,
-                                    template_dir=options.template_dir,
-                                    image_list=options.image_list,
-                                    template_list=options.template_list)
+                                   log_base=options.log_base,
+                                   work_base=options.work_base,
+                                   image_dir=options.image_dir,
+                                   template_dir=options.template_dir,
+                                   image_list=options.image_list,
+                                   template_list=options.template_list)
     detEff.options = options
 
     current_dir = options.subdir_start
