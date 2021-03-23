@@ -66,11 +66,13 @@ class DetermineEfficiencies():
         self.image_dir = image_dir
         self.template_dir = template_dir
 
+        self.log_base = log_base
+        self.work_base = work_base
+
         self.image_path = "{0}/{1}/1".format(self.root_path, self.image_dir)
         self.template_path = "{0}/{1}/1".format(self.root_path, self.template_dir)
-        self.log_path = self.image_path.replace(work_base, log_base)
+        self.log_path = self.image_path.replace(self.work_base, self.log_base)
 
-        import pdb; pdb.set_trace()
         self.image_list = image_list
         self.template_list = template_list
 
@@ -108,8 +110,8 @@ class DetermineEfficiencies():
         self.fake_image_dir = "{0}_fake_{1}_{2}".format(self.image_dir, galstr, iteration)
 
         self.fake_image_path = "{0}/{1}/1".format(self.root_path, self.fake_image_dir)
-        self.fake_log_path = self.fake_image_path.replace("workstch", "logstch")
-        self.fake_stitched_path = self.fake_log_path.replace("logstch", "stitched")
+        self.fake_log_path = self.fake_image_path.replace(self.work_base, self.log_base)
+        self.fake_stitched_path = self.fake_log_path.replace(self.work_base, self.log_base)
         self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
 
         # if len(galstr) > 0 and galstr != 'uniform':
@@ -1162,7 +1164,8 @@ class DetermineEfficiencies():
             print("'%s' not found. Proceeding..." % lgdir)
 
     def soft_clean(self):
-        diff_log_dir = self.diff_dir_path.replace("workstch", "logstch")
+        # diff_log_dir = self.diff_dir_path.replace("workstch", "logstch")
+        diff_log_dir = self.diff_dir_path.replace(self.work_base, self.log_base)
 
         wkdir = self.diff_dir_path.replace("/1", "")
         try:
