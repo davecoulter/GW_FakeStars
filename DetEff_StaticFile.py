@@ -70,6 +70,7 @@ class DetermineEfficiencies():
         self.template_path = "{0}/{1}/1".format(self.root_path, self.template_dir)
         self.log_path = self.image_path.replace(work_base, log_base)
 
+        import pdb; pdb.set_trace()
         self.image_list = image_list
         self.template_list = template_list
 
