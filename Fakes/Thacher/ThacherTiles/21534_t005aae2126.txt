@@ -1,0 +1,35 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=t005aae2126.r.ut190516.052941_1.sw.dcmp, DB ID=21534, Field
+#       Name=t005aae2126, RA (deg)=185.2845, Dec (deg)=24.924, MJD=58620.22894675926,
+#     Exp Time (sec)=180.0, Lim Mag=19.3168, Instrument=THACHER, E(B-V)=0.0486362319719,
+#     Filter=SDSS r, A_lambda=0.1111337900557915, Net 2D Prob=1.060600096089e-05, Redistributed
+#       2D Prob=7.26067736408599e-07, Net 4D Prob=4.90553759264886e-05, Weighted Mean
+#       Pixel Comp=0.9500141909600904, Weighted Mean Pixel Dist=114.3580742790058]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+251538 185.194931 24.915411 None None None 12204678+2454554 None 1.07328806491e-05 0.029319 122.73681902 2.94568365649 15.406 12.619
+269720 185.196 24.91597 39847 PGC039847 PGC039847 None None 1.87273841151e-06 0.0221785310893 92.3466852746 2.21632044659 15.44 nan
+2403948 185.082 25.07045 None None SDSSJ122019.61+250413.6 None None 0.0 0.129778804889 582.784491378 13.9868277931 18.87 nan
+400892 185.423 24.82426 None None SDSSJ122141.64+244927.5 None None 1.01509070145e-06 0.0249904324952 104.27628936 2.50263094464 17.44 nan
+1142885 185.545074 24.900043 None None SDSSJ122210.82+245359.4 12221081+2454001 None 0.0 0.13143906572 590.877116506 14.1810507961 18.18 14.529
+33449 185.231964 24.669024 None None None 12205567+2440084 None 2.4095995126e-05 0.029323 122.753932193 2.94609437263 14.527 11.613
+379664 185.326 24.71267 None None AGC732086 None None 1.17024608254e-06 0.0248778724389 103.797799608 2.4911471906 17.29 nan
+380657 185.233 24.66857 None None IC3186 None None 9.44235721948e-06 0.0249904324952 104.27628936 2.50263094464 15.07 nan
+1142879 185.33522 24.874676 None None SDSSJ122120.46+245228.6 12212045+2452288 None 0.0 0.129229864615 580.112159394 13.9226918254 18.7 14.267

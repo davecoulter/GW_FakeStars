@@ -1,0 +1,31 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=t005aae17523.r.ut190517.075027_1.sw.dcmp, DB ID=21355, Field
+#       Name=t005aae17523, RA (deg)=233.3373, Dec (deg)=44.6631, MJD=58621.32670138889,
+#     Exp Time (sec)=180.0, Lim Mag=19.2062, Instrument=THACHER, E(B-V)=0.0366566417459,
+#     Filter=SDSS r, A_lambda=0.0837604263893815, Net 2D Prob=7.3482038288e-06, Redistributed
+#       2D Prob=3.850904098979383e-06, Net 4D Prob=6.446641155859539e-05, Weighted Mean
+#       Pixel Comp=0.47593940115182454, Weighted Mean Pixel Dist=172.19228947899998]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+652914 233.216797 44.881294 None None 2254114 15325203+4452526 None 0.0 0.187785 874.414865763 20.9859567783 18.65 13.868
+32066 233.283463 44.535725 None None 55390 15330803+4432086 None 8.20923396832e-06 0.031756 133.181423768 3.19635417043 14.601 11.576
+35006 233.242157 44.544907 None None 2800996 15325811+4432416 None 2.65566399539e-05 0.039844 168.108595188 4.03460628452 15.556 11.651
+60979 233.314407 44.58535 None None 2247541 15331545+4435072 None 5.85060804496e-07 0.054845 233.950305868 5.61480734083 16.923 12.828
+82854 233.228119 44.538799 None None 55379 15325474+4432196 None 2.52645727329e-05 0.044039 186.382780137 4.4731867233 15.457 11.978

@@ -1,0 +1,34 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=t005aae1940.r.ut190709.071450_1.sw.dcmp, DB ID=21437, Field
+#       Name=t005aae1940, RA (deg)=256.7289, Dec (deg)=24.9304, MJD=58674.30196759259,
+#     Exp Time (sec)=180.0, Lim Mag=20.8036, Instrument=THACHER, E(B-V)=0.120579654183,
+#     Filter=SDSS r, A_lambda=0.275524509808155, Net 2D Prob=3.52975783156e-06, Redistributed
+#       2D Prob=1.6021113635520947e-06, Net 4D Prob=1.2186473103345323e-05, Weighted
+#       Mean Pixel Comp=0.546112951651408, Weighted Mean Pixel Dist=177.343991272]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+29853 256.705 24.90618 None None 1719725 None None 6.13714511669e-06 0.0376347488174 158.528131168 3.80467514802 15.7 nan
+13020 256.652283 24.774872 None None UGC10702 17063654+2446295 None 1.35901779351e-06 0.029359 122.907955219 2.94979092525 14.728 10.861
+52127 256.630554 24.810986 None None 1717082 17063133+2448395 None 9.98573333122e-07 0.053316 227.176643288 5.45223943891 16.746 13.004
+52935 256.648315 24.782095 None None 214579 17063559+2446555 None 6.80759261205e-07 0.052756 224.699314054 5.3927835373 17.306 13.676
+71149 256.640015 24.673485 None None 1713310 17063360+2440245 None 8.43509783303e-07 0.0390066795033 164.474004303 3.94737610326 18.17 14.324
+71181 256.580078 24.823761 None None 1717436 17061921+2449255 None 5.64664172454e-07 0.053565 228.278780112 5.47869072269 17.299 13.385
+500583 256.583435 24.822096 None None 1717389 17062002+2449195 None 6.92279509227e-10 0.071953 310.699444392 7.4567866654 16.238 12.438
+500588 256.622314 24.827654 None None 1717544 17062935+2449395 None 0.0 0.107115803558 473.863982664 11.3727355839 18.21 14.096

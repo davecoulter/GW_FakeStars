@@ -1,0 +1,34 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=t005aae15016.r.ut190705.085815_1.sw.dcmp, DB ID=21272, Field
+#       Name=t005aae15016, RA (deg)=232.9663, Dec (deg)=40.855, MJD=58670.37378472222,
+#     Exp Time (sec)=180.0, Lim Mag=20.2535, Instrument=THACHER, E(B-V)=0.0579778299946,
+#     Filter=SDSS r, A_lambda=0.132479341537661, Net 2D Prob=1.171061365592e-05, Redistributed
+#       2D Prob=4.843916366123344e-06, Net 4D Prob=0.00026368679148190693, Weighted
+#       Mean Pixel Comp=0.5863652829435948, Weighted Mean Pixel Dist=179.776566681]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+82850 232.929047 40.864887 None None 55315 15314297+4051535 None 0.000258842859567 0.0432274716137 182.83920154 4.38814083697 13.81 13.139
+2319458 232.77 41.01357 None None SDSSJ153104.89+410048.8 None None 0.0 0.198694119347 931.253968929 22.3500952543 18.39 nan
+689785 233.197891 40.812363 None None SDSSJ153247.46+404844.3 15324749+4048445 None 0.0 0.198694119347 931.253968929 22.3500952543 19.33 14.297
+986985 233.127029 40.802391 None None None 15323048+4048086 None 0.0 0.112114 497.636357473 11.9432725794 18.099 13.728
+2319510 233.117 40.84773 None None SDSSJ153227.96+405051.9 None None 0.0 0.189114754557 881.310212821 21.1514451077 18.47 nan
+2319522 233.164 40.8028 None None SDSSJ153239.44+404809.8 None None 3.53372729782e-16 0.0889864944932 388.840217617 9.33216522281 18.53 nan
+2319543 233.256 40.81187 None None SDSSJ153301.48+404842.8 None None 0.0 0.193850046925 905.939253102 21.7425420744 19.21 nan
+2336113 233.046 40.82965 None None SDSSJ153211.10+404946.8 None None 1.55484302137e-11 0.0764184082092 331.019158381 7.94445980115 18.34 nan

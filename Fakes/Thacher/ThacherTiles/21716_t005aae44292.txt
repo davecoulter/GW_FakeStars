@@ -1,0 +1,33 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - {name: Galaxy_ID, datatype: int32}
+# - {name: Galaxy_RA, datatype: float64}
+# - {name: Galaxy_Dec, datatype: float64}
+# - {name: PGC, datatype: string}
+# - {name: Name_GWGC, datatype: string}
+# - {name: Name_HyperLEDA, datatype: string}
+# - {name: Name_2MASS, datatype: string}
+# - {name: Name_SDSS_DR12, datatype: string}
+# - {name: Galaxy_4D_Prob, datatype: float64}
+# - {name: z, datatype: float64}
+# - {name: z_Dist, datatype: float64}
+# - {name: z_Dist_Err, datatype: float64}
+# - {name: B, datatype: float64}
+# - {name: K, datatype: float64}
+# meta: !!omap
+# - comment: [DCMP File=t005aae44292.r.ut190710.061844_1.sw.dcmp, DB ID=21716, Field
+#       Name=t005aae44292, RA (deg)=262.8226, Dec (deg)=6.568, MJD=58675.26300925926,
+#     Exp Time (sec)=180.0, Lim Mag=20.4389, Instrument=THACHER, E(B-V)=0.26971662268,
+#     Filter=SDSS r, A_lambda=0.6163024828238001, Net 2D Prob=1.1584354253790002e-05,
+#     Redistributed 2D Prob=8.226896949312592e-06, Net 4D Prob=4.8041623827503065e-05,
+#     Weighted Mean Pixel Comp=0.2898268846862106, Weighted Mean Pixel Dist=162.80993405300003]
+# schema: astropy-2.0
+Galaxy_ID Galaxy_RA Galaxy_Dec PGC Name_GWGC Name_HyperLEDA Name_2MASS Name_SDSS_DR12 Galaxy_4D_Prob z z_Dist z_Dist_Err B K
+164313 263.018738 6.686332 None None 1305584 17320449+0641107 None 3.43825548311e-06 0.047454 201.338649797 4.83212759512 16.357 12.323
+195788 262.957642 6.601041 None None None 17314983+0636037 None 8.51604966854e-07 0.050488 214.685576981 5.15245384754 16.923 13.522
+877932 263.015961 6.68022 None None None 17320383+0640487 None 4.1496160367e-10 0.065316 280.716810387 6.7372034493 17.084 13.885
+24267 262.978912 6.483542 60439 PGC060439 PGC060439 17315493+0629007 None 8.55447945926e-07 0.025962 108.409682767 2.60183238641 15.169 11.378
+35459 262.976105 6.501876 60438 PGC060438 PGC060438 17315426+0630067 None 7.33714852268e-08 0.021376 88.9509881759 2.13482371622 15.313 11.696
+42595 262.994568 6.532154 60444 PGC060444 PGC060444 17315869+0631557 None 1.73483504437e-06 0.026989 112.785304744 2.70684731386 14.889 12.608
+42596 262.987579 6.469099 60445 PGC060445 PGC060445 17315701+0628087 None 3.28607969911e-05 0.035601 149.735308348 3.59364740035 14.757 11.976
