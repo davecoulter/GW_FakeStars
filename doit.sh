@@ -1,6 +1,9 @@
 #!/bin/bash
 
-input_dir="./Fakes/Swope/Galaxy_Fakes"
+#input_dir="./Fakes/Swope/Galaxy_Fakes"
+input_dir="./Fakes/Thacher/Galaxy_Fakes"
+root_path = "/data2/THACHER/workspace"
+field_name_start = "t005"
 
 #gal_bin_arr=(
 #"13.0_13.5" # 0
@@ -131,7 +134,7 @@ global_start=$SECONDS
 #dir_append=4
 
 START=1
-END=20
+END=5
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -148,7 +151,7 @@ start=$SECONDS
 #  gal_fake_bright=${bright_arr[${i}]}
 #  gal_fake_dim=${dim_arr[${i}]}
 #  fwhm_factor=${fwhm_arr[${i}]}
-gal_bin="17.5_18.0"
+gal_bin="13.0_13.5"
 gal_fake_bright="18"
 gal_fake_dim="23"
 fwhm_factor="3"
@@ -169,6 +172,8 @@ echo "${msg}"
 #
 # Do work... #  --stage plant,photpipe \
 python ./DetEff_StaticFile.py \
+--root_path ${root_path} \
+--field_name_start ${field_name_start} \
 --stage plant,photpipe \
 --image_list ${input_dir}/${gal_bin}_images.txt \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
