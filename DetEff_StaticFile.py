@@ -653,6 +653,7 @@ class DetermineEfficiencies():
             galaxy_by_sexcat_id = {}
 
             # Keep track of the SExtractor/GLADE galaxy properties by sexcat_id
+            import pdb; pdb.set_trace()
             sexcat_table = at.Table.read(file_association.sexcat_good, format='ascii.ecsv')
             sexcat_ids = list(sexcat_table["sexcat_id"])
             glade_ids = list(sexcat_table["glade_id"])
