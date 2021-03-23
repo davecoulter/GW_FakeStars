@@ -2,8 +2,8 @@
 
 #input_dir="./Fakes/Swope/Galaxy_Fakes"
 input_dir="./Fakes/Thacher/Galaxy_Fakes"
-root_path = "/data2/THACHER/workspace"
-field_name_start = "t005"
+root_path="/data2/THACHER/workspace"
+field_name_start="t005"
 
 #gal_bin_arr=(
 #"13.0_13.5" # 0
