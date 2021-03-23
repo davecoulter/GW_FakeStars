@@ -1,6 +1,6 @@
+s005aae0520.i.ut190604.5095_stch_1.sw.fits
+s005aae37244.i.ut200224.2069_stch_1.sw.fits
+s005aae37244.i.ut200224.2069_stch_1.sw.fits
 s005aae14697.i.ut190603.4104_stch_1.sw.fits
+s005aae0520.i.ut190604.5095_stch_1.sw.fits
 s005aae2369.i.ut190603.4087_stch_1.sw.fits
-s005aae0520.i.ut190604.5095_stch_1.sw.fits
-s005aae37244.i.ut200224.2069_stch_1.sw.fits
-s005aae37244.i.ut200224.2069_stch_1.sw.fits
-s005aae0520.i.ut190604.5095_stch_1.sw.fits

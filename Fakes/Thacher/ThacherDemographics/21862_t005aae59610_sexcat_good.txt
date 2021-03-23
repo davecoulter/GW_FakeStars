@@ -1,0 +1,52 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data2/THACHER/workspace/gw190425/1/t005aae59610.r.ut190718.060443_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+229 181264 263.93795766 -7.4062148299 15.766 r 17.32 84 4.566 1223.682 885.563 0.18784618 0.19828179 0.032567143 2.384 2.181 -36.1 0.085
+274 259149 263.95519811 -7.3941997997 15.629 r 16.8724 90 6.507 1121.092 957.64 0.15481579 0.18088402 0.034481626 2.615 2.297 -26.5 0.121
+341 184401 263.99249796 -7.3745628326 15.756 r 17.2191 64 5.26 899.127 1075.421 0.19856758 0.25548369 0.0099919895 2.247 1.977 -5.0 0.12
+354 259151 263.91761605 -7.3697003149 16.002 r 17.7691 28 5.309 1344.701 1104.66 0.48707688 0.496335 0.32242754 1.74 1.238 -44.2 0.289
+402 2394 263.93219291 -7.3479138663 13.48 r 15.0318 414 16.379 1257.951 1235.372 0.042866882 0.03549185 0.0037827175 5.343 4.804 -76.4 0.101
+507 259156 264.05084864 -7.3245638602 13.804 r 15.4355 299 12.504 551.811 1375.315 0.047615811 0.064438708 -0.034318529 5.205 3.648 31.9 0.299
+875 259157 264.02551269 -7.2189243993 16.128 r 18.5494 5 3.628 702.398 2009.203 4.652946 2.0170732 -1.9685833 0.769 0.448 71.6 0.417
+1016 181260 263.90227609 -7.1784874258 15.794 r 17.366 68 5.263 1435.953 2251.943 0.15351379 0.29311934 0.12614538 2.782 1.775 -21.1 0.362

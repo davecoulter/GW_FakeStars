@@ -1,0 +1,6 @@
+# Region file format: DS9 version 4.0 global
+
+global color=lightgreen
+ICRS
+circle(265.58443884,0.28079372347,30") # width=2 text="sxct_id: 886 | db_id: 930217"
+circle(265.3455301,0.44088354726,30") # width=2 text="sxct_id: 2117 | db_id: 209799"

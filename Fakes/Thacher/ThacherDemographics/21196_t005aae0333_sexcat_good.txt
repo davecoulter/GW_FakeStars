@@ -1,0 +1,52 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data2/THACHER/workspace/gw190425/1/t005aae0333.r.ut190717.065221_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+204 457731 252.84398647 23.187904175 17.986 r 17.0534 111 4.429 1069.921 1516.707 0.15659021 0.12927411 0.0043225633 2.783 2.526 -85.5 0.092
+229 2323233 252.93631531 23.202878974 19.13 r 18.1223 26 4.502 560.802 1606.991 0.77088541 0.39456904 0.44973111 1.858 1.068 -65.0 0.425
+284 296349 252.8294034 23.244075264 17.51 r 16.63 134 5.989 1150.498 1853.695 0.11342688 0.12722903 -0.021392357 3.049 2.741 28.6 0.101
+326 78563 252.72738564 23.309977213 16.729 r 15.8948 229 4.769 1712.817 2249.059 0.07277295 0.11209988 0.040786587 3.95 2.878 -23.0 0.271
+328 628528 252.82180175 23.305978968 17.849 r 16.898 113 5.805 1192.549 2225.101 0.13147452 0.13955705 0.027431717 2.872 2.584 -36.8 0.1
+340 1228811 252.94903604 23.293488869 18.42 r 18.3442 15 4.055 491.334 2150.738 0.86595362 0.96911448 -0.75872129 1.368 0.877 41.1 0.359
+355 2323200 252.82984589 23.28874381 18.58 r 17.523 42 5.988 1148.176 2121.708 0.29735324 0.36319035 -0.048413288 1.859 1.641 18.2 0.117
+431 2323220 252.89200601 23.361942855 19.14 r 18.0441 32 4.181 805.982 2561.13 0.62680334 0.29347172 -0.0041458569 1.846 1.263 89.6 0.316

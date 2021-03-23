@@ -1,0 +1,48 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data2/THACHER/workspace/gw190425/1/t005aae48402.r.ut190712.063725_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+373 209673 263.80108955 2.6814767318 15.312 r 15.2142 379 8.914 1157.863 1126.552 0.067114703 0.025529832 0.003859668 6.27 3.857 -87.3 0.385
+862 259334 263.86139054 2.7847477258 15.566 r 15.5482 250 8.136 796.513 1746.205 0.070043117 0.059272956 -0.0077964594 4.152 3.745 72.0 0.098
+917 929639 263.757556 2.7953240407 17.125 r 16.6894 96 4.542 1418.786 1809.628 0.17375147 0.15740235 0.017858043 2.553 2.372 -66.2 0.071
+1380 929632 263.66052992 2.9018602875 16.488 r 16.1592 142 5.927 2000.206 2448.866 0.12171169 0.11249179 0.039897587 3.217 2.696 -51.5 0.162

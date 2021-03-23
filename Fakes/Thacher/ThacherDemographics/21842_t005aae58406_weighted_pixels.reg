@@ -1,0 +1,39 @@
+# Region file format: DS9 version 4.0 global
+
+global color=red
+image
+box(1524,992,1.0,1.0) # width=2 color=#440154
+box(1523,993,1.0,1.0) # width=2 color=#482071
+box(1524,993,1.0,1.0) # width=2 color=#453781
+box(1525,993,1.0,1.0) # width=2 color=#423f85
+box(1526,993,1.0,1.0) # width=2 color=#443a83
+box(1522,994,1.0,1.0) # width=2 color=#481d6f
+box(1523,994,1.0,1.0) # width=2 color=#404688
+box(1524,994,1.0,1.0) # width=2 color=#32658e
+box(1525,994,1.0,1.0) # width=2 color=#2b748e
+box(1526,994,1.0,1.0) # width=2 color=#2c718e
+box(1527,994,1.0,1.0) # width=2 color=#365d8d
+box(1522,995,1.0,1.0) # width=2 color=#472f7d
+box(1523,995,1.0,1.0) # width=2 color=#355f8d
+box(1524,995,1.0,1.0) # width=2 color=#23888e
+box(1525,995,1.0,1.0) # width=2 color=#25ab82
+box(1526,995,1.0,1.0) # width=2 color=#28ae80
+box(1527,995,1.0,1.0) # width=2 color=#21908d
+box(1528,995,1.0,1.0) # width=2 color=#31678e
+box(1522,996,1.0,1.0) # width=2 color=#46307e
+box(1523,996,1.0,1.0) # width=2 color=#32658e
+box(1524,996,1.0,1.0) # width=2 color=#1f9a8a
+box(1525,996,1.0,1.0) # width=2 color=#81d34d
+box(1526,996,1.0,1.0) # width=2 color=#fde725
+box(1527,996,1.0,1.0) # width=2 color=#48c16e
+box(1528,996,1.0,1.0) # width=2 color=#24868e
+box(1523,997,1.0,1.0) # width=2 color=#38588c
+box(1524,997,1.0,1.0) # width=2 color=#238a8d
+box(1525,997,1.0,1.0) # width=2 color=#4cc26c
+box(1526,997,1.0,1.0) # width=2 color=#d5e21a
+box(1527,997,1.0,1.0) # width=2 color=#5ec962
+box(1528,997,1.0,1.0) # width=2 color=#21918c
+box(1524,998,1.0,1.0) # width=2 color=#31678e
+box(1525,998,1.0,1.0) # width=2 color=#228d8d
+box(1526,998,1.0,1.0) # width=2 color=#21a585
+box(1527,998,1.0,1.0) # width=2 color=#1f9f88

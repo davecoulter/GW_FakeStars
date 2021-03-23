@@ -1,0 +1,15 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: x
+#   datatype: int32
+# - name: y
+#   datatype: int32
+# - name: sep
+#   datatype: float64
+# - name: weight
+#   datatype: float64
+# schema: astropy-2.0
+sexcat_id x y sep weight

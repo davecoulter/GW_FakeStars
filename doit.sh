@@ -123,17 +123,17 @@ input_dir="./Fakes/Swope/Galaxy_Fakes"
 #)
 
 global_start=$SECONDS
-arr_len=${#gal_bin_arr[@]}
-start_i=12 # index to start (i.e. skips indices < start_i)
-stop_i=14 # index to stop after (i.e. skips indices > stop_i)
+#arr_len=${#gal_bin_arr[@]}
+#start_i=16 # index to start (i.e. skips indices < start_i)
+#stop_i=16 # index to stop after (i.e. skips indices > stop_i)
 
 # Hack for single run use...
-dir_append=4
+#dir_append=4
 
-START=16
-END=116
+START=1
+END=20
 
-for i in $( seq $START $END ); do # i==index, not object
+#for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
 
 #  if [ $i -lt $start_i -o $i -gt $stop_i ]; then
@@ -142,53 +142,54 @@ for i in $( seq $START $END ); do # i==index, not object
 #    continue
 #  else
 
-  start=$SECONDS
+start=$SECONDS
 
 #  gal_bin=${gal_bin_arr[${i}]}
 #  gal_fake_bright=${bright_arr[${i}]}
 #  gal_fake_dim=${dim_arr[${i}]}
 #  fwhm_factor=${fwhm_arr[${i}]}
-  gal_bin="15.0_15.5"
-  gal_fake_bright="18"
-  gal_fake_dim="25"
-  fwhm_factor="3"
+gal_bin="17.5_18.0"
+gal_fake_bright="18"
+gal_fake_dim="23"
+fwhm_factor="3"
 
 #    iterations=$(($i + 1))
 #    iteration_start=${iterations}
 #  iterations=${dir_append}
 #  iteration_start=${dir_append}
-  iterations=$i
-  iteration_start=$i
+#  current_dir=$i
+#  end_dir=$i
 
 
-  msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor}"
+
+msg="Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim} with fwhm_multipier=${fwhm_factor}"
 #  msg="${msg} [${iterations}/${arr_len}] ..."
-  msg="${msg} [${iterations}/${END}] ..."
-  echo "${msg}"
+msg="${msg} [${iterations}/${END}] ..."
+echo "${msg}"
 #
-  # Do work...
-  python ./DetEff_StaticFile.py \
-  --stage plant,photpipe \
-  --image_list ${input_dir}/${gal_bin}_images.txt \
-  --template_list ${input_dir}/${gal_bin}_temps.txt \
-  --iteration_start ${iteration_start} \
-  --iterations ${iterations} \
-  --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
-  --gal_bin_to_process ${gal_bin} \
-  --gal_fake_fwhm_factor ${fwhm_factor} \
-  --plant_in_galaxies
+# Do work... #  --stage plant,photpipe \
+python ./DetEff_StaticFile.py \
+--stage plant,photpipe \
+--image_list ${input_dir}/${gal_bin}_images.txt \
+--template_list ${input_dir}/${gal_bin}_temps.txt \
+--subdir_start ${START} \
+--subdir_end ${END} \
+--gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
+--gal_bin_to_process ${gal_bin} \
+--fake_fwhm_factor ${fwhm_factor} \
+--plant_in_galaxies
 
-  duration=$(( SECONDS - start ))
-  msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
-  msg="${msg} fwhm_multipier=${fwhm_factor}. [${iterations}/${arr_len}] elapsed: ${duration} sec."
-  echo "${msg}"
-  echo "" #newline
+duration=$(( SECONDS - start ))
+msg="... done Processing '${gal_bin}' between ${gal_fake_bright} and ${gal_fake_dim}"
+#  msg="${msg} fwhm_multipier=${fwhm_factor}. [${iterations - }/${arr_len}] elapsed: ${duration} sec."
+echo "${msg}"
+echo "" #newline
 #
 #  ((dir_append++))
 
 #  fi
 
-done
+#done
 
 global_duration=$(( SECONDS - start ))
 echo "Full process elapsed: ${global_duration} sec."

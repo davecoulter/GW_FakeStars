@@ -22,6 +22,26 @@ from matplotlib import colors
 logging.basicConfig(filename='GalaxyDemographics.log', level=logging.DEBUG)
 
 
+# File paths
+# # SWOPE
+# file_base_path = "/data/LCO/Swope/workstch/gw190425/1"
+# all_tiles_asci = "./Fakes/Swope/all_tiles_ascii.txt"
+# template_file_base_path = "/data/LCO/Swope/workstch/gw190425tmpl/1"
+# all_temps = "./Fakes/Swope/all_temps.txt"
+# tile_file_pattern_match = "./Fakes/Swope/SwopeTiles/*%s*txt"
+# glade_path = "./Fakes/Swope/SwopeTiles"
+# demographics_path = "/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics"
+
+# THACHER
+file_base_path = "/data2/THACHER/workspace/gw190425/1"
+all_tiles_asci = "./Fakes/Thacher/all_tiles_ascii.txt"
+template_file_base_path = "/data2/THACHER/workspace/gw190425tmpl/1"
+all_temps = "./Fakes/Thacher/all_temps.txt"
+tile_file_pattern_match = "./Fakes/Thacher/ThacherTiles/*%s*txt"
+glade_path = "./Fakes/Thacher/ThacherTiles"
+demographics_path = "/data2/THACHER/logs/gw190425/1/galaxy_demographics"
+
+
 def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bmags, filtr, sex_mags, pixels, gal_coords,
                           pixel_tuple_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta, ellip):
 
@@ -29,7 +49,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     # Tile synoptic information
     ascii_ecsv_fname = "%s_sexcat_good.txt" % glade_file.replace('.txt', '')
-    ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
+    ascii_ecsv_fpath = "%s/%s" % (demographics_path, ascii_ecsv_fname)
     print("Creating `%s`" % ascii_ecsv_fpath)
     cols = ['sexcat_id', 'glade_id', 'ra_dec', 'dec_dec', 'glade_B', 'filter', 'sex_mag', 'num_pixels',
             'flux_radius', 'x', 'y', 'cxx', 'cyy', 'cxy', 'A', 'B', 'theta', 'ellip']
@@ -50,7 +70,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
     # Tile good pix
     ascii_ecsv_fname2 = "%s_pixel_good.txt" % glade_file.replace('.txt', '')
-    ascii_ecsv_fpath2 = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname2)
+    ascii_ecsv_fpath2 = "%s/%s" % (demographics_path, ascii_ecsv_fname2)
     print("Creating `%s`" % ascii_ecsv_fpath2)
     # Build ascii.ecsv formatted output
     cols2 = ['sexcat_id', 'x', 'y', 'sep', 'weight']
@@ -78,12 +98,11 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
 
         print("sxct_id: %s; num_pix: %s" % (sxct_id, len(ggi[0])))
 
-        # print("num indices: %s" % len(ggi[0]))
-        # s1D = Sersic1D(amplitude=1, r_eff=gfr)
-
         # assuming this... from Ryan (7/15/2020): "it looks like n = 2 might be a good sersic index it is both
         # between spirals and ellipticals and it avoids some issues with smaller galaxies that are only a few times
         # the size of your PSF"
+        # https: // sextractor.readthedocs.io / en / latest / Position.html  # fig-ellipse
+        # http: // astroa.physics.metu.edu.tr / MANUALS / sextractor / Guide2source_extractor.pdf
         s2D = Sersic2D(amplitude=1, r_eff=gfr, n=2.0, x_0=gxy[0], y_0=gxy[1], ellip=gel, theta=np.radians(gth))
 
         arr_len = np.shape(ggi)[1]
@@ -101,7 +120,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
     result_table2.write(ascii_ecsv_fpath2, overwrite=True, format='ascii.ecsv')
 
     # Tile region
-    region_fpath = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics",
+    region_fpath = "%s/%s.reg" % (demographics_path,
                                   glade_file.replace('.txt', '_galaxies'))
     with open(region_fpath, 'w') as csvfile:
 
@@ -119,7 +138,7 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
         print("Done w/ Galaxy Position Region File")
 
 
-    region_fpath2 = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics",
+    region_fpath2 = "%s/%s.reg" % (demographics_path,
                                   glade_file.replace('.txt', '_weighted_pixels'))
     with open(region_fpath2, 'w') as csvfile:
 
@@ -132,6 +151,12 @@ def write_good_sexcat_ids(glade_file, image_file, good_ids, glade_ids, glade_bma
             weights = []
             for pixel_tuple in pixel_list:
                 weights.append(pixel_tuple[3])
+
+            if len(weights) == 0:
+                print("No weights for sexcat_id: %s" % sxct_id)
+                logging.debug("No weights for sexcat_id: %s" % sxct_id)
+                continue
+
             norm = colors.LogNorm(min(weights), max(weights))
 
             for pixel_tuple in pixel_list:
@@ -151,7 +176,7 @@ def test_mask(arr_tup):
     arr_len = np.shape(arr_tup)[1]
 
     # Output region files as well
-    region_fpath = "%s/%s.reg" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", "test")
+    region_fpath = "%s/%s.reg" % (demographics_path, "test")
     with open(region_fpath, 'w') as csvfile:
         csvfile.write("# Region file format: DS9 version 4.0 global\n\n")
         csvfile.write("global color=lightgreen\n")
@@ -167,28 +192,34 @@ def test_mask(arr_tup):
 
 global_t1 = time.time()
 # get all the swope files...
-swope_files = []
-swope_file_base_path = "/data/LCO/Swope/workstch/gw190425/1"
-with open("./Fakes/Swope/all_tiles_ascii.txt", 'r') as csvfile:
+img_files = []
+with open(all_tiles_asci, 'r') as csvfile:
     csvreader = csv.reader(csvfile, delimiter=',')
     for row in csvreader:
-        f = "%s/%s" % (swope_file_base_path, row[0])
-        swope_files.append(f)
+        f = "%s/%s" % (file_base_path, row[0])
+        img_files.append(f)
+
+template_files = []
+with open(all_temps, 'r') as csvfile:
+    csvreader = csv.reader(csvfile, delimiter=',')
+    for row in csvreader:
+        f = "%s/%s" % (template_file_base_path, row[0])
+        template_files.append(f)
 
 
-num_sf = len(swope_files)
-for sf_index, sf in enumerate(swope_files):
+num_sf = len(img_files)
+for img_file_index, img_file in enumerate(img_files):
 
     print("\n********************")
-    print("Processing %s/%s..." % (sf_index + 1, num_sf))
+    print("Processing %s/%s..." % (img_file_index + 1, num_sf))
     print("********************\n")
     t1 = time.time()
 
-    tokens = sf.split("/")[-1].split(".")
+    tokens = img_file.split("/")[-1].split(".")
     field_name = tokens[0]
     photpipe_id = tokens[3].replace('_stch_1', '')
 
-    glade_files = glob.glob('./Fakes/Swope/SwopeTiles/*%s*txt' % field_name)
+    glade_files = glob.glob(tile_file_pattern_match % field_name)
     db_id = -9999
 
     for gf in glade_files:
@@ -202,23 +233,20 @@ for sf_index, sf in enumerate(swope_files):
             db_id = comment[1].split("=")[1]
             break
 
+
     if db_id == -9999:
-        print("Can't find match between glade files and `%s`!" % sf)
-        print("Skipping %s" % sf)
-        logging.debug("Can't find match between glade files and `%s`!" % sf)
-        logging.debug("Skipping %s" % sf)
+        print("Can't find match between glade files and `%s`!" % img_file)
+        print("Skipping %s" % img_file)
+        logging.debug("Can't find match between glade files and `%s`!" % img_file)
+        logging.debug("Skipping %s" % img_file)
         continue
 
-    glade_path = "./Fakes/Swope/SwopeTiles"
     glade_file_name = "%s_%s.txt" % (db_id, field_name)
     glade_file_path = "%s/%s" % (glade_path, glade_file_name)
 
-
-
-
     # check if this file has already been processed
     ascii_ecsv_fname = "%s_sexcat_good.txt" % glade_file_name.replace('.txt', '')
-    ascii_ecsv_fpath = "%s/%s" % ("/data/LCO/Swope/logstch/gw190425/1/galaxy_demographics", ascii_ecsv_fname)
+    ascii_ecsv_fpath = "%s/%s" % (demographics_path, ascii_ecsv_fname)
     if os.path.exists(ascii_ecsv_fpath):
         print("%s already processed! skipping..." % glade_file_name)
         logging.debug("%s already processed! skipping..." % glade_file_name)
@@ -226,23 +254,42 @@ for sf_index, sf in enumerate(swope_files):
 
 
 
-    dcmp_file = sf.replace('.fits', '.dcmp')
-    mask_file = sf.replace('.fits', '.mask.fits.gz')
+    img_dcmp_file = img_file.replace('.fits', '.dcmp')
+    img_mask_file = img_file.replace('.fits', '.mask.fits.gz')
 
-    if os.path.exists(sf) and os.path.exists(glade_file_path) \
-            and os.path.exists(dcmp_file) and os.path.exists(mask_file):
+    # get template file path from field name
+    tmp_file = None
+    for tf in template_files:
+        if field_name in tf:
+            tmp_file = tf
+            break
 
-        dcmp = txtobj(dcmp_file, cmpheader=True)
-        dcmp_header = fits.getheader(dcmp_file)
-        zpt = dcmp_header['ZPTMAG']
-        filtr = dcmp_header['FILTER']
+    if tmp_file is None:
+        raise Exception("No matching template file for image: %s" % img_file)
 
-        mask_hdu = fits.open(mask_file)
-        mask_data = mask_hdu[0].data.astype('float')
+    tmp_dcmp_file = tmp_file.replace('.fits', '.dcmp')
+    tmp_mask_file = tmp_file.replace('.fits', '.mask.fits.gz')
+    if not os.path.exists(tmp_mask_file):
+        tmp_mask_file = tmp_file.replace('.fits', '.mask.fits')
+
+    if os.path.exists(img_file) and os.path.exists(glade_file_path) \
+            and os.path.exists(img_dcmp_file) and os.path.exists(img_mask_file) \
+            and os.path.exists(tmp_file) and os.path.exists(tmp_dcmp_file) and os.path.exists(tmp_mask_file):
+
+        img_dcmp = txtobj(img_dcmp_file, cmpheader=True)
+        img_dcmp_header = fits.getheader(img_dcmp_file)
+        img_zpt = img_dcmp_header['ZPTMAG']
+        filtr = img_dcmp_header['FILTER']
+
+        img_mask_hdu = fits.open(img_mask_file)
+        img_mask_data = img_mask_hdu[0].data.astype('float')
+
+        tmp_mask_hdu = fits.open(tmp_mask_file)
+        tmp_mask_data = tmp_mask_hdu[0].data.astype('float')
 
         # RUN SEXTRACTOR - this outputs the file *.sexcat
-        segmap_file = sf.replace('.fits', '.check.fits')
-        sextable = runsex(sf, segmapname=segmap_file, zpt=fits.getval(sf, 'ZPTMAG'))
+        segmap_file = img_file.replace('.fits', '.check.fits')
+        sextable = runsex(img_file, segmapname=segmap_file, zpt=fits.getval(img_file, 'ZPTMAG'))
         segmap = fits.getdata(segmap_file)
 
         good_ids, glade_ids, glade_bmags, measured_mags, gal_coords, gal_xy, flux_radii, cxx, cyy, cxy, A, B, theta, ellip = \
@@ -271,9 +318,9 @@ for sf_index, sf in enumerate(swope_files):
 
             # sanity
             if len(sep) == 0:
-                logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, sf))
+                logging.debug("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, img_file))
                 logging.debug("Skipping sextable.NUMBER=%s" % sex_num)
-                print("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, sf))
+                print("No sep for sextable.NUMBER=%s for `%s` and `%s`" % (sex_num, glade_file_path, img_file))
                 print("Skipping sextable.NUMBER=%s" % sex_num)
                 continue
 
@@ -306,7 +353,9 @@ for sf_index, sf in enumerate(swope_files):
         pixels = []
         pixel_tup_dict = {}
         for i, good_id in enumerate(good_ids):
-            good_galaxy_indices = np.where((mask_data != 144.0) & (segmap == good_id))
+
+            # CHANGE THIS TO ALSO RESPECT THE TEMPLATE MASK!
+            good_galaxy_indices = np.where((img_mask_data != 144.0) & (tmp_mask_data != 144.0) & (segmap == good_id))
 
             # print("sxct_id: %s" % good_id)
             # print("\tnum good indices: %s" % len(good_galaxy_indices[0]))
@@ -317,28 +366,40 @@ for sf_index, sf in enumerate(swope_files):
             gal_pix = segmap[good_galaxy_indices]
             pixels.append(len(gal_pix))
 
-        write_good_sexcat_ids(glade_file_name, sf, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
+        write_good_sexcat_ids(glade_file_name, img_file, good_ids, glade_ids, glade_bmags, filtr, measured_mags, pixels,
                               gal_coords, pixel_tup_dict, flux_radii, gal_xy, cxx, cyy, cxy, A, B, theta, ellip)
 
         t2 = time.time()
         print("\n********************")
-        print("Done processing %s/%s: %s" % (sf_index + 1, num_sf, (t2 - t1)))
+        print("Done processing %s/%s: %s" % (img_file_index + 1, num_sf, (t2 - t1)))
         print("********************\n")
     else:
-        if not os.path.exists(sf):
-            print("Path doesn't exist for: `%s`" % sf)
-            logging.debug("Path doesn't exist for: `%s`" % sf)
+
+        if not os.path.exists(img_file):
+            print("Path doesn't exist for: `%s`" % img_file)
+            logging.debug("Path doesn't exist for: `%s`" % img_file)
         if not os.path.exists(glade_file_path):
             print("Path doesn't exist for: `%s`" % glade_file_path)
             logging.debug("Path doesn't exist for: `%s`" % glade_file_path)
-        if not os.path.exists(dcmp_file):
-            print("Path doesn't exist for: `%s`" % dcmp_file)
-            logging.debug("Path doesn't exist for: `%s`" % dcmp_file)
-        if not os.path.exists(mask_file):
-            print("Path doesn't exist for: `%s`" % mask_file)
-            logging.debug("Path doesn't exist for: `%s`" % mask_file)
-        print("Skipping %s" % sf)
-        logging.debug("Skipping %s" % sf)
+        if not os.path.exists(img_dcmp_file):
+            print("Path doesn't exist for: `%s`" % img_dcmp_file)
+            logging.debug("Path doesn't exist for: `%s`" % img_dcmp_file)
+        if not os.path.exists(img_mask_file):
+            print("Path doesn't exist for: `%s`" % img_mask_file)
+            logging.debug("Path doesn't exist for: `%s`" % img_mask_file)
+
+        if not os.path.exists(tmp_file):
+            print("Path doesn't exist for: `%s`" % tmp_file)
+            logging.debug("Path doesn't exist for: `%s`" % tmp_file)
+        if not os.path.exists(tmp_dcmp_file):
+            print("Path doesn't exist for: `%s`" % tmp_dcmp_file)
+            logging.debug("Path doesn't exist for: `%s`" % tmp_dcmp_file)
+        if not os.path.exists(tmp_mask_file):
+            print("Path doesn't exist for: `%s`" % tmp_mask_file)
+            logging.debug("Path doesn't exist for: `%s`" % tmp_mask_file)
+
+        print("Skipping %s" % img_file)
+        logging.debug("Skipping %s" % img_file)
 
     # if sf_index == 0:
     #     print("\n\nDebug stop!!\n\n")

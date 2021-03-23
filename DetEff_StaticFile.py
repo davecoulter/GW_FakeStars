@@ -19,6 +19,7 @@ from runsex import runsex
 import sys
 from astLib import astCoords
 import astropy.table as at
+import operator
 
 class FileAssociation():
     def __init__(self, image_file,
@@ -31,6 +32,7 @@ class FileAssociation():
                  fake_image_noise_file,
                  template_file,
                  template_dcmp_file,
+                 template_mask_file,
                  diff_dcmp_file,
                  segmap_file,
                  sexcat_good = None,
@@ -46,6 +48,7 @@ class FileAssociation():
         self.fake_image_noise_file = fake_image_noise_file
         self.template_file = template_file
         self.template_dcmp_file = template_dcmp_file
+        self.template_mask_file = template_mask_file
         self.diff_dcmp_file = diff_dcmp_file
         self.segmap_file = segmap_file
 
@@ -98,22 +101,20 @@ class DetermineEfficiencies():
             self.end_mag = float(tokens[1])
 
         else:
-            galstr = ''
+            galstr = 'uniform'
 
         # These directories depend on the iteration #
-        if len(galstr) > 0:
-            self.fake_image_dir = "{0}_fake_{1}_{2}".format(self.image_dir, galstr, iteration)
-        else:
-            self.fake_image_dir = "{0}_fake_{1}{2}".format(self.image_dir, galstr, iteration)
+        self.fake_image_dir = "{0}_fake_{1}_{2}".format(self.image_dir, galstr, iteration)
 
         self.fake_image_path = "{0}/{1}/1".format(self.root_path, self.fake_image_dir)
         self.fake_log_path = self.fake_image_path.replace("workstch", "logstch")
         self.fake_stitched_path = self.fake_log_path.replace("logstch", "stitched")
+        self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
 
-        if len(galstr) > 0:
-            self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
-        else:
-            self.diff_dir_name = "%s_fake_%s%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
+        # if len(galstr) > 0 and galstr != 'uniform':
+        #     self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
+        # else:
+        #     self.diff_dir_name = "%s_fake_%s%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
 
         self.diff_dir_path = "%s/%s/1" % (self.root_path, self.diff_dir_name)
 
@@ -162,21 +163,35 @@ class DetermineEfficiencies():
 
             image_file = self.image_files[i]
             image_dcmp_file = image_file.replace(".fits", ".dcmp")
+
+            image_mask_file = None
             if os.path.exists(image_file.replace('.fits', '.mask.fits.gz')):
                 image_mask_file = image_file.replace('.fits', '.mask.fits.gz')
             else:
                 image_mask_file = image_file.replace('.fits', '.mask.fits')
+
+            image_noise_file = None
             if os.path.exists(image_file.replace('.fits', '.noise.fits.gz')):
                 image_noise_file = image_file.replace('.fits', '.noise.fits.gz')
             else:
                 image_noise_file = image_file.replace('.fits', '.noise.fits')
+
             try:
                 template_index = np.where(np.asarray(template_fields) == image_fields[i])[0][0]
             except:
-                continue
+                print("\n\n*** NO TEMPLATE ASSOCIATION FOR %s ***\n\n" % image_name)
+                raise Exception("Stop!")
+                # continue
+
             template_name = self.template_names[template_index]
             template_file = self.template_files[template_index]
             template_dcmp_file = template_file.replace("fits", "dcmp")
+
+            template_mask_file = None
+            if os.path.exists(template_file.replace('.fits', '.mask.fits.gz')):
+                template_mask_file = template_file.replace('.fits', '.mask.fits.gz')
+            else:
+                template_mask_file = template_file.replace('.fits', '.mask.fits')
 
             date_match = re.findall(r"ut1\d{5}", image_name)[0]
             fake_image_name = image_name.replace(date_match, "{0}_fake".format(date_match))
@@ -203,14 +218,16 @@ class DetermineEfficiencies():
                          image_mask_file,
                          image_noise_file,
                          template_file,
-                         template_dcmp_file]:
+                         template_dcmp_file,
+                         template_mask_file]:
 
                 if not os.path.exists(file):
-                    filemissing = True
-                    print('warning : file %s does not exist'%file)
-            if filemissing: continue
-
-
+                    # filemissing = True
+                    print('warning : file %s does not exist' % file)
+                    raise Exception("Stop!")
+            
+            # if filemissing:
+            #     continue
 
             sexcat_good = None
             pixel_good = None
@@ -242,6 +259,7 @@ class DetermineEfficiencies():
                                                             fake_image_noise_file,
                                                             template_file,
                                                             template_dcmp_file,
+                                                            template_mask_file,
                                                             diff_dcmp_file,
                                                             segmap_file,
                                                             sexcat_good,
@@ -453,7 +471,132 @@ class DetermineEfficiencies():
             image_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
             print('hi5')
 
-    def galaxy_plant(self, gal_fake_mag_range, gal_fake_fwhm_factor, clobber=False):
+    def plant_fakes2(self, fake_mag_range, fake_fwhm_factor, clobber=False):
+
+        print("fake_fwhm_factor: %s" % fake_fwhm_factor)
+
+        bright_mag_lim = fake_mag_range[0]
+        dim_mag_lim = fake_mag_range[1]
+        num_fakes = fake_mag_range[2]
+
+        for i, img in enumerate(self.image_names):
+
+            file_association = None
+
+            print("Opening: %s" % img)
+            try:
+                file_association = self.file_associations[img]
+            except:
+                print("Could not find file association for: %s" % img)
+                continue
+
+            if not clobber and os.path.exists(file_association.fake_image_file):
+                print("No overwrite and file exists! %s" % file_association.fake_image_file)
+                continue
+
+
+            # Open the relevant data files, and extract vars
+            img_hdu = fits.open(file_association.image_file)
+            img_data = img_hdu[0].data.astype('float')
+
+            img_mask_hdu = fits.open(file_association.image_mask_file)
+            img_mask_data = img_mask_hdu[0].data.astype('float')
+
+            tmp_mask_hdu = fits.open(file_association.template_mask_file)
+            tmp_mask_data = tmp_mask_hdu[0].data.astype('float')
+
+            dcmp_header = fits.getheader(file_association.image_dcmp_file)
+
+            zpt = None
+            try:
+                zpt = dcmp_header['ZPTMAG']
+            except KeyError:
+                print("'ZPTMAG' keyword doesn't exist. Exiting...")
+                continue
+            fwhm = dcmp_header['FWHM']
+            pix_scale_arc_sec = np.abs(dcmp_header['CD2_2']) * 3600.0
+
+            # Build the fake star model -- calculate PSF shape (e.g. the pixel-based radius for the fakes
+            psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
+
+            psf_shape = int(np.ceil(fake_fwhm_factor * fwhm))
+            # must be odd...
+            if psf_shape % 2 == 0:
+                psf_shape += 1
+
+            psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
+            psf_mag = -2.5 * np.log10(np.sum(psf_model)) + zpt
+            dx = dy = int((psf_shape - 1) / 2)
+
+            good_pixel_indices = np.where((img_mask_data != 144.0) & (tmp_mask_data != 144.0))
+
+            # tuples need to be inverted to fit with the img data conventions...
+            good_pixel_tuples = [(gpi_y, gpi_x) for gpi_x, gpi_y in zip(good_pixel_indices[0], good_pixel_indices[1])]
+
+            imshapex, imshapey = np.shape(img_data)
+            img_pix_per_fake = (imshapex*imshapey)/num_fakes
+            pix_spacing = int(np.ceil(np.sqrt(img_pix_per_fake)))
+
+            psf_loc_x = np.arange(0, imshapex, pix_spacing)
+            psf_loc_y = np.arange(0, imshapey, pix_spacing)
+
+            # Actually inject the fakes
+            injected_fakes = []
+
+            # tuples need to be inverted to fit with the img data conventions...
+            candidate_fakes = []
+            for x in psf_loc_x:
+                for y in psf_loc_y:
+                    candidate_fakes.append((y, x))
+
+            good_fakes = list(set(good_pixel_tuples).intersection(set(candidate_fakes)))
+
+            for gud_fake in good_fakes:
+                m = np.random.uniform(bright_mag_lim, dim_mag_lim)
+                injected_fakes.append((gud_fake[0], gud_fake[1], m))
+
+            for x, y, m in injected_fakes:
+                # target_footprint = img_data[int(x) - dx:int(x) + dx + 1, int(y) - dy:int(y) + dy + 1]
+                target_footprint = img_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1]
+
+                if np.shape(target_footprint) == np.shape(psf_model):
+                    psf_flux = 10 ** (-0.4 * (m - psf_mag))
+                    self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, -99, -99, -99))
+                    # img_data[int(x) - dx:int(x) + dx + 1, int(y) - dy:int(y) + dy + 1] += psf_model * psf_flux
+                    img_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1] += psf_model * psf_flux
+                else:
+                    print("Target footprint different than PSF! Skipping")
+                    continue
+
+            img_hdu[0].data[:] = img_data
+            print("Writing fake img data out to: %s..." % file_association.fake_image_file)
+            img_hdu.writeto(file_association.fake_image_file, clobber=True, output_verify='ignore')
+
+            # Write out Fakes for image file.
+            fake_radius = (psf_shape / 2.0) * pix_scale_arc_sec
+            fakes_region = "%s/%s" % (self.fake_log_path, img.replace("fits", "reg"))
+            with open(fakes_region, 'w') as csvfile:
+
+                csvfile.write("# Region file format: DS9 version 4.0 global\n")
+                csvfile.write("global color=green\n")
+                csvfile.write("image\n")
+
+                for x, y, m in injected_fakes:
+                    csvfile.write('circle(%s,%s,%s") # color=green width=4\n' % (x, y, fake_radius))
+                    csvfile.write(
+                        '# text(%s,%s) textangle=360 color=blue width=3 font="helvetica 10 bold roman" text={%0.1f} \n' % (
+                            x, y, m))
+
+            print("Done w/ %s" % fakes_region)
+
+
+    def galaxy_plant(self, gal_fake_mag_range, gal_fake_fwhm_factor, gal_fake_current_run, gal_fake_num_runs,
+                     clobber=False):
+
+        offset_operator = {
+            0: operator.add,
+            1: operator.sub
+        }
 
         print("gal_fake_fwhm_factor: %s" % gal_fake_fwhm_factor)
 
@@ -493,10 +636,13 @@ class DetermineEfficiencies():
             psf_x, psf_xy, psf_y = dcmp_header['DPSIGX'], dcmp_header['DPSIGXY'], dcmp_header['DPSIGY']
 
             psf_shape = int(np.ceil(gal_fake_fwhm_factor * fwhm))
-            print("psf_shape: %s" % psf_shape)
             # must be odd...
             if psf_shape % 2 == 0:
                 psf_shape += 1
+            # psf_offset = (psf_shape//gal_fake_num_runs) * gal_fake_current_run
+            psf_offset = int(np.ceil(float(psf_shape)/float(gal_fake_num_runs) * float(gal_fake_current_run)))
+            print("psf_shape: %s" % psf_shape)
+            print("psf_offset: %s" % psf_offset)
 
             psf_model = self.generate_psf(psf_x, psf_xy, psf_y, psf_shape)
             psf_mag = -2.5 * np.log10(np.sum(psf_model)) + zpt
@@ -545,29 +691,76 @@ class DetermineEfficiencies():
                 all_x = good_pix[0]
                 all_y = good_pix[1]
 
+                # Box surrounding galaxy footprint
                 x_min = np.min(all_x)
                 x_max = np.max(all_x)
                 y_min = np.min(all_y)
                 y_max = np.max(all_y)
 
-                psf_loc_x = np.arange(x_min, x_max, psf_shape)
-                psf_loc_y = np.arange(y_min, y_max, psf_shape)
+                # Make it bigger to accomodate shifting insert grid
+                x_min_min = x_min - (x_max - x_min)
+                x_max_max = x_max
+                y_min_min = y_min - (y_max - y_min)
+                y_max_max = y_max
 
+                good_pix_tuples = [(x, y) for x, y in zip(good_pix[0], good_pix[1])]
+                psf_loc_x = np.arange(x_min_min, x_max_max, psf_shape)
+                psf_loc_y = np.arange(y_min_min, y_max_max, psf_shape)
+
+                # Pick a x/y direction with the offset
+                opx = offset_operator[np.random.randint(2)]
+                opy = offset_operator[np.random.randint(2)]
+                print("SID: %s; x-offset: %s; y-offset: %s" % (sid, opx, opy))
                 for x in psf_loc_x:
+                    # x += psf_offset
+                    x = opx(x, psf_offset)
+
                     for y in psf_loc_y:
-                        if segmap[y, x] == sid:
+                        # y += psf_offset
+                        y = opy(y, psf_offset)
+
+                        # try:
+                        #     if segmap[y, x] == sid and (x, y) in good_pix_tuples:
+                        #         pass
+                        # except Exception as e:
+                        #     print(e)
+                        #     import pdb; pdb.set_trace()
+
+                        # check if PSF center:
+                        #   pixel is in "good pixels" (i.e. not clipped by the img or temp mask)
+                        #   is in the segmap (i.e. within the galaxy footprint)
+                        # IMPORTANT -- check if in good tuples first, as this could throw an exception if looking in
+                        #   segmap with out of bounds indices (e.g. if x > 4000)
+                        # import pdb; pdb.set_trace()
+                        if (x, y) in good_pix_tuples and segmap[y, x] == sid:
+
                             # m = next(fake_mags_iter)
                             m = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1])
                             injected_fakes.append((x, y, m, glade_id, glade_B, sex_mag))
 
-            for x, y, m, gi, gg, g in injected_fakes:
+                # # Go in the backward x/y direction with the offset, but don't add duplicates
+                # for x in psf_loc_x:
+                #     for y in psf_loc_y:
+                #
+                #         x -= psf_offset
+                #         y -= psf_offset
+                #
+                #         if segmap[y, x] == sid and (x, y) not in fake_xy_coords:
+                #
+                #             m = np.random.uniform(gal_fake_mag_range[0], gal_fake_mag_range[1])
+                #             injected_fakes.append((x, y, m, glade_id, glade_B, sex_mag))
+                #             fake_xy_coords.append((x, y))
+
+
+
+            for x, y, m, gi, gB, sm in injected_fakes:
                 # import pdb; pdb.set_trace()
 
                 target_footprint = image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1]
 
                 if np.shape(target_footprint) == np.shape(psf_model):
                     psf_flux = 10 ** (-0.4 * (m - psf_mag))
-                    self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, g, gg, gi))
+                    self.append_fake_mag_file('%s %s %s %s %s %s %s' % (file_association.image_dcmp_file, x, y, m, sm, gB, gi))
                     image_data[int(y) - dy:int(y) + dy + 1, int(x) - dx:int(x) + dx + 1] += psf_model * psf_flux
                 else:
                     print("Target footprint different than PSF! Skipping")
@@ -606,7 +799,7 @@ class DetermineEfficiencies():
 
         return psf_model
 
-    def do_phot(self, iteration):
+    def do_phot(self):
 
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
@@ -701,7 +894,8 @@ class DetermineEfficiencies():
             os.system('rsync -avz %s %s' % (file_association.image_noise_file, file_association.fake_image_noise_file))
             os.system('rsync -avz %s %s' % (file_association.image_dcmp_file, file_association.fake_image_dcmp_file))
 
-        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
+        # os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
+        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 7500 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
 
     def get_phot(self, fake_mag_range, gal_mag_range):
 
@@ -874,7 +1068,7 @@ class DetermineEfficiencies():
             iGood = "["
             for n in np.arange(niter)+1:
                 diff_dcmp_iter = diff_dcmp_file.replace(self.fake_image_dir,"{0}_fake_{1}{2}".format(self.image_dir, galstr, n))
-                iGood += "(om.dcmpfile == '%s') |"%diff_dcmp_iter
+                iGood += "(om.dcmpfile == '%s') |" % diff_dcmp_iter
             iGood = eval(iGood[:-1]+"]")
 
             mag_sims = om.mag_sim[iGood] #[om.dcmpfile == diff_dcmp_file]
@@ -1027,14 +1221,21 @@ class AllStages():
         parser.add_option('--image_list', default='gw190425/<change this to the one you want>.txt', type='string', help='File with all observations')
         parser.add_option('--template_list', default='gw190425/<change this to the one you want>.txt', type='string', help='File with all templates')
 
-        parser.add_option('--iterations', default=1, type='int', help='Number of times to run the job')
-        parser.add_option('--iteration_start', default=1, type='int', help='Integer used in directory name to start the iterations')
+        parser.add_option('--subdir_start', default=1, type='int', help='Integer used in directory name to start the iterations')
+        parser.add_option('--subdir_end', default=1, type='int', help='Integer used in directory name to end the iterations')
+
+
+        # parser.add_option('--gal_fake_offset_x', default=0, type='int',
+        #                   help='Offset the fake star grid in the x-direction by an integer multiple of the FWHM*gal_fake_fwhm_factor')
+        # parser.add_option('--gal_fake_offset_y', default=0, type='int',
+        #                   help='Offset the fake star grid in the y-direction by an integer multiple of the FWHM*gal_fake_fwhm_factor')
+
 
         parser.add_option('--gal_bin_to_process', default='', type='string', help='Gal mag range for galaxy injections')
-        parser.add_option('--gal_mag_range', default=(13, 22, 0.5), nargs=2, type='float', help='gal mag tuple: (min, max, bin size)')
-        parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=2, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
-        parser.add_option('--gal_fake_mag_range', default=(18, 25, 5000, 0.2), nargs=2, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
-        parser.add_option('--gal_fake_fwhm_factor', default=2.0, type='float', help='Factor times image FWHM to set fake star psf size in pixels')
+        parser.add_option('--gal_mag_range', default=(13, 22, 0.5), nargs=3, type='float', help='gal mag tuple: (min, max, bin size)')
+        parser.add_option('--fake_mag_range', default=(18, 25, 1500, 0.2), nargs=4, type='float', help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--gal_fake_mag_range', default=(18, 25, 5000, 0.2), nargs=4, type='float',help='Fake mag tuple: (min, max, # of stars, bin size)')
+        parser.add_option('--fake_fwhm_factor', default=2.0, type='float', help='Factor times image FWHM to set fake star psf size in pixels')
 
         parser.add_option('--plant_in_galaxies', default=False, action="store_true",
                           help='if set, generate positions from the SExtractor galaxy mask')
@@ -1067,15 +1268,18 @@ if __name__ == "__main__":
                                     template_list=options.template_list)
     detEff.options = options
 
-    iterations = options.iterations
+    current_dir = options.subdir_start
+    end_dir = options.subdir_end
+
+    current_run = 0 # used as a multiplier to the offset, so start at index=0 for no offset
+    num_runs = end_dir - current_dir + 1
 
     t0 = time.time()
 
-    i = options.iteration_start
     out_match_files = []
-    while i <= iterations:
+    while current_dir <= end_dir:
 
-        detEff.initialize(i, options.gal_bin_to_process)
+        detEff.initialize(current_dir, options.gal_bin_to_process)
         if options.clean:
             detEff.hard_clean()
             continue
@@ -1085,20 +1289,31 @@ if __name__ == "__main__":
             if options.plant_in_galaxies:
                 if options.gal_bin_to_process == "":
                     raise Exception("Which gal mag bin to process?")
-                detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range, gal_fake_fwhm_factor=options.gal_fake_fwhm_factor)
+                detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range,
+                                    gal_fake_fwhm_factor=options.fake_fwhm_factor,
+                                    gal_fake_current_run=current_run,
+                                    gal_fake_num_runs=num_runs)
+                # DEBUG
+                # detEff.galaxy_plant(gal_fake_mag_range=options.gal_fake_mag_range,
+                #                     gal_fake_fwhm_factor=options.gal_fake_fwhm_factor,
+                #                     gal_fake_current_run=9,
+                #                     gal_fake_num_runs=10)
             else:
-                detEff.plant_fakes(fake_mag_range=options.fake_mag_range, clobber=options.clobber)
+                detEff.plant_fakes2(fake_mag_range=options.fake_mag_range,
+                                    fake_fwhm_factor=options.fake_fwhm_factor,
+                                    clobber=options.clobber)
 
         if 'photpipe' in options.stage or 'all' in options.stage:
-            detEff.do_phot(iteration=i)
+            detEff.do_phot()
 
         if 'getphot' in options.stage or 'all' in options.stage:
             out_match_files += [detEff.get_phot(fake_mag_range=options.fake_mag_range, gal_mag_range=options.gal_mag_range)]
 
-        i += 1
+        current_dir += 1
+        current_run += 1
 
     if 'getphot' in options.stage or 'all' in options.stage:
-        detEff.get_phot_alliter(fake_mag_range=options.fake_mag_range,gal_mag_range=options.gal_mag_range,niter=iterations,out_match_files=out_match_files)
+        detEff.get_phot_alliter(fake_mag_range=options.fake_mag_range,gal_mag_range=options.gal_mag_range,niter=end_dir,out_match_files=out_match_files)
 
 
     t1 = time.time()

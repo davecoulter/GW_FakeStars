@@ -1,0 +1,19 @@
+# Region file format: DS9 version 4.0 global
+
+global color=lightgreen
+ICRS
+circle(247.70963659,41.402700471,30") # width=2 text="sxct_id: 14 | db_id: 303655"
+circle(247.75639056,41.421925571,30") # width=2 text="sxct_id: 35 | db_id: 1245703"
+circle(247.85477942,41.42844245,30") # width=2 text="sxct_id: 38 | db_id: 2234365"
+circle(247.63864806,41.438697945,30") # width=2 text="sxct_id: 42 | db_id: 267793"
+circle(247.88754045,41.460629247,30") # width=2 text="sxct_id: 56 | db_id: 2234375"
+circle(247.61187364,41.484205622,30") # width=2 text="sxct_id: 61 | db_id: 38912"
+circle(247.67999692,41.470726072,30") # width=2 text="sxct_id: 65 | db_id: 2234371"
+circle(247.90782172,41.493629929,30") # width=2 text="sxct_id: 74 | db_id: 36554"
+circle(247.85809016,41.510875171,30") # width=2 text="sxct_id: 94 | db_id: 1245749"
+circle(247.86931056,41.534138061,30") # width=2 text="sxct_id: 108 | db_id: 1245766"
+circle(247.48513787,41.556958326,30") # width=2 text="sxct_id: 129 | db_id: 339513"
+circle(247.68559994,41.56755189,30") # width=2 text="sxct_id: 135 | db_id: 339516"
+circle(247.4769725,41.604634301,30") # width=2 text="sxct_id: 150 | db_id: 137125"
+circle(247.89074908,41.633561557,30") # width=2 text="sxct_id: 181 | db_id: 1245840"
+circle(247.89720477,41.715529925,30") # width=2 text="sxct_id: 232 | db_id: 1145714"

@@ -1,0 +1,52 @@
+# %ECSV 0.9
+# ---
+# datatype:
+# - name: sexcat_id
+#   datatype: int32
+# - name: glade_id
+#   datatype: int32
+# - name: ra_dec
+#   datatype: float64
+# - name: dec_dec
+#   datatype: float64
+# - name: glade_B
+#   datatype: float64
+# - name: filter
+#   datatype: unicode
+# - name: sex_mag
+#   datatype: float64
+# - name: num_pixels
+#   datatype: int32
+# - name: flux_radius
+#   datatype: float64
+# - name: x
+#   datatype: float64
+# - name: y
+#   datatype: float64
+# - name: cxx
+#   datatype: float64
+# - name: cyy
+#   datatype: float64
+# - name: cxy
+#   datatype: float64
+# - name: A
+#   datatype: float64
+# - name: B
+#   datatype: float64
+# - name: theta
+#   datatype: float64
+# - name: ellip
+#   datatype: float64
+# meta: !!omap
+# - comment:
+#   - image_file=/data2/THACHER/workspace/gw190425/1/t005aae17958.r.ut190630.102326_1.sw.fits
+# schema: astropy-2.0
+sexcat_id glade_id ra_dec dec_dec glade_B filter sex_mag num_pixels flux_radius x y cxx cyy cxy A B theta ellip
+57 340171 238.61898863 45.263327602 18.37 r 17.0843 140 6.953 1635.089 942.092 0.13582876 0.088890158 0.060367942 3.673 2.577 -63.9 0.298
+69 2283922 238.65055755 45.276662685 18.21 r 17.6535 99 4.972 1501.77 1022.076 0.12219378 0.18460822 0.053694151 2.985 2.267 -20.4 0.24
+114 39458 238.68697376 45.338316709 15.76 r 14.5759 916 9.501 1348.182 1392.034 0.026880879 0.027459886 -0.002990454 6.244 5.903 39.5 0.055
+116 23878 238.67589342 45.344286427 15.26 r 13.9317 1903 14.837 1394.925 1427.835 0.0080640838 0.016068032 0.0018127151 11.206 7.864 -6.4 0.298
+185 2283970 238.809882 45.391265922 18.6 r 17.2036 123 5.269 830.442 1710.358 0.12841344 0.13577133 -0.018522102 2.861 2.653 34.2 0.073
+209 1249422 238.71283922 45.414445945 18.24 r 16.3165 279 5.515 1239.446 1848.876 0.080259845 0.055506043 0.014474107 4.322 3.487 -74.8 0.193
+224 388116 238.78224753 45.423943662 18.6 r 17.5706 85 5.891 947.202 1906.214 0.19054201 0.152153 0.058121007 2.706 2.202 -61.7 0.186
+289 516490 238.84192706 45.516796037 17.036 r 15.9805 322 6.04 697.205 2463.834 0.055128317 0.068796799 0.0039617866 4.27 3.805 -8.1 0.109
