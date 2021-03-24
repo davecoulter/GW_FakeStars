@@ -181,11 +181,11 @@ msg="${msg} [${iterations}/${END}] ..."
 echo "${msg}"
 #
 # Do work... #  --stage plant,photpipe \
-python ./DetEff_StaticFile.py \
 #--root_path ${root_path} \
 #--log_base ${log_base} \
 #--work_base ${work_base} \
 #--field_name_start ${field_name_start} \
+python ./DetEff_StaticFile.py \
 --stage plant,photpipe \
 --image_list ${input_dir}/${gal_bin}_images.txt \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
