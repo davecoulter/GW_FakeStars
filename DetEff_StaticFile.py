@@ -1224,8 +1224,8 @@ class AllStages():
         parser.add_option('--root_path', default='$PIPE_DATA/workstch', type='string', help='Root directory')
         parser.add_option('--image_dir', default='gw190425', type='string', help='Image directory')
 
-        parser.add_option('--log_base', default='workstch', type='string', help='Root directory')
-        parser.add_option('--work_base', default='logstch', type='string', help='Image directory')
+        parser.add_option('--log_base', default='logstch', type='string', help='Root directory')
+        parser.add_option('--work_base', default='workstch', type='string', help='Image directory')
 
         parser.add_option('--field_name_start', default='s005', type='string', help='Image directory')
         parser.add_option('--template_dir', default='gw190425tmpl', type='string', help='Template directory')
