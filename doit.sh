@@ -144,7 +144,7 @@ global_start=$SECONDS
 #dir_append=4
 
 START=1
-END=1
+END=5
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
