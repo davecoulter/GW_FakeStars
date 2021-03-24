@@ -1,11 +1,19 @@
 #!/bin/bash
 
-#input_dir="./Fakes/Swope/Galaxy_Fakes"
-input_dir="./Fakes/Thacher/Galaxy_Fakes"
-root_path="/data2/THACHER/workspace"
-field_name_start="t005"
-log_base="logs"
-work_base="workspace"
+
+# Swope
+input_dir="./Fakes/Swope/Galaxy_Fakes"
+root_path="/data/LCO/Swope/workstch"
+field_name_start="s005"
+log_base="logstch"
+work_base="workstch"
+
+# Thacher
+#input_dir="./Fakes/Thacher/Galaxy_Fakes"
+#root_path="/data2/THACHER/workspace"
+#field_name_start="t005"
+#log_base="logs"
+#work_base="workspace"
 
 #gal_bin_arr=(
 #"13.0_13.5" # 0
@@ -135,8 +143,8 @@ global_start=$SECONDS
 # Hack for single run use...
 #dir_append=4
 
-START=1
-END=5
+START=21
+END=21
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -153,7 +161,7 @@ start=$SECONDS
 #  gal_fake_bright=${bright_arr[${i}]}
 #  gal_fake_dim=${dim_arr[${i}]}
 #  fwhm_factor=${fwhm_arr[${i}]}
-gal_bin="13.0_13.5"
+gal_bin="12.0_12.5"
 gal_fake_bright="18"
 gal_fake_dim="23"
 fwhm_factor="3"
@@ -178,7 +186,7 @@ python ./DetEff_StaticFile.py \
 --log_base ${log_base} \
 --work_base ${work_base} \
 --field_name_start ${field_name_start} \
---stage photpipe \
+--stage plant \
 --image_list ${input_dir}/${gal_bin}_images.txt \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
 --subdir_start ${START} \
