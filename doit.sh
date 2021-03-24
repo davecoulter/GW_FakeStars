@@ -143,8 +143,8 @@ global_start=$SECONDS
 # Hack for single run use...
 #dir_append=4
 
-START=5
-END=5
+START=6
+END=6
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -165,7 +165,7 @@ gal_bin="13.0_13.5"
 gal_fake_bright="18"
 #gal_fake_dim="23"
 gal_fake_dim="22"
-fwhm_factor="6"
+fwhm_factor="5"
 
 #    iterations=$(($i + 1))
 #    iteration_start=${iterations}
