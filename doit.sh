@@ -186,7 +186,7 @@ python ./DetEff_StaticFile.py \
 --log_base ${log_base} \
 --work_base ${work_base} \
 --field_name_start ${field_name_start} \
---stage plant \
+--stage photpipe \
 --image_list ${input_dir}/${gal_bin}_images.txt \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
 --subdir_start ${START} \
