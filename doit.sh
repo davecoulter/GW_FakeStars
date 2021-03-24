@@ -143,8 +143,8 @@ global_start=$SECONDS
 # Hack for single run use...
 #dir_append=4
 
-START=21
-END=21
+START=22
+END=22
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -186,7 +186,7 @@ python ./DetEff_StaticFile.py \
 --log_base ${log_base} \
 --work_base ${work_base} \
 --field_name_start ${field_name_start} \
---stage photpipe \
+--stage plant,photpipe \
 --image_list ${input_dir}/${gal_bin}_images.txt \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
 --subdir_start ${START} \
