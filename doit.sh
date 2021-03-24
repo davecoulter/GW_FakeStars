@@ -165,7 +165,7 @@ gal_bin="13.0_13.5"
 gal_fake_bright="18"
 #gal_fake_dim="23"
 gal_fake_dim="22"
-fwhm_factor="5"
+fwhm_factor="6"
 
 #    iterations=$(($i + 1))
 #    iteration_start=${iterations}

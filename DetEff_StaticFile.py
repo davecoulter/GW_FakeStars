@@ -901,7 +901,7 @@ class DetermineEfficiencies():
         # os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
 
         # new setting with uniform fakes
-        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 7500' % (self.fake_image_dir, self.template_dir)) #  -k HP_CONVOLVE_WHICH t
+        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 7500 -k HP_CONVOLVE_WHICH b' % (self.fake_image_dir, self.template_dir))
 
     def get_phot(self, fake_mag_range, gal_mag_range):
 
