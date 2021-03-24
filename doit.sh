@@ -144,7 +144,7 @@ global_start=$SECONDS
 #dir_append=4
 
 START=1
-END=5
+END=20
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -163,7 +163,8 @@ start=$SECONDS
 #  fwhm_factor=${fwhm_arr[${i}]}
 gal_bin="13.0_13.5"
 gal_fake_bright="18"
-gal_fake_dim="23"
+#gal_fake_dim="23"
+gal_fake_dim="20"
 fwhm_factor="3"
 
 #    iterations=$(($i + 1))
