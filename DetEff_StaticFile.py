@@ -111,7 +111,7 @@ class DetermineEfficiencies():
 
         self.fake_image_path = "{0}/{1}/1".format(self.root_path, self.fake_image_dir)
         self.fake_log_path = self.fake_image_path.replace(self.work_base, self.log_base)
-        self.fake_stitched_path = self.fake_log_path.replace(self.work_base, self.log_base)
+        self.fake_stitched_path = self.fake_log_path.replace(self.log_base, "stitched")
         self.diff_dir_name = "%s_fake_%s_%s_%s" % (self.image_dir, galstr, iteration, self.template_dir)
 
         # if len(galstr) > 0 and galstr != 'uniform':

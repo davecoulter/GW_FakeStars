@@ -143,8 +143,8 @@ global_start=$SECONDS
 # Hack for single run use...
 #dir_append=4
 
-START=24
-END=24
+START=25
+END=25
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
