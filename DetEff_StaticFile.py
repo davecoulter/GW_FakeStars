@@ -1318,7 +1318,7 @@ if __name__ == "__main__":
                                     clobber=options.clobber)
 
         if 'photpipe' in options.stage or 'all' in options.stage:
-            detEff.do_phot()
+            detEff.do_phot(options.convolve_which)
 
         if 'getphot' in options.stage or 'all' in options.stage:
             out_match_files += [detEff.get_phot(fake_mag_range=options.fake_mag_range, gal_mag_range=options.gal_mag_range)]
