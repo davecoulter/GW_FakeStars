@@ -803,7 +803,7 @@ class DetermineEfficiencies():
 
         return psf_model
 
-    def do_phot(self):
+    def do_phot(self, convolve_which):
 
         image_base_names = [i.replace(".sw.fits", "") for i in self.image_names]
 
@@ -901,7 +901,7 @@ class DetermineEfficiencies():
         # os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 2000 -k HP_CONVOLVE_WHICH t' % (self.fake_image_dir, self.template_dir))
 
         # new setting with uniform fakes
-        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 7500 -k HP_CONVOLVE_WHICH b' % (self.fake_image_dir, self.template_dir))
+        os.system('pipeloop.pl -diff %s %s 1 -redo -stage MATCHTEMPL,DIFFIM,DIFFIMSTATS,DIFFDOPHOT,PIXCHK,DIFFCUT -k DC_MAX_NUMBER_OBJECTS 7500 -k HP_CONVOLVE_WHICH %s' % (self.fake_image_dir, self.template_dir, convolve_which))
 
     def get_phot(self, fake_mag_range, gal_mag_range):
 
@@ -1235,6 +1235,7 @@ class AllStages():
         parser.add_option('--subdir_start', default=1, type='int', help='Integer used in directory name to start the iterations')
         parser.add_option('--subdir_end', default=1, type='int', help='Integer used in directory name to end the iterations')
 
+        parser.add_option('--convolve_which', default='t', type='string', help='For photpipe convolution: `t`==template, `i`==image, `b`==both. Default `t`')
 
         # parser.add_option('--gal_fake_offset_x', default=0, type='int',
         #                   help='Offset the fake star grid in the x-direction by an integer multiple of the FWHM*gal_fake_fwhm_factor')

@@ -143,8 +143,8 @@ global_start=$SECONDS
 # Hack for single run use...
 #dir_append=4
 
-START=6
-END=6
+START=1
+END=1
 
 #for i in $( seq $START $END ); do # i==index, not object
 #for i in "${!gal_bin_arr[@]}"; do # i==index, not object
@@ -167,6 +167,7 @@ gal_fake_bright="18"
 gal_fake_dim="22"
 fwhm_factor="5"
 
+convolve_which='b'
 #    iterations=$(($i + 1))
 #    iteration_start=${iterations}
 #  iterations=${dir_append}
@@ -192,6 +193,7 @@ python ./DetEff_StaticFile.py \
 --template_list ${input_dir}/${gal_bin}_temps.txt \
 --subdir_start ${START} \
 --subdir_end ${END} \
+--convolve_which ${convolve_which} \
 --gal_fake_mag_range ${gal_fake_bright} ${gal_fake_dim} 5000 0.2 \
 --gal_bin_to_process ${gal_bin} \
 --fake_fwhm_factor ${fwhm_factor} \
