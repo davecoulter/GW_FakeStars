@@ -17,9 +17,9 @@ log_base="logs"
 work_base="workspace"
 
 START=1
-END=20
+END=10
 
-gal_bin="12.5_13.0"
+gal_bin="13.5_14.0"
 gal_fake_bright="18"
 gal_fake_dim="22"
 fwhm_factor="3"
